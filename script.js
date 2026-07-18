@@ -1,13 +1,24 @@
 // ==========================================
-// 1. CONFIGURACIÓN SUPABASE
+// 1. CONFIGURACIÓN SUPABASE A PRUEBA DE FALLOS
 // ==========================================
 const supabaseUrl = 'https://bxsywvdoolrvtxqpyehs.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ4c3l3dmRvb2xydnR4cXB5ZWhzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQzOTAwODMsImV4cCI6MjA5OTk2NjA4M30.n_lik0Cui7EN1Aj9XC03wsQjLUKbo8d7zcX23Vfx6CU';
-const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+let supabase = null;
+try {
+    if (window.supabase) {
+        supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+    } else {
+        console.warn("Supabase fue bloqueado (posiblemente por uBlock o VPN).");
+    }
+} catch (e) {
+    console.error("Error crítico al inicializar base de datos:", e);
+}
+
 let myChart = null; // Instancia global para destruir la gráfica previa
 
 // ==========================================
-// 2. BASES DE DATOS LOCALES (Del PDF)
+// 2. BASES DE DATOS LOCALES
 // ==========================================
 const planNutricion = {
     desayuno: [
@@ -62,12 +73,12 @@ const rutinas = {
     6: { 
         nombre: "Sábado: Ciclismo de Montaña (MTB)", 
         cardio: "Zonas FC: 2 a 4. Monitorear carga aguda en Garmin.",
-        ejercicios: [] // Sin pesas
+        ejercicios: [] 
     },
     0: { 
         nombre: "Domingo: Ciclismo Recuperación Activa", 
-        cardio: "Zona FC: 1 y 2 estrictas. Cancelar si VFC deprimida.",
-        ejercicios: [] // Sin pesas
+        cardio: "Zona FC: 1 y 2 estrictas. Cancelar si VFC amanece deprimida.",
+        ejercicios: [] 
     }
 };
 
@@ -107,7 +118,8 @@ async function renderizarDashboard() {
     }
 
     if (diaSemana === 0) {
-        document.getElementById('alerta-domingo').classList.remove('hidden');
+        const alertaDom = document.getElementById('alerta-domingo');
+        if(alertaDom) alertaDom.classList.remove('hidden');
     }
 
     document.getElementById('momento-dia').innerText = momentoStr;
@@ -129,23 +141,24 @@ async function renderizarDashboard() {
 
     if (rutinaDia.ejercicios.length > 0) {
         for (const ejercicio of rutinaDia.ejercicios) {
-            // Se dibuja el HTML base
+            const idSeguro = btoa(unescape(encodeURIComponent(ejercicio))); // Previene fallos con acentos
+            
             const div = document.createElement('div');
             div.className = 'ejercicio-item';
             div.innerHTML = `
                 <div class="ejercicio-nombre">${ejercicio}</div>
                 <div class="controles-peso">
-                    <input type="number" id="peso-${btoa(ejercicio)}" placeholder="Kg" step="0.5">
+                    <input type="number" id="peso-${idSeguro}" placeholder="Kg" step="0.5">
                     <button class="btn-guardar" onclick="guardarPeso('${ejercicio}')">Guardar</button>
                     <button class="btn-grafica" onclick="verHistorial('${ejercicio}')">📈</button>
                 </div>
             `;
             contenedorEjercicios.appendChild(div);
 
-            // Consulta asíncrona para traer el último peso registrado y llenar el placeholder
             const ultimoPeso = await obtenerUltimoPeso(ejercicio);
             if (ultimoPeso) {
-                document.getElementById(`peso-${btoa(ejercicio)}`).placeholder = ultimoPeso + " Kg (Último)";
+                const inputEl = document.getElementById(`peso-${idSeguro}`);
+                if(inputEl) inputEl.placeholder = ultimoPeso + " Kg (Último)";
             }
         }
     } else {
@@ -157,22 +170,34 @@ async function renderizarDashboard() {
 // 4. FUNCIONES SUPABASE Y CHART.JS
 // ==========================================
 async function obtenerUltimoPeso(ejercicio) {
-    const { data, error } = await supabase
-        .from('historial_entrenamiento')
-        .select('peso_levantado')
-        .eq('ejercicio', ejercicio)
-        .order('fecha', { ascending: false })
-        .limit(1);
-    
-    if (data && data.length > 0) {
-        return data[0].peso_levantado;
+    if (!supabase) return null;
+    try {
+        const { data, error } = await supabase
+            .from('historial_entrenamiento')
+            .select('peso_levantado')
+            .eq('ejercicio', ejercicio)
+            .order('fecha', { ascending: false })
+            .limit(1);
+        
+        if (error) throw error;
+        
+        if (data && data.length > 0) {
+            return data[0].peso_levantado;
+        }
+    } catch (e) {
+        console.warn("No se pudo obtener el historial:", e.message);
     }
     return null;
 }
 
 async function guardarPeso(ejercicio) {
-    const inputId = `peso-${btoa(ejercicio)}`;
-    const inputElement = document.getElementById(inputId);
+    if (!supabase) {
+        alert("No hay conexión con la base de datos.");
+        return;
+    }
+
+    const idSeguro = btoa(unescape(encodeURIComponent(ejercicio)));
+    const inputElement = document.getElementById(`peso-${idSeguro}`);
     const pesoValue = parseFloat(inputElement.value);
 
     if (isNaN(pesoValue) || pesoValue <= 0) {
@@ -185,20 +210,25 @@ async function guardarPeso(ejercicio) {
         .insert([{
             ejercicio: ejercicio,
             peso_levantado: pesoValue,
-            repeticiones: 0 // Simplificado para este MVP
+            repeticiones: 0 
         }]);
 
     if (error) {
         alert("Error al guardar en BD: " + error.message);
     } else {
-        inputElement.style.backgroundColor = "#e8f8f5"; // Feedback visual verde
+        inputElement.style.backgroundColor = "#e8f8f5"; 
         setTimeout(() => { inputElement.style.backgroundColor = ""; }, 1500);
-        inputElement.value = ''; // Limpiar input
+        inputElement.value = ''; 
         inputElement.placeholder = pesoValue + " Kg (Guardado)";
     }
 }
 
 async function verHistorial(ejercicio) {
+    if (!supabase) {
+        alert("No hay conexión con la base de datos.");
+        return;
+    }
+
     document.getElementById('modal-historial').classList.remove('hidden');
     document.getElementById('titulo-grafica').innerText = "Historial: " + ejercicio;
 
@@ -218,7 +248,6 @@ async function verHistorial(ejercicio) {
 
     const ctx = document.getElementById('graficaPesos').getContext('2d');
     
-    // Destruir instancia previa si existe para evitar superposición
     if (myChart) {
         myChart.destroy();
     }
