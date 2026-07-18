@@ -14,20 +14,34 @@
 
     <main>
         <div id="vista-hoy">
+            
             <section class="card">
-                <h2>🍽️ Plan Nutricional Activo</h2>
+                <h2>🍽️ Menú del Día</h2>
                 <div id="alerta-domingo" class="alerta hidden">
-                    ⚠️ Mantenimiento Dominical: Añadir 1 huevo entero o 30% más de carbohidratos.
+                    ⚠️ Mantenimiento Dominical: Añadir 1 huevo entero o 30% más de carbohidratos base.
                 </div>
-                <p id="momento-dia" class="badge"></p>
+                
+                <div class="tabs-nutricion">
+                    <button id="btn-desayuno" onclick="mostrarComida('desayuno')">Desayuno</button>
+                    <button id="btn-comida" onclick="mostrarComida('comida')">Comida</button>
+                    <button id="btn-cena" onclick="mostrarComida('cena')">Cena</button>
+                </div>
+                
                 <ul id="lista-comidas"></ul>
+
+                <div class="snacks-container">
+                    <h3>🍎 Snacks y Libres (Siempre Disponibles)</h3>
+                    <ul id="lista-snacks"></ul>
+                </div>
             </section>
 
             <section class="card">
                 <h2>🏋️ Rutina del Día</h2>
                 <h3 id="nombre-rutina"></h3>
                 <p id="bloque-cardio" class="info-texto"></p>
-                <ul id="lista-ejercicios"></ul>
+                
+                <div id="lista-ejercicios">
+                    </div>
             </section>
             
             <button class="btn-primario" onclick="toggleVista()">Ver Plan Semanal Completo 📅</button>
