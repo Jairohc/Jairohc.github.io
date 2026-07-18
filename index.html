@@ -1,50 +1,24 @@
-<!DOCTYPE html>
-<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | Nutrición & Entrenamiento</title>
     <link rel="stylesheet" href="styles.css">
+    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <script>
+        if (!window.supabase) {
+            console.warn("Librería externa bloqueada. Activando modo offline local.");
+            window.supabase = {
+                createClient: () => ({
+                    from: () => ({
+                        select: () => ({ eq: () => ({ order: () => ({ limit: () => Promise.resolve({ data: [], error: null }) }) }) }),
+                        insert: () => Promise.resolve({ data: null, error: new Error("Modo local activo por bloqueo de red") })
+                    })
+                })
+            };
+        }
+    </script>
+    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body>
-    <header>
-        <h1>Mi Protocolo</h1>
-        <p id="fecha-hora"></p>
-    </header>
-
-    <main>
-        <section id="modulo-nutricion" class="card">
-            <h2>Plan Nutricional Activo</h2>
-            <div id="alerta-domingo" class="alerta hidden">
-                ⚠️ Protocolo de Mantenimiento Dominical: Añadir 1 huevo entero o 30% más de carbohidratos base.
-            </div>
-            <p id="momento-dia" class="badge"></p>
-            <ul id="lista-comidas"></ul>
-        </section>
-
-        <section id="modulo-entrenamiento" class="card">
-            <div class="header-entrenamiento">
-                <h2>Rutina del Día</h2>
-                <button id="btn-contingencia" class="btn-secundario hidden">MTB Activo</button>
-            </div>
-            <h3 id="nombre-rutina"></h3>
-            <p id="bloque-cardio" class="info-texto"></p>
-            
-            <div id="contenedor-ejercicios">
-                </div>
-        </section>
-    </main>
-
-    <div id="modal-historial" class="modal hidden">
-        <div class="modal-content">
-            <span class="close-btn" onclick="cerrarModal()">&times;</span>
-            <h3 id="titulo-grafica"></h3>
-            <canvas id="graficaPesos"></canvas>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
-</body>
-</html>
