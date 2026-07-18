@@ -1,102 +1,33 @@
-const planNutricion = {
-    desayuno: [
-        "A: Huevo Clásico (3 enteros + 150g claras + 3 tortillas + 5g aceite)",
-        "B: Avena Dulce (1.5 scoop Whey + 50g avena + 15g crema cacahuate + 80g frutos rojos)",
-        "C: Tacos de Pollo (150g pechuga + 3 tortillas + 50g aguacate)",
-        "D: Pasta Roja (1 huevo + 150g claras + 170g pasta preparada)",
-        "E: Tacos Jamón/Queso (150g claras + 60g jamón + 40g queso + 3 tortillas + 50g aguacate)"
-    ],
-    comida: [
-        "A: Base Arroz/Pasta (200g carne magra + 70g arroz/pasta seco + 10g aceite)",
-        "B: Base Papa (200g carne magra + 200g papa + 10g aceite)"
-    ],
-    cena: [
-        "A: Tacos Atún (200g atún + 3 tortillas + 50g aguacate)",
-        "B: Pasta con Pollo (200g pollo + 60g pasta seco + 10g aceite)",
-        "C: Tacos Pescado (200g tilapia + 4 tortillas + 50g aguacate)",
-        "D: Tacos Pollo (200g pollo + 3 tortillas + 50g aguacate)",
-        "E: Tacos Res (200g bistec + 3 tortillas + 50g aguacate)"
-    ],
-    snacks: [
-        "Snack A: 1 scoop Whey + 150g fruta + 15g nueces",
-        "Snack B: 150g yogur griego + 150g fruta + 15g nueces",
-        "Libre: Gelatina Light (0% azúcar) consumo ilimitado"
-    ]
-};
+// Variables globales que se llenarán con el JSON
+let planNutricion = {};
+let rutinas = {};
 
-const rutinas = {
-    1: { 
-        nombre: "Lunes: Empuje (Pecho/Hombro/Tríceps)", 
-        cardio: "20 min | 5% inclinación | 4.2-4.8 km/h",
-        ejercicios: [
-            { nombre: "Press de banca: 3x6-8", detalle: "Retracción escapular obligatoria. Los pies empujan el piso. Baja la barra al nivel de los pezones." },
-            { nombre: "Press inclinado mancuerna: 3x8-10", detalle: "Banco a 30-45 grados. Baja hasta sentir el estiramiento en el pectoral superior." },
-            { nombre: "Press militar sentado: 3x8-10", detalle: "Core apretado, no arquees la espalda baja. Rango de movimiento completo." },
-            { nombre: "Elevaciones laterales: 3x12-15", detalle: "Lidera el movimiento con los codos ligeramente flexionados." },
-            { nombre: "Extensión de tríceps polea: 3x10-12", detalle: "Codos pegados a las costillas en todo momento. Aprieta un segundo abajo." }
-        ]
-    },
-    2: { 
-        nombre: "Martes: Pierna 1 (Foco Cuádriceps) + Core", 
-        cardio: "20 min plana | 0% | 4.0 km/h",
-        ejercicios: [
-            { nombre: "Sentadilla libre o Hack: 3x6-8", detalle: "Romper el paralelo. Foco en empujar con toda la planta del pie." },
-            { nombre: "Prensa de piernas: 3x10-12", detalle: "Pies en la parte baja de la plataforma. No bloquees las rodillas al extender." },
-            { nombre: "Extensión de cuádriceps: 3x12-15", detalle: "Movimiento controlado, pausa de 1 segundo en la máxima contracción arriba." },
-            { nombre: "Curl de isquios tumbado: 3x10-12", detalle: "Mantén la cadera pegada al banco. Controla la bajada en 3 segundos." },
-            { nombre: "Elevación de talones + Core: 4x10-15", detalle: "Alterna con 3 series de Crunch en polea alta." }
-        ]
-    },
-    3: { 
-        nombre: "Miércoles: Tirón (Espalda/Bíceps)", 
-        cardio: "20 min | 5% inclinación | 4.2-4.8 km/h",
-        ejercicios: [
-            { nombre: "Dominadas o Jalón al pecho: 3x6-8", detalle: "Depresión escapular antes de flexionar. Lleva la barra/pecho hacia arriba." },
-            { nombre: "Remo con barra/máquina: 3x8-10", detalle: "Torso firme. Tira desde los codos rozando las costillas." },
-            { nombre: "Pullover en polea alta: 2x12-15", detalle: "Brazos semirrectos, siente el estiramiento en los dorsales." },
-            { nombre: "Face pulls: 3x12-15", detalle: "Tira hacia tu frente separando la cuerda. Siente el trabajo en el deltoides posterior." },
-            { nombre: "Curl de bíceps mancuerna: 3x10-12", detalle: "Codos fijos. Supinación (girar la muñeca) al subir." }
-        ]
-    },
-    4: { 
-        nombre: "Jueves: Pierna 2 (Isquios/Glúteo) + Core", 
-        cardio: "20 min plana | 0% | 4.0 km/h",
-        ejercicios: [
-            { nombre: "Peso muerto rumano: 3x8-10", detalle: "Empuja la cadera hacia atrás. Espalda recta, barra pegada a las piernas." },
-            { nombre: "Zancadas búlgaras: 3x10-12", detalle: "Torso ligeramente inclinado hacia adelante. Baja profundo." },
-            { nombre: "Curl de isquios sentado: 3x12-15", detalle: "Ajusta la almohadilla firme contra los muslos." },
-            { nombre: "Prensa pies altos: 2x12-15", detalle: "Pies colocados alto y separados. Baja hasta que las rodillas se acerquen al pecho." },
-            { nombre: "Elevación talones + Core: 4x10-15", detalle: "Alterna con 3 series de Rueda abdominal." }
-        ]
-    },
-    5: { 
-        nombre: "Viernes: Torso (Mantenimiento)", 
-        cardio: "20 min | 6% inclinación | 4.5 km/h",
-        ejercicios: [
-            { nombre: "Aperturas en polea (pecho): 3x10-12", detalle: "Siente el estiramiento profundo y abraza un barril imaginario al cerrar." },
-            { nombre: "Remo unilateral mancuerna: 3x8-10", detalle: "Tira de la mancuerna hacia tu cadera, no hacia tu pecho." },
-            { nombre: "Press hombros máquina: 3x10-12", detalle: "Movimiento constante. No dejes que el peso descanse en la pila." },
-            { nombre: "Curl bíceps polea: 2x12-15", detalle: "Tensión constante. Aprieta un segundo arriba." },
-            { nombre: "Extensión tríceps copa: 2x12-15", detalle: "Codos apuntando hacia arriba y cerrados. Estira completamente." }
-        ]
-    },
-    6: { 
-        nombre: "Sábado: Ciclismo de Montaña (MTB)", 
-        cardio: "Duración: 90-120 min | Zonas FC: 2 a 4.",
-        ejercicios: [] 
-    },
-    0: { 
-        nombre: "Domingo: Ciclismo Recuperación", 
-        cardio: "Duración: 45-60 min | Zona FC: 1 y 2 estrictas.",
-        ejercicios: [] 
-    }
-};
-
-// Variable para forzar un día de forma manual
 let diaOverride = null;
 let diaEnMemoria = new Date().getDay();
 
-document.addEventListener('DOMContentLoaded', () => {
+// Carga inicial de datos asíncrona
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        const respuesta = await fetch('data.json');
+        if (!respuesta.ok) throw new Error('No se pudo cargar el archivo data.json');
+        
+        const datos = await respuesta.json();
+        planNutricion = datos.planNutricion;
+        rutinas = datos.rutinas;
+
+        iniciarAplicacion();
+    } catch (error) {
+        console.error("Error al inicializar la app:", error);
+        document.getElementById('main-content').innerHTML = `
+            <div class="card" style="text-align: center; color: red;">
+                <h2>Error de conexión</h2>
+                <p>No se pudo cargar la base de datos (data.json). Verifica que el archivo exista en el repositorio.</p>
+            </div>
+        `;
+    }
+});
+
+function iniciarAplicacion() {
     actualizarReloj();
     setInterval(actualizarReloj, 60000);
     
@@ -106,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const vistaGuardada = localStorage.getItem('vistaActiva') || 'rutina';
     cambiarVista(vistaGuardada);
-});
+}
 
 function actualizarReloj() {
     const ahora = new Date();
@@ -114,7 +45,6 @@ function actualizarReloj() {
     const relojElemento = document.getElementById('fecha-hora');
     if (relojElemento) relojElemento.innerText = ahora.toLocaleDateString('es-MX', opciones).toUpperCase();
 
-    // Verificación de cambio de día en segundo plano
     if (ahora.getDay() !== diaEnMemoria) {
         diaEnMemoria = ahora.getDay();
         if (diaOverride === null) {
@@ -147,7 +77,6 @@ function renderizarHoy() {
     const ahora = new Date();
     const hora = ahora.getHours();
     
-    // El entrenamiento evalúa si existe un cambio manual forzado por el dropdown
     const diaSemana = diaOverride !== null ? diaOverride : ahora.getDay();
 
     // -- Lógica Dieta --
