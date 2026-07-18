@@ -92,6 +92,10 @@ const rutinas = {
     }
 };
 
+// Variable para forzar un día de forma manual
+let diaOverride = null;
+let diaEnMemoria = new Date().getDay();
+
 document.addEventListener('DOMContentLoaded', () => {
     actualizarReloj();
     setInterval(actualizarReloj, 60000);
@@ -100,7 +104,6 @@ document.addEventListener('DOMContentLoaded', () => {
     renderizarSemana();
     renderizarSnacks();
 
-    // Recuperar la última vista abierta (si no hay, por defecto abre rutina)
     const vistaGuardada = localStorage.getItem('vistaActiva') || 'rutina';
     cambiarVista(vistaGuardada);
 });
@@ -110,29 +113,42 @@ function actualizarReloj() {
     const opciones = { weekday: 'long', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
     const relojElemento = document.getElementById('fecha-hora');
     if (relojElemento) relojElemento.innerText = ahora.toLocaleDateString('es-MX', opciones).toUpperCase();
+
+    // Verificación de cambio de día en segundo plano
+    if (ahora.getDay() !== diaEnMemoria) {
+        diaEnMemoria = ahora.getDay();
+        if (diaOverride === null) {
+            renderizarHoy();
+        }
+    }
 }
 
 function cambiarVista(vistaDestino) {
-    // Ocultar todas las vistas
     document.querySelectorAll('.vista').forEach(el => el.classList.add('hidden'));
-    // Desactivar todos los botones del nav
     document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('activo'));
     
-    // Mostrar la vista seleccionada
     document.getElementById(`vista-${vistaDestino}`).classList.remove('hidden');
     document.getElementById(`nav-${vistaDestino}`).classList.add('activo');
     
-    // Guardar en caché para recordar dónde se quedó el usuario
     localStorage.setItem('vistaActiva', vistaDestino);
-    
-    // Hacer scroll al tope suavemente
     window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function cambiarDiaRutina(valor) {
+    if (valor === "auto") {
+        diaOverride = null;
+    } else {
+        diaOverride = parseInt(valor);
+    }
+    renderizarHoy();
 }
 
 function renderizarHoy() {
     const ahora = new Date();
-    const diaSemana = ahora.getDay();
     const hora = ahora.getHours();
+    
+    // El entrenamiento evalúa si existe un cambio manual forzado por el dropdown
+    const diaSemana = diaOverride !== null ? diaOverride : ahora.getDay();
 
     // -- Lógica Dieta --
     let comidaActual = 'cena';
@@ -140,8 +156,10 @@ function renderizarHoy() {
     else if (hora >= 12 && hora < 18) comidaActual = 'comida';
     mostrarComida(comidaActual);
 
-    if (diaSemana === 0) {
+    if (ahora.getDay() === 0) {
         document.getElementById('alerta-domingo')?.classList.remove('hidden');
+    } else {
+        document.getElementById('alerta-domingo')?.classList.add('hidden');
     }
 
     // -- Lógica Rutina --
@@ -164,15 +182,12 @@ function renderizarHoy() {
                 div.className = 'ejercicio-card';
                 div.innerHTML = `
                     <h4>${ej.nombre}</h4>
-                    
                     <div class="registro-rapido">
                         <input type="number" id="input-${idSeguro}" placeholder="Kg (último: ${pesoGuardado})" step="0.5">
                         <button class="btn-guardar" onclick="guardarPesoLocal('${idSeguro}')">Guardar</button>
                         <span id="check-${idSeguro}" class="check-exito hidden">✔</span>
                     </div>
-                    
                     <p class="ultimo-peso">Carga anterior: <strong id="display-${idSeguro}">${pesoGuardado}</strong> kg</p>
-                    
                     <details>
                         <summary>Ver detalle técnico</summary>
                         <div class="detalle-tecnica">${ej.detalle}</div>
