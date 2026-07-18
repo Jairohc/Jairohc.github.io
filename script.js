@@ -2,7 +2,7 @@
 // 1. CONFIGURACIÓN SUPABASE
 // ==========================================
 const supabaseUrl = 'https://bxsywvdoolrvtxqpyehs.supabase.co';
-const supabaseKey = 'sb_publishable_fWNWzH9jP4Y5CY4tuvyMtg_xUat-Der';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ4c3l3dmRvb2xydnR4cXB5ZWhzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQzOTAwODMsImV4cCI6MjA5OTk2NjA4M30.n_lik0Cui7EN1Aj9XC03wsQjLUKbo8d7zcX23Vfx6CU';
 const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 let myChart = null; // Instancia global para destruir la gráfica previa
 
