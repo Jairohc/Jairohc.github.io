@@ -17,10 +17,7 @@ body {
     box-sizing: border-box;
 }
 
-header {
-    text-align: center;
-    margin-bottom: 20px;
-}
+header { text-align: center; margin-bottom: 20px; }
 
 .card {
     background: var(--card-bg);
@@ -39,25 +36,30 @@ header {
     font-weight: bold;
 }
 
-/* Pestañas de Nutrición */
+/* Pestañas de Nutrición Mejoradas */
 .tabs-nutricion {
     display: flex;
-    gap: 10px;
+    gap: 5px;
     margin-bottom: 15px;
+    background-color: #e9ecef;
+    padding: 5px;
+    border-radius: 8px;
 }
 
 .tabs-nutricion button {
     flex: 1;
     padding: 10px;
-    background-color: #e0e0e0;
-    color: #333;
-    border-radius: 4px;
+    background-color: transparent;
+    color: #495057;
+    border-radius: 6px;
     margin-bottom: 0;
+    transition: 0.2s ease;
 }
 
 .tabs-nutricion button.activo {
-    background-color: var(--primary);
-    color: white;
+    background-color: #ffffff;
+    color: var(--primary);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .snacks-container {
@@ -70,6 +72,7 @@ header {
     font-size: 1.1em;
     color: var(--success);
     margin-bottom: 10px;
+    margin-top: 0;
 }
 
 ul { list-style-type: none; padding: 0; margin: 0; }
@@ -82,7 +85,7 @@ li {
     border-radius: 4px;
 }
 
-/* Estilos para los desplegables de ejercicios */
+/* Detalles de ejercicios */
 details {
     background: #f9f9f9;
     margin: 8px 0;
@@ -91,12 +94,7 @@ details {
     border-radius: 4px;
 }
 
-summary {
-    font-weight: bold;
-    cursor: pointer;
-    outline: none;
-    font-size: 1.05em;
-}
+summary { font-weight: bold; cursor: pointer; outline: none; font-size: 1.05em; }
 
 .detalle-ejercicio {
     margin-top: 10px;
@@ -131,9 +129,5 @@ button {
 button:hover { opacity: 0.9; }
 .hidden { display: none !important; }
 
-.dia-semana {
-    border-bottom: 2px solid #eee;
-    padding-bottom: 15px;
-    margin-bottom: 15px;
-}
+.dia-semana { border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 15px; }
 .dia-semana h3 { color: var(--accent); margin-bottom: 5px; }
