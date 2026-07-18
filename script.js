@@ -27,57 +27,57 @@ const planNutricion = {
 const rutinas = {
     1: { 
         nombre: "Lunes: Empuje (Pecho/Hombro/Tríceps)", 
-        cardio: "Caminadora Inclinada: 20 min | 5% | 4.2-4.8 km/h",
+        cardio: "20 min | 5% inclinación | 4.2-4.8 km/h",
         ejercicios: [
-            { nombre: "Press de banca: 3x6-8", detalle: "Retracción escapular obligatoria. Los pies empujan el piso (leg drive). Baja la barra al nivel de los pezones." },
-            { nombre: "Press inclinado mancuerna: 3x8-10", detalle: "Banco a 30-45 grados. Baja hasta sentir el estiramiento en el pectoral superior, sube sin chocar las mancuernas." },
-            { nombre: "Press militar sentado: 3x8-10", detalle: "Core apretado, no arquees la espalda baja en exceso. Rango de movimiento completo desde clavículas hasta bloqueo." },
-            { nombre: "Elevaciones laterales: 3x12-15", detalle: "Lidera el movimiento con los codos ligeramente flexionados. Imagina que viertes agua de unas jarras en la parte alta." },
-            { nombre: "Extensión de tríceps en polea: 3x10-12", detalle: "Codos pegados a las costillas en todo momento. Extensión total abajo apretando el tríceps un segundo." }
+            { nombre: "Press de banca: 3x6-8", detalle: "Retracción escapular obligatoria. Los pies empujan el piso. Baja la barra al nivel de los pezones." },
+            { nombre: "Press inclinado mancuerna: 3x8-10", detalle: "Banco a 30-45 grados. Baja hasta sentir el estiramiento en el pectoral superior." },
+            { nombre: "Press militar sentado: 3x8-10", detalle: "Core apretado, no arquees la espalda baja. Rango de movimiento completo." },
+            { nombre: "Elevaciones laterales: 3x12-15", detalle: "Lidera el movimiento con los codos ligeramente flexionados." },
+            { nombre: "Extensión de tríceps polea: 3x10-12", detalle: "Codos pegados a las costillas en todo momento. Aprieta un segundo abajo." }
         ]
     },
     2: { 
         nombre: "Martes: Pierna 1 (Foco Cuádriceps) + Core", 
-        cardio: "Caminadora Plana: 20 min | 0% | 4.0 km/h",
+        cardio: "20 min plana | 0% | 4.0 km/h",
         ejercicios: [
-            { nombre: "Sentadilla libre o Hack: 3x6-8", detalle: "Romper el paralelo. Foco en empujar con toda la planta del pie. Pecho arriba en todo momento." },
-            { nombre: "Prensa de piernas: 3x10-12", detalle: "Pies en la parte baja de la plataforma para mayor énfasis en cuádriceps. No bloquees las rodillas al extender." },
-            { nombre: "Extensión de cuádriceps: 3x12-15", detalle: "Movimiento controlado, pausa de 1 segundo en la máxima contracción arriba. Baja lento." },
-            { nombre: "Curl de isquios tumbado: 3x10-12", detalle: "Mantén la cadera pegada al banco. Controla la fase excéntrica (bajada) en 3 segundos." },
-            { nombre: "Elevación de talones + Core: 4x10-15", detalle: "Alterna las pantorrillas (rango completo) con 3 series de Crunch en polea alta y elevaciones en suspensión." }
+            { nombre: "Sentadilla libre o Hack: 3x6-8", detalle: "Romper el paralelo. Foco en empujar con toda la planta del pie." },
+            { nombre: "Prensa de piernas: 3x10-12", detalle: "Pies en la parte baja de la plataforma. No bloquees las rodillas al extender." },
+            { nombre: "Extensión de cuádriceps: 3x12-15", detalle: "Movimiento controlado, pausa de 1 segundo en la máxima contracción arriba." },
+            { nombre: "Curl de isquios tumbado: 3x10-12", detalle: "Mantén la cadera pegada al banco. Controla la bajada en 3 segundos." },
+            { nombre: "Elevación de talones + Core: 4x10-15", detalle: "Alterna con 3 series de Crunch en polea alta." }
         ]
     },
     3: { 
         nombre: "Miércoles: Tirón (Espalda/Bíceps)", 
-        cardio: "Caminadora Inclinada: 20 min | 5% | 4.2-4.8 km/h",
+        cardio: "20 min | 5% inclinación | 4.2-4.8 km/h",
         ejercicios: [
-            { nombre: "Dominadas o Jalón al pecho: 3x6-8", detalle: "Depresión escapular antes de flexionar los brazos. Lleva la barra/pecho hacia arriba, no te encojas." },
-            { nombre: "Remo con barra o máquina: 3x8-10", detalle: "Torso paralelo al suelo o firme en el apoyo. Tira desde los codos rozando las costillas." },
-            { nombre: "Pullover en polea alta: 2x12-15", detalle: "Brazos semirrectos, siente el estiramiento en los dorsales en la parte alta. Aprieta abajo." },
-            { nombre: "Face pulls: 3x12-15", detalle: "Tira hacia tu frente/ojos separando la cuerda. Siente el trabajo en el deltoides posterior y romboides." },
-            { nombre: "Curl de bíceps mancuerna: 3x10-12", detalle: "Codos fijos a los lados. Supinación (girar la muñeca) activa al subir para máximo pico del bíceps." }
+            { nombre: "Dominadas o Jalón al pecho: 3x6-8", detalle: "Depresión escapular antes de flexionar. Lleva la barra/pecho hacia arriba." },
+            { nombre: "Remo con barra/máquina: 3x8-10", detalle: "Torso firme. Tira desde los codos rozando las costillas." },
+            { nombre: "Pullover en polea alta: 2x12-15", detalle: "Brazos semirrectos, siente el estiramiento en los dorsales." },
+            { nombre: "Face pulls: 3x12-15", detalle: "Tira hacia tu frente separando la cuerda. Siente el trabajo en el deltoides posterior." },
+            { nombre: "Curl de bíceps mancuerna: 3x10-12", detalle: "Codos fijos. Supinación (girar la muñeca) al subir." }
         ]
     },
     4: { 
         nombre: "Jueves: Pierna 2 (Isquios/Glúteo) + Core", 
-        cardio: "Caminadora Plana: 20 min | 0% | 4.0 km/h",
+        cardio: "20 min plana | 0% | 4.0 km/h",
         ejercicios: [
-            { nombre: "Peso muerto rumano: 3x8-10", detalle: "Empuja la cadera hacia atrás como si cerraras una puerta con los glúteos. Espalda recta, barra pegada a las piernas." },
-            { nombre: "Zancadas búlgaras: 3x10-12", detalle: "Torso ligeramente inclinado hacia adelante para enfocar el glúteo. Baja profundo." },
-            { nombre: "Curl de isquios sentado: 3x12-15", detalle: "Ajusta la almohadilla firme contra los muslos. Rango de movimiento completo." },
-            { nombre: "Prensa pies altos: 2x12-15", detalle: "Pies colocados alto y separados en la plataforma. Baja hasta que las rodillas se acerquen al pecho sin despegar la zona lumbar." },
-            { nombre: "Elevación talones + Core: 4x10-15", detalle: "Alterna pantorrillas con 3 series de Rueda abdominal y Plancha lateral." }
+            { nombre: "Peso muerto rumano: 3x8-10", detalle: "Empuja la cadera hacia atrás. Espalda recta, barra pegada a las piernas." },
+            { nombre: "Zancadas búlgaras: 3x10-12", detalle: "Torso ligeramente inclinado hacia adelante. Baja profundo." },
+            { nombre: "Curl de isquios sentado: 3x12-15", detalle: "Ajusta la almohadilla firme contra los muslos." },
+            { nombre: "Prensa pies altos: 2x12-15", detalle: "Pies colocados alto y separados. Baja hasta que las rodillas se acerquen al pecho." },
+            { nombre: "Elevación talones + Core: 4x10-15", detalle: "Alterna con 3 series de Rueda abdominal." }
         ]
     },
     5: { 
         nombre: "Viernes: Torso (Mantenimiento)", 
-        cardio: "Caminadora Inclinada: 20 min | 6% | 4.5 km/h",
+        cardio: "20 min | 6% inclinación | 4.5 km/h",
         ejercicios: [
-            { nombre: "Aperturas en polea (pecho): 3x10-12", detalle: "Mantén un ángulo fijo en los codos. Siente el estiramiento profundo y abraza un barril imaginario al cerrar." },
-            { nombre: "Remo unilateral mancuerna: 3x8-10", detalle: "No rotes excesivamente el torso. Tira de la mancuerna hacia tu cadera, no hacia tu pecho." },
-            { nombre: "Press hombros máquina: 3x10-12", detalle: "Movimiento constante. No dejes que el peso descanse en la pila entre repeticiones." },
-            { nombre: "Curl bíceps polea: 2x12-15", detalle: "Tensión constante que ofrece el cable. Aprieta un segundo arriba." },
-            { nombre: "Extensión tríceps copa: 2x12-15", detalle: "Codos apuntando hacia arriba y lo más cerrados posible. Estira completamente." }
+            { nombre: "Aperturas en polea (pecho): 3x10-12", detalle: "Siente el estiramiento profundo y abraza un barril imaginario al cerrar." },
+            { nombre: "Remo unilateral mancuerna: 3x8-10", detalle: "Tira de la mancuerna hacia tu cadera, no hacia tu pecho." },
+            { nombre: "Press hombros máquina: 3x10-12", detalle: "Movimiento constante. No dejes que el peso descanse en la pila." },
+            { nombre: "Curl bíceps polea: 2x12-15", detalle: "Tensión constante. Aprieta un segundo arriba." },
+            { nombre: "Extensión tríceps copa: 2x12-15", detalle: "Codos apuntando hacia arriba y cerrados. Estira completamente." }
         ]
     },
     6: { 
@@ -95,9 +95,14 @@ const rutinas = {
 document.addEventListener('DOMContentLoaded', () => {
     actualizarReloj();
     setInterval(actualizarReloj, 60000);
+    
     renderizarHoy();
     renderizarSemana();
     renderizarSnacks();
+
+    // Recuperar la última vista abierta (si no hay, por defecto abre rutina)
+    const vistaGuardada = localStorage.getItem('vistaActiva') || 'rutina';
+    cambiarVista(vistaGuardada);
 });
 
 function actualizarReloj() {
@@ -107,23 +112,39 @@ function actualizarReloj() {
     if (relojElemento) relojElemento.innerText = ahora.toLocaleDateString('es-MX', opciones).toUpperCase();
 }
 
+function cambiarVista(vistaDestino) {
+    // Ocultar todas las vistas
+    document.querySelectorAll('.vista').forEach(el => el.classList.add('hidden'));
+    // Desactivar todos los botones del nav
+    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('activo'));
+    
+    // Mostrar la vista seleccionada
+    document.getElementById(`vista-${vistaDestino}`).classList.remove('hidden');
+    document.getElementById(`nav-${vistaDestino}`).classList.add('activo');
+    
+    // Guardar en caché para recordar dónde se quedó el usuario
+    localStorage.setItem('vistaActiva', vistaDestino);
+    
+    // Hacer scroll al tope suavemente
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
 function renderizarHoy() {
     const ahora = new Date();
     const diaSemana = ahora.getDay();
     const hora = ahora.getHours();
 
-    // Comida por defecto
+    // -- Lógica Dieta --
     let comidaActual = 'cena';
     if (hora >= 4 && hora < 12) comidaActual = 'desayuno';
     else if (hora >= 12 && hora < 18) comidaActual = 'comida';
     mostrarComida(comidaActual);
 
-    // Alerta Dominical
     if (diaSemana === 0) {
         document.getElementById('alerta-domingo')?.classList.remove('hidden');
     }
 
-    // Entrenamiento
+    // -- Lógica Rutina --
     const rutinaDia = rutinas[diaSemana];
     const nombreRutina = document.getElementById('nombre-rutina');
     const bloqueCardio = document.getElementById('bloque-cardio');
@@ -137,55 +158,49 @@ function renderizarHoy() {
         if (rutinaDia.ejercicios.length > 0) {
             rutinaDia.ejercicios.forEach(ej => {
                 const idSeguro = btoa(unescape(encodeURIComponent(ej.nombre)));
-                // Leer caché de Chrome
                 const pesoGuardado = localStorage.getItem('peso_' + idSeguro) || '--';
 
-                const details = document.createElement('details');
-                details.innerHTML = `
-                    <summary>${ej.nombre}</summary>
-                    <div class="detalle-ejercicio">
-                        <p>${ej.detalle}</p>
-                        
-                        <div style="display: flex; gap: 10px; margin-top: 15px; align-items: center;">
-                            <input type="number" id="input-${idSeguro}" placeholder="${pesoGuardado !== '--' ? pesoGuardado + ' kg' : 'Kg'}" step="0.5" style="width: 80px; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
-                            <button onclick="guardarPesoLocal('${idSeguro}')" style="width: auto; padding: 10px 15px; margin: 0; background-color: #27ae60; color: white;">Guardar</button>
-                            <span id="check-${idSeguro}" class="hidden" style="color: #27ae60; font-weight: bold; font-size: 1.2em;">✔</span>
-                        </div>
-                        
-                        <p style="font-size: 0.85em; color: #666; margin-top: 10px;">
-                            Último peso registrado: <strong id="display-${idSeguro}" style="color: #2c3e50;">${pesoGuardado}</strong> kg
-                        </p>
+                const div = document.createElement('div');
+                div.className = 'ejercicio-card';
+                div.innerHTML = `
+                    <h4>${ej.nombre}</h4>
+                    
+                    <div class="registro-rapido">
+                        <input type="number" id="input-${idSeguro}" placeholder="Kg (último: ${pesoGuardado})" step="0.5">
+                        <button class="btn-guardar" onclick="guardarPesoLocal('${idSeguro}')">Guardar</button>
+                        <span id="check-${idSeguro}" class="check-exito hidden">✔</span>
                     </div>
+                    
+                    <p class="ultimo-peso">Carga anterior: <strong id="display-${idSeguro}">${pesoGuardado}</strong> kg</p>
+                    
+                    <details>
+                        <summary>Ver detalle técnico</summary>
+                        <div class="detalle-tecnica">${ej.detalle}</div>
+                    </details>
                 `;
-                listaEjercicios.appendChild(details);
+                listaEjercicios.appendChild(div);
             });
         } else {
-            listaEjercicios.innerHTML = "<p style='padding: 10px; background: #eee; border-radius: 4px; font-weight: bold;'>Día enfocado en ciclismo. Carga la ruta en tu Garmin.</p>";
+            listaEjercicios.innerHTML = "<p style='padding: 15px; background: #e8f8f5; color: #27ae60; border-radius: 8px; font-weight: bold; text-align: center;'>Día enfocado en ciclismo. Carga la ruta en tu Garmin.</p>";
         }
     }
 }
 
-// Función para guardar en caché local
 function guardarPesoLocal(idSeguro) {
     const inputElement = document.getElementById(`input-${idSeguro}`);
     const pesoValue = inputElement.value;
 
     if (!pesoValue || isNaN(pesoValue) || pesoValue <= 0) return;
 
-    // Escribir en el localStorage del navegador
     localStorage.setItem('peso_' + idSeguro, pesoValue);
 
-    // Actualizar los textos visuales sin recargar la página
     document.getElementById(`display-${idSeguro}`).innerText = pesoValue;
-    inputElement.placeholder = pesoValue + " kg";
+    inputElement.placeholder = "Kg (último: " + pesoValue + ")";
     inputElement.value = '';
 
-    // Mostrar palomita de confirmación
     const checkmark = document.getElementById(`check-${idSeguro}`);
     checkmark.classList.remove('hidden');
-    setTimeout(() => {
-        checkmark.classList.add('hidden');
-    }, 1500);
+    setTimeout(() => { checkmark.classList.add('hidden'); }, 1500);
 }
 
 function mostrarComida(tipo) {
@@ -231,28 +246,13 @@ function renderizarSemana() {
         
         let htmlEjercicios = rut.ejercicios.length > 0 
             ? rut.ejercicios.map(e => `<li>${e.nombre}</li>`).join('') 
-            : `<li>MTB / Ciclismo</li>`;
+            : `<li>MTB / Ciclismo Recuperación</li>`;
 
         div.innerHTML = `
             <h3>${rut.nombre}</h3>
-            <p><strong>Foco:</strong> ${rut.cardio}</p>
-            <ul>${htmlEjercicios}</ul>
+            <p style="margin:0 0 10px 0; font-size: 0.9em; color: #666;"><strong>Cardio:</strong> ${rut.cardio}</p>
+            <ul style="font-size: 0.9em;">${htmlEjercicios}</ul>
         `;
         contenedor.appendChild(div);
     });
-}
-
-function toggleVista() {
-    const vistaHoy = document.getElementById('vista-hoy');
-    const vistaSemana = document.getElementById('vista-semana');
-    
-    if (vistaHoy && vistaSemana) {
-        if (vistaHoy.classList.contains('hidden')) {
-            vistaHoy.classList.remove('hidden');
-            vistaSemana.classList.add('hidden');
-        } else {
-            vistaHoy.classList.add('hidden');
-            vistaSemana.classList.remove('hidden');
-        }
-    }
 }
