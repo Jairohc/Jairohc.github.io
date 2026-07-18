@@ -1,11 +1,12 @@
 :root {
-    --bg-color: #f4f7f6;
+    --bg-color: #f0f2f5;
     --text-color: #333;
     --primary: #2c3e50;
     --accent: #3498db;
     --success: #27ae60;
     --warning: #f39c12;
     --card-bg: #ffffff;
+    --nav-height: 70px;
 }
 
 body {
@@ -13,121 +14,137 @@ body {
     background-color: var(--bg-color);
     color: var(--text-color);
     margin: 0;
-    padding: 20px;
+    padding: 0;
     box-sizing: border-box;
+    /* Evita el rebote excesivo al hacer scroll en iOS */
+    overscroll-behavior-y: none; 
 }
 
-header { text-align: center; margin-bottom: 20px; }
+header { 
+    text-align: center; 
+    padding: 15px 20px;
+    background: var(--card-bg);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+header h1 { margin: 0 0 5px 0; font-size: 1.5em; }
+header p { margin: 0; font-size: 0.85em; color: #666; }
+
+#main-content {
+    padding: 15px 15px calc(var(--nav-height) + 20px) 15px;
+}
 
 .card {
     background: var(--card-bg);
-    border-radius: 8px;
+    border-radius: 12px;
     padding: 20px;
     margin-bottom: 20px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
-.alerta {
-    background-color: var(--warning);
-    color: white;
-    padding: 10px;
-    border-radius: 4px;
-    margin-bottom: 15px;
-    font-weight: bold;
-}
+.card h2 { margin-top: 0; font-size: 1.3em; border-bottom: 2px solid #eee; padding-bottom: 10px; }
 
-/* Pestañas de Nutrición Mejoradas */
-.tabs-nutricion {
-    display: flex;
-    gap: 5px;
-    margin-bottom: 15px;
-    background-color: #e9ecef;
-    padding: 5px;
-    border-radius: 8px;
-}
+.titulo-destacado { color: var(--primary); margin-bottom: 5px; }
+.info-texto { font-size: 0.9em; color: #666; margin-top: 0; font-weight: bold; }
 
-.tabs-nutricion button {
-    flex: 1;
-    padding: 10px;
-    background-color: transparent;
-    color: #495057;
-    border-radius: 6px;
-    margin-bottom: 0;
-    transition: 0.2s ease;
-}
-
-.tabs-nutricion button.activo {
-    background-color: #ffffff;
-    color: var(--primary);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.snacks-container {
-    margin-top: 25px;
-    padding-top: 15px;
-    border-top: 2px dashed #ccc;
-}
-
-.snacks-container h3 {
-    font-size: 1.1em;
-    color: var(--success);
-    margin-bottom: 10px;
-    margin-top: 0;
-}
-
-ul { list-style-type: none; padding: 0; margin: 0; }
-
-li {
+/* NUEVO: Tarjetas de Ejercicios Optimizadas para Registro Rápido */
+.ejercicio-card {
     background: #f9f9f9;
-    margin: 8px 0;
-    padding: 12px;
-    border-left: 4px solid var(--accent);
-    border-radius: 4px;
-}
-
-/* Detalles de ejercicios */
-details {
-    background: #f9f9f9;
-    margin: 8px 0;
-    padding: 12px;
     border-left: 4px solid var(--primary);
-    border-radius: 4px;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 12px;
 }
 
-summary { font-weight: bold; cursor: pointer; outline: none; font-size: 1.05em; }
+.ejercicio-card h4 { margin: 0 0 10px 0; font-size: 1.05em; }
 
-.detalle-ejercicio {
+.registro-rapido {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.registro-rapido input {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px; /* Evita el zoom automático en Safari iOS */
+}
+
+.btn-guardar {
+    background-color: var(--success);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.ultimo-peso { font-size: 0.85em; color: #666; margin: 0; }
+.check-exito { color: var(--success); font-weight: bold; font-size: 1.2em; }
+
+/* Menú desplegable para la técnica (no estorba el registro) */
+details {
     margin-top: 10px;
-    font-size: 0.95em;
-    color: #555;
-    line-height: 1.4;
-    border-top: 1px solid #ddd;
+    border-top: 1px dashed #ccc;
     padding-top: 10px;
 }
+summary { font-size: 0.9em; font-weight: 600; color: #555; cursor: pointer; outline: none; }
+.detalle-tecnica { font-size: 0.85em; color: #555; margin-top: 8px; line-height: 1.4; }
 
-.info-texto {
-    font-size: 0.9em;
-    color: #666;
-    margin-bottom: 15px;
-    font-weight: bold;
+/* Navegación Inferior Estilo App */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: var(--nav-height);
+    background-color: #ffffff;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    padding-bottom: env(safe-area-inset-bottom); /* Soporte para el notch de iPhone */
+    z-index: 1000;
 }
 
-button {
-    width: 100%;
-    padding: 15px;
+.nav-item {
+    background: transparent;
     border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 1em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+    font-size: 0.75em;
     font-weight: bold;
-    margin-bottom: 20px;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
     transition: 0.2s;
 }
 
-.btn-primario { background-color: var(--primary); color: white; }
-.btn-secundario { background-color: #ccc; color: #333; width: auto; padding: 10px 20px; }
-button:hover { opacity: 0.9; }
-.hidden { display: none !important; }
+.nav-icon { font-size: 1.8em; margin-bottom: 4px; }
+.nav-item.activo { color: var(--primary); }
+.nav-item.activo .nav-icon { transform: scale(1.1); }
 
+/* Pestañas de Nutrición */
+.tabs-nutricion { display: flex; gap: 5px; margin-bottom: 15px; background-color: #e9ecef; padding: 5px; border-radius: 8px; }
+.tabs-nutricion button { flex: 1; padding: 10px; background-color: transparent; border: none; color: #495057; font-weight: bold; border-radius: 6px; cursor: pointer; }
+.tabs-nutricion button.activo { background-color: #ffffff; color: var(--primary); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+
+.snacks-container { margin-top: 25px; padding-top: 15px; border-top: 2px dashed #ccc; }
+.snacks-container h3 { font-size: 1.1em; color: var(--success); margin: 0 0 10px 0; }
+
+ul { list-style-type: none; padding: 0; margin: 0; }
+li { background: #f9f9f9; margin: 8px 0; padding: 12px; border-left: 4px solid var(--accent); border-radius: 4px; font-size: 0.95em; }
+
+.alerta { background-color: var(--warning); color: white; padding: 10px; border-radius: 4px; margin-bottom: 15px; font-weight: bold; }
 .dia-semana { border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 15px; }
-.dia-semana h3 { color: var(--accent); margin-bottom: 5px; }
+.dia-semana h3 { color: var(--accent); margin: 0 0 5px 0; }
+
+.hidden { display: none !important; }
