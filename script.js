@@ -1,5 +1,5 @@
 // ==========================================
-// 1. BASES DE DATOS LOCALES (Del PDF)
+// 1. BASES DE DATOS LOCALES
 // ==========================================
 const planNutricion = {
     desayuno: [
@@ -11,10 +11,7 @@ const planNutricion = {
     ],
     comida: [
         "A: Base Arroz/Pasta (200g carne magra + 70g arroz/pasta seco + 10g aceite)",
-        "B: Base Papa (200g carne magra + 200g papa + 10g aceite)",
-        "Snack A: Whey + 150g fruta + 15g nueces",
-        "Snack B: 150g yogur griego + 150g fruta + 15g nueces",
-        "Libre: Gelatina Light ilimitada"
+        "B: Base Papa (200g carne magra + 200g papa + 10g aceite)"
     ],
     cena: [
         "A: Tacos Atún (200g atún + 3 tortillas + 50g aguacate)",
@@ -22,6 +19,11 @@ const planNutricion = {
         "C: Tacos Pescado (200g tilapia + 4 tortillas + 50g aguacate)",
         "D: Tacos Pollo (200g pollo + 3 tortillas + 50g aguacate)",
         "E: Tacos Res (200g bistec + 3 tortillas + 50g aguacate)"
+    ],
+    snacks: [
+        "Snack A: 1 scoop Whey + 150g fruta + 15g nueces",
+        "Snack B: 150g yogur griego + 150g fruta + 15g nueces",
+        "Libre: Gelatina Light (0% azúcar) consumo ilimitado"
     ]
 };
 
@@ -29,27 +31,57 @@ const rutinas = {
     1: { 
         nombre: "Lunes: Empuje (Pecho/Hombro/Tríceps)", 
         cardio: "Caminadora Inclinada: 20 min | 5% | 4.2-4.8 km/h",
-        ejercicios: ["Press de banca: 3x6-8", "Press inclinado mancuerna: 3x8-10", "Press militar sentado: 3x8-10", "Elevaciones laterales: 3x12-15", "Extensión de tríceps: 3x10-12"]
+        ejercicios: [
+            { nombre: "Press de banca: 3x6-8", detalle: "Retracción escapular obligatoria. Los pies empujan el piso (leg drive). Baja la barra al nivel de los pezones." },
+            { nombre: "Press inclinado mancuerna: 3x8-10", detalle: "Banco a 30-45 grados. Baja hasta sentir el estiramiento en el pectoral superior, sube sin chocar las mancuernas." },
+            { nombre: "Press militar sentado: 3x8-10", detalle: "Core apretado, no arquees la espalda baja en exceso. Rango de movimiento completo desde clavículas hasta bloqueo." },
+            { nombre: "Elevaciones laterales: 3x12-15", detalle: "Lidera el movimiento con los codos ligeramente flexionados. Imagina que viertes agua de unas jarras en la parte alta." },
+            { nombre: "Extensión de tríceps en polea: 3x10-12", detalle: "Codos pegados a las costillas en todo momento. Extensión total abajo apretando el tríceps un segundo." }
+        ]
     },
     2: { 
-        nombre: "Martes: Pierna 1 (Cuádriceps) + Core", 
+        nombre: "Martes: Pierna 1 (Foco Cuádriceps) + Core", 
         cardio: "Caminadora Plana: 20 min | 0% | 4.0 km/h",
-        ejercicios: ["Sentadilla libre o Hack: 3x6-8", "Prensa de piernas: 3x10-12", "Extensión de cuádriceps: 3x12-15", "Curl de isquios tumbado: 3x10-12", "Elevación de talones: 4x10-15"]
+        ejercicios: [
+            { nombre: "Sentadilla libre o Hack: 3x6-8", detalle: "Romper el paralelo. Foco en empujar con toda la planta del pie. Pecho arriba en todo momento." },
+            { nombre: "Prensa de piernas: 3x10-12", detalle: "Pies en la parte baja de la plataforma para mayor énfasis en cuádriceps. No bloquees las rodillas al extender." },
+            { nombre: "Extensión de cuádriceps: 3x12-15", detalle: "Movimiento controlado, pausa de 1 segundo en la máxima contracción arriba. Baja lento." },
+            { nombre: "Curl de isquios tumbado: 3x10-12", detalle: "Mantén la cadera pegada al banco. Controla la fase excéntrica (bajada) en 3 segundos." },
+            { nombre: "Elevación de talones + Core: 4x10-15", detalle: "Alterna las pantorrillas (rango completo) con 3 series de Crunch en polea alta y elevaciones en suspensión." }
+        ]
     },
     3: { 
         nombre: "Miércoles: Tirón (Espalda/Bíceps)", 
         cardio: "Caminadora Inclinada: 20 min | 5% | 4.2-4.8 km/h",
-        ejercicios: ["Dominadas o Jalón: 3x6-8", "Remo con barra/máquina: 3x8-10", "Pullover en polea: 2x12-15", "Face pulls: 3x12-15", "Curl de bíceps mancuerna: 3x10-12"]
+        ejercicios: [
+            { nombre: "Dominadas o Jalón al pecho: 3x6-8", detalle: "Depresión escapular antes de flexionar los brazos. Lleva la barra/pecho hacia arriba, no te encojas." },
+            { nombre: "Remo con barra o máquina: 3x8-10", detalle: "Torso paralelo al suelo o firme en el apoyo. Tira desde los codos rozando las costillas." },
+            { nombre: "Pullover en polea alta: 2x12-15", detalle: "Brazos semirrectos, siente el estiramiento en los dorsales en la parte alta. Aprieta abajo." },
+            { nombre: "Face pulls: 3x12-15", detalle: "Tira hacia tu frente/ojos separando la cuerda. Siente el trabajo en el deltoides posterior y romboides." },
+            { nombre: "Curl de bíceps mancuerna: 3x10-12", detalle: "Codos fijos a los lados. Supinación (girar la muñeca) activa al subir para máximo pico del bíceps." }
+        ]
     },
     4: { 
         nombre: "Jueves: Pierna 2 (Isquios/Glúteo) + Core", 
         cardio: "Caminadora Plana: 20 min | 0% | 4.0 km/h",
-        ejercicios: ["Peso muerto rumano: 3x8-10", "Zancadas búlgaras: 3x10-12", "Curl de isquios sentado: 3x12-15", "Prensa pies altos: 2x12-15", "Elevación de talones: 4x10-15"]
+        ejercicios: [
+            { nombre: "Peso muerto rumano: 3x8-10", detalle: "Empuja la cadera hacia atrás como si cerraras una puerta con los glúteos. Espalda recta, barra pegada a las piernas." },
+            { nombre: "Zancadas búlgaras: 3x10-12", detalle: "Torso ligeramente inclinado hacia adelante para enfocar el glúteo. Baja profundo." },
+            { nombre: "Curl de isquios sentado: 3x12-15", detalle: "Ajusta la almohadilla firme contra los muslos. Rango de movimiento completo." },
+            { nombre: "Prensa pies altos: 2x12-15", detalle: "Pies colocados alto y separados en la plataforma. Baja hasta que las rodillas se acerquen al pecho sin despegar la zona lumbar." },
+            { nombre: "Elevación talones + Core: 4x10-15", detalle: "Alterna pantorrillas con 3 series de Rueda abdominal y Plancha lateral." }
+        ]
     },
     5: { 
         nombre: "Viernes: Torso (Mantenimiento)", 
         cardio: "Caminadora Inclinada: 20 min | 6% | 4.5 km/h",
-        ejercicios: ["Aperturas en polea: 3x10-12", "Remo unilateral mancuerna: 3x8-10", "Press hombros máquina: 3x10-12", "Curl bíceps polea: 2x12-15", "Extensión tríceps copa: 2x12-15"]
+        ejercicios: [
+            { nombre: "Aperturas en polea (pecho): 3x10-12", detalle: "Mantén un ángulo fijo en los codos. Siente el estiramiento profundo y abraza un barril imaginario al cerrar." },
+            { nombre: "Remo unilateral mancuerna: 3x8-10", detalle: "No rotes excesivamente el torso. Tira de la mancuerna hacia tu cadera, no hacia tu pecho." },
+            { nombre: "Press hombros máquina: 3x10-12", detalle: "Movimiento constante. No dejes que el peso descanse en la pila entre repeticiones." },
+            { nombre: "Curl bíceps polea: 2x12-15", detalle: "Tensión constante que ofrece el cable. Aprieta un segundo arriba." },
+            { nombre: "Extensión tríceps copa: 2x12-15", detalle: "Codos apuntando hacia arriba y lo más cerrados posible. Estira completamente." }
+        ]
     },
     6: { 
         nombre: "Sábado: Ciclismo de Montaña (MTB)", 
@@ -71,6 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(actualizarReloj, 60000);
     renderizarHoy();
     renderizarSemana();
+    renderizarSnacks();
 });
 
 function actualizarReloj() {
@@ -84,53 +117,73 @@ function renderizarHoy() {
     const diaSemana = ahora.getDay();
     const hora = ahora.getHours();
 
-    // -- Lógica Nutricional --
-    let momentoStr = "";
-    let opcionesComida = [];
-
+    // Determinar qué comida mostrar por defecto según la hora
+    let comidaActual = 'cena'; // Por defecto
     if (hora >= 4 && hora < 12) {
-        momentoStr = "☀️ Desayuno (450 kcal | 35g Prot)";
-        opcionesComida = planNutricion.desayuno;
+        comidaActual = 'desayuno';
     } else if (hora >= 12 && hora < 18) {
-        momentoStr = "🌤️ Comida / Snack";
-        opcionesComida = planNutricion.comida;
-    } else {
-        momentoStr = "🌙 Cena (450 kcal | 40g Prot)";
-        opcionesComida = planNutricion.cena;
+        comidaActual = 'comida';
     }
+    mostrarComida(comidaActual);
 
+    // Alerta Dominical
     if (diaSemana === 0) {
         document.getElementById('alerta-domingo').classList.remove('hidden');
     }
 
-    document.getElementById('momento-dia').innerText = momentoStr;
-    const listaComidas = document.getElementById('lista-comidas');
-    opcionesComida.forEach(item => {
-        const li = document.createElement('li');
-        li.innerText = item;
-        listaComidas.appendChild(li);
-    });
-
-    // -- Lógica de Entrenamiento --
+    // Entrenamiento
     const rutinaDia = rutinas[diaSemana];
     document.getElementById('nombre-rutina').innerText = rutinaDia.nombre;
     document.getElementById('bloque-cardio').innerText = "Cardio/Actividad: " + rutinaDia.cardio;
 
     const listaEjercicios = document.getElementById('lista-ejercicios');
+    listaEjercicios.innerHTML = ''; // Limpiar previo
+
     if (rutinaDia.ejercicios.length > 0) {
         rutinaDia.ejercicios.forEach(ej => {
-            const li = document.createElement('li');
-            li.innerText = ej;
-            listaEjercicios.appendChild(li);
+            const details = document.createElement('details');
+            details.innerHTML = `
+                <summary>${ej.nombre}</summary>
+                <div class="detalle-ejercicio">${ej.detalle}</div>
+            `;
+            listaEjercicios.appendChild(details);
         });
     } else {
-        listaEjercicios.innerHTML = "<li>Carga tus rutas y monitorea FC en Garmin Connect.</li>";
+        listaEjercicios.innerHTML = "<p style='padding: 10px; background: #eee; border-radius: 4px;'>Carga tus rutas y monitorea FC en Garmin Connect.</p>";
     }
+}
+
+function mostrarComida(tipo) {
+    // 1. Quitar la clase 'activo' de todos los botones
+    document.getElementById('btn-desayuno').classList.remove('activo');
+    document.getElementById('btn-comida').classList.remove('activo');
+    document.getElementById('btn-cena').classList.remove('activo');
+    
+    // 2. Activar el botón seleccionado
+    document.getElementById(`btn-${tipo}`).classList.add('activo');
+    
+    // 3. Renderizar la lista
+    const listaComidas = document.getElementById('lista-comidas');
+    listaComidas.innerHTML = '';
+    
+    planNutricion[tipo].forEach(item => {
+        const li = document.createElement('li');
+        li.innerText = item;
+        listaComidas.appendChild(li);
+    });
+}
+
+function renderizarSnacks() {
+    const listaSnacks = document.getElementById('lista-snacks');
+    planNutricion.snacks.forEach(item => {
+        const li = document.createElement('li');
+        li.innerText = item;
+        listaSnacks.appendChild(li);
+    });
 }
 
 function renderizarSemana() {
     const contenedor = document.getElementById('contenedor-semana');
-    // Iteramos del 1 (Lunes) al 6 (Sábado), y al final agregamos el 0 (Domingo)
     const ordenDias = [1, 2, 3, 4, 5, 6, 0]; 
 
     ordenDias.forEach(dia => {
@@ -139,7 +192,7 @@ function renderizarSemana() {
         div.className = 'dia-semana';
         
         let htmlEjercicios = rut.ejercicios.length > 0 
-            ? rut.ejercicios.map(e => `<li>${e}</li>`).join('') 
+            ? rut.ejercicios.map(e => `<li>${e.nombre}</li>`).join('') 
             : `<li>Día de Ciclismo</li>`;
 
         div.innerHTML = `
