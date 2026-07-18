@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Protocolo | Nutrición & Entrenamiento</title>
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -12,9 +12,17 @@
         <p id="fecha-hora"></p>
     </header>
 
-    <main>
-        <div id="vista-hoy">
-            
+    <main id="main-content">
+        <div id="vista-rutina" class="vista">
+            <section class="card">
+                <h2>🏋️ Entrenamiento del Día</h2>
+                <h3 id="nombre-rutina" class="titulo-destacado"></h3>
+                <p id="bloque-cardio" class="info-texto"></p>
+                <div id="lista-ejercicios"></div>
+            </section>
+        </div>
+
+        <div id="vista-dieta" class="vista hidden">
             <section class="card">
                 <h2>🍽️ Menú del Día</h2>
                 <div id="alerta-domingo" class="alerta hidden">
@@ -34,25 +42,30 @@
                     <ul id="lista-snacks"></ul>
                 </div>
             </section>
-
-            <section class="card">
-                <h2>🏋️ Rutina del Día</h2>
-                <h3 id="nombre-rutina"></h3>
-                <p id="bloque-cardio" class="info-texto"></p>
-                <div id="lista-ejercicios"></div>
-            </section>
-            
-            <button class="btn-primario" onclick="toggleVista()">Ver Plan Semanal Completo 📅</button>
         </div>
 
-        <div id="vista-semana" class="hidden">
-            <button class="btn-secundario" onclick="toggleVista()">⬅ Volver a Hoy</button>
+        <div id="vista-semana" class="vista hidden">
             <section class="card">
-                <h2>📅 Resumen Semanal de Entrenamiento</h2>
+                <h2>📅 Resumen Semanal</h2>
                 <div id="contenedor-semana"></div>
             </section>
         </div>
     </main>
+
+    <nav class="bottom-nav">
+        <button id="nav-rutina" class="nav-item activo" onclick="cambiarVista('rutina')">
+            <span class="nav-icon">🏋️</span>
+            <span>Rutina</span>
+        </button>
+        <button id="nav-dieta" class="nav-item" onclick="cambiarVista('dieta')">
+            <span class="nav-icon">🍽️</span>
+            <span>Dieta</span>
+        </button>
+        <button id="nav-semana" class="nav-item" onclick="cambiarVista('semana')">
+            <span class="nav-icon">📅</span>
+            <span>Semana</span>
+        </button>
+    </nav>
 
     <script src="script.js"></script>
 </body>
