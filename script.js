@@ -1,8 +1,8 @@
 // ==========================================
 // 1. CONFIGURACIÓN SUPABASE
 // ==========================================
-const supabaseUrl = 'AQUÍ_TU_PROJECT_URL';
-const supabaseKey = 'AQUÍ_TU_ANON_KEY';
+const supabaseUrl = 'https://bxsywvdoolrvtxqpyehs.supabase.co';
+const supabaseKey = 'sb_publishable_fWNWzH9jP4Y5CY4tuvyMtg_xUat-Der';
 const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 let myChart = null; // Instancia global para destruir la gráfica previa
 
