@@ -38,6 +38,7 @@ header {
     border-radius: 4px;
     font-weight: bold;
     font-size: 0.9em;
+    margin-bottom: 10px;
 }
 
 .alerta {
@@ -62,85 +63,47 @@ li {
     border-radius: 4px;
 }
 
-.header-entrenamiento {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.ejercicio-item {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    padding: 15px 0;
-    border-bottom: 1px solid #eee;
-}
-
-.ejercicio-nombre {
-    flex: 1 1 100%;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.controles-peso {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-
-input[type="number"] {
-    width: 70px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-button {
-    background-color: var(--accent);
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-button:hover { opacity: 0.9; }
-
-.btn-guardar { background-color: var(--success); }
-.btn-grafica { background-color: var(--primary); }
-
 .info-texto {
     font-size: 0.9em;
     color: #666;
     margin-bottom: 15px;
+    font-weight: bold;
 }
+
+button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.btn-primario {
+    background-color: var(--primary);
+    color: white;
+}
+
+.btn-secundario {
+    background-color: #ccc;
+    color: #333;
+    width: auto;
+    padding: 10px 20px;
+}
+
+button:hover { opacity: 0.9; }
 
 .hidden { display: none !important; }
 
-/* Modal Styles */
-.modal {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* Estilos para la vista semanal */
+.dia-semana {
+    border-bottom: 2px solid #eee;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
 }
-
-.modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    width: 90%;
-    max-width: 500px;
-    position: relative;
-}
-
-.close-btn {
-    position: absolute;
-    top: 10px; right: 15px;
-    font-size: 1.5em;
-    cursor: pointer;
+.dia-semana h3 {
+    color: var(--accent);
+    margin-bottom: 5px;
 }
