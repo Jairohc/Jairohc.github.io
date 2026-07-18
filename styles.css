@@ -117,7 +117,7 @@ button:hover { opacity: 0.9; }
     margin-bottom: 15px;
 }
 
-.hidden { display: none; }
+.hidden { display: none !important; }
 
 /* Modal Styles */
 .modal {
