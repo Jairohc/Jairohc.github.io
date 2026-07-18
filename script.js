@@ -1,24 +1,5 @@
 // ==========================================
-// 1. CONFIGURACIÓN SUPABASE A PRUEBA DE FALLOS
-// ==========================================
-const supabaseUrl = 'https://bxsywvdoolrvtxqpyehs.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ4c3l3dmRvb2xydnR4cXB5ZWhzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQzOTAwODMsImV4cCI6MjA5OTk2NjA4M30.n_lik0Cui7EN1Aj9XC03wsQjLUKbo8d7zcX23Vfx6CU';
-
-let supabase = null;
-try {
-    if (window.supabase) {
-        supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-    } else {
-        console.warn("Supabase fue bloqueado (posiblemente por uBlock o VPN).");
-    }
-} catch (e) {
-    console.error("Error crítico al inicializar base de datos:", e);
-}
-
-let myChart = null; // Instancia global para destruir la gráfica previa
-
-// ==========================================
-// 2. BASES DE DATOS LOCALES
+// 1. BASES DE DATOS LOCALES (Del PDF)
 // ==========================================
 const planNutricion = {
     desayuno: [
@@ -47,234 +28,138 @@ const planNutricion = {
 const rutinas = {
     1: { 
         nombre: "Lunes: Empuje (Pecho/Hombro/Tríceps)", 
-        cardio: "Caminadora Inclinada: 20 min | Inclinación 5% | 4.2-4.8 km/h",
-        ejercicios: ["Press de banca", "Press inclinado mancuerna", "Press militar sentado", "Elevaciones laterales", "Extensión de tríceps polea"]
+        cardio: "Caminadora Inclinada: 20 min | 5% | 4.2-4.8 km/h",
+        ejercicios: ["Press de banca: 3x6-8", "Press inclinado mancuerna: 3x8-10", "Press militar sentado: 3x8-10", "Elevaciones laterales: 3x12-15", "Extensión de tríceps: 3x10-12"]
     },
     2: { 
-        nombre: "Martes: Pierna 1 (Foco Cuádriceps) + Core", 
-        cardio: "Caminadora Plana: 20 min | Inclinación 0% | 4.0 km/h",
-        ejercicios: ["Sentadilla libre o Hack", "Prensa de piernas", "Extensión de cuádriceps", "Curl de isquios tumbado", "Elevación de talones"]
+        nombre: "Martes: Pierna 1 (Cuádriceps) + Core", 
+        cardio: "Caminadora Plana: 20 min | 0% | 4.0 km/h",
+        ejercicios: ["Sentadilla libre o Hack: 3x6-8", "Prensa de piernas: 3x10-12", "Extensión de cuádriceps: 3x12-15", "Curl de isquios tumbado: 3x10-12", "Elevación de talones: 4x10-15"]
     },
     3: { 
         nombre: "Miércoles: Tirón (Espalda/Bíceps)", 
-        cardio: "Caminadora Inclinada: 20 min | Inclinación 5% | 4.2-4.8 km/h",
-        ejercicios: ["Dominadas o Jalón al pecho", "Remo con barra o máquina", "Pullover en polea alta", "Face pulls", "Curl de bíceps mancuerna"]
+        cardio: "Caminadora Inclinada: 20 min | 5% | 4.2-4.8 km/h",
+        ejercicios: ["Dominadas o Jalón: 3x6-8", "Remo con barra/máquina: 3x8-10", "Pullover en polea: 2x12-15", "Face pulls: 3x12-15", "Curl de bíceps mancuerna: 3x10-12"]
     },
     4: { 
         nombre: "Jueves: Pierna 2 (Isquios/Glúteo) + Core", 
-        cardio: "Caminadora Plana: 20 min | Inclinación 0% | 4.0 km/h",
-        ejercicios: ["Peso muerto rumano", "Zancadas búlgaras", "Curl de isquios sentado", "Prensa pies altos", "Elevación de talones"]
+        cardio: "Caminadora Plana: 20 min | 0% | 4.0 km/h",
+        ejercicios: ["Peso muerto rumano: 3x8-10", "Zancadas búlgaras: 3x10-12", "Curl de isquios sentado: 3x12-15", "Prensa pies altos: 2x12-15", "Elevación de talones: 4x10-15"]
     },
     5: { 
-        nombre: "Viernes: Torso (Mantenimiento General)", 
-        cardio: "Caminadora Inclinada: 20 min | Inclinación 6% | 4.5 km/h",
-        ejercicios: ["Aperturas en polea", "Remo unilateral mancuerna", "Press hombros máquina", "Curl bíceps polea", "Extensión tríceps copa"]
+        nombre: "Viernes: Torso (Mantenimiento)", 
+        cardio: "Caminadora Inclinada: 20 min | 6% | 4.5 km/h",
+        ejercicios: ["Aperturas en polea: 3x10-12", "Remo unilateral mancuerna: 3x8-10", "Press hombros máquina: 3x10-12", "Curl bíceps polea: 2x12-15", "Extensión tríceps copa: 2x12-15"]
     },
     6: { 
         nombre: "Sábado: Ciclismo de Montaña (MTB)", 
-        cardio: "Zonas FC: 2 a 4. Monitorear carga aguda en Garmin.",
+        cardio: "Duración: 90-120 min | Zonas FC: 2 a 4.",
         ejercicios: [] 
     },
     0: { 
-        nombre: "Domingo: Ciclismo Recuperación Activa", 
-        cardio: "Zona FC: 1 y 2 estrictas. Cancelar si VFC amanece deprimida.",
+        nombre: "Domingo: Ciclismo Recuperación", 
+        cardio: "Duración: 45-60 min | Zona FC: 1 y 2 estrictas.",
         ejercicios: [] 
     }
 };
 
 // ==========================================
-// 3. LÓGICA PRINCIPAL DEL DOM
+// 2. LÓGICA DE RENDERIZADO
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
     actualizarReloj();
     setInterval(actualizarReloj, 60000);
-    renderizarDashboard();
+    renderizarHoy();
+    renderizarSemana();
 });
 
 function actualizarReloj() {
     const ahora = new Date();
-    const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-    document.getElementById('fecha-hora').innerText = ahora.toLocaleDateString('es-MX', opciones);
+    const opciones = { weekday: 'long', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+    document.getElementById('fecha-hora').innerText = ahora.toLocaleDateString('es-MX', opciones).toUpperCase();
 }
 
-async function renderizarDashboard() {
+function renderizarHoy() {
     const ahora = new Date();
     const diaSemana = ahora.getDay();
     const hora = ahora.getHours();
 
-    // Lógica Nutricional
+    // -- Lógica Nutricional --
     let momentoStr = "";
     let opcionesComida = [];
 
     if (hora >= 4 && hora < 12) {
-        momentoStr = "Desayuno (Objetivo: 450 kcal | 35g Prot)";
+        momentoStr = "☀️ Desayuno (450 kcal | 35g Prot)";
         opcionesComida = planNutricion.desayuno;
     } else if (hora >= 12 && hora < 18) {
-        momentoStr = "Comida / Snack";
+        momentoStr = "🌤️ Comida / Snack";
         opcionesComida = planNutricion.comida;
     } else {
-        momentoStr = "Cena (Objetivo: 450 kcal | 40g Prot)";
+        momentoStr = "🌙 Cena (450 kcal | 40g Prot)";
         opcionesComida = planNutricion.cena;
     }
 
     if (diaSemana === 0) {
-        const alertaDom = document.getElementById('alerta-domingo');
-        if(alertaDom) alertaDom.classList.remove('hidden');
+        document.getElementById('alerta-domingo').classList.remove('hidden');
     }
 
     document.getElementById('momento-dia').innerText = momentoStr;
     const listaComidas = document.getElementById('lista-comidas');
-    listaComidas.innerHTML = '';
     opcionesComida.forEach(item => {
         const li = document.createElement('li');
         li.innerText = item;
         listaComidas.appendChild(li);
     });
 
-    // Lógica de Entrenamiento
+    // -- Lógica de Entrenamiento --
     const rutinaDia = rutinas[diaSemana];
     document.getElementById('nombre-rutina').innerText = rutinaDia.nombre;
-    document.getElementById('bloque-cardio').innerText = "Cardio Innegociable: " + rutinaDia.cardio;
+    document.getElementById('bloque-cardio').innerText = "Cardio/Actividad: " + rutinaDia.cardio;
 
-    const contenedorEjercicios = document.getElementById('contenedor-ejercicios');
-    contenedorEjercicios.innerHTML = '';
-
+    const listaEjercicios = document.getElementById('lista-ejercicios');
     if (rutinaDia.ejercicios.length > 0) {
-        for (const ejercicio of rutinaDia.ejercicios) {
-            const idSeguro = btoa(unescape(encodeURIComponent(ejercicio))); // Previene fallos con acentos
-            
-            const div = document.createElement('div');
-            div.className = 'ejercicio-item';
-            div.innerHTML = `
-                <div class="ejercicio-nombre">${ejercicio}</div>
-                <div class="controles-peso">
-                    <input type="number" id="peso-${idSeguro}" placeholder="Kg" step="0.5">
-                    <button class="btn-guardar" onclick="guardarPeso('${ejercicio}')">Guardar</button>
-                    <button class="btn-grafica" onclick="verHistorial('${ejercicio}')">📈</button>
-                </div>
-            `;
-            contenedorEjercicios.appendChild(div);
-
-            const ultimoPeso = await obtenerUltimoPeso(ejercicio);
-            if (ultimoPeso) {
-                const inputEl = document.getElementById(`peso-${idSeguro}`);
-                if(inputEl) inputEl.placeholder = ultimoPeso + " Kg (Último)";
-            }
-        }
+        rutinaDia.ejercicios.forEach(ej => {
+            const li = document.createElement('li');
+            li.innerText = ej;
+            listaEjercicios.appendChild(li);
+        });
     } else {
-        contenedorEjercicios.innerHTML = "<p>Hoy es día enfocado en ciclismo. Carga tus rutas en Garmin Connect.</p>";
+        listaEjercicios.innerHTML = "<li>Carga tus rutas y monitorea FC en Garmin Connect.</li>";
     }
 }
 
-// ==========================================
-// 4. FUNCIONES SUPABASE Y CHART.JS
-// ==========================================
-async function obtenerUltimoPeso(ejercicio) {
-    if (!supabase) return null;
-    try {
-        const { data, error } = await supabase
-            .from('historial_entrenamiento')
-            .select('peso_levantado')
-            .eq('ejercicio', ejercicio)
-            .order('fecha', { ascending: false })
-            .limit(1);
+function renderizarSemana() {
+    const contenedor = document.getElementById('contenedor-semana');
+    // Iteramos del 1 (Lunes) al 6 (Sábado), y al final agregamos el 0 (Domingo)
+    const ordenDias = [1, 2, 3, 4, 5, 6, 0]; 
+
+    ordenDias.forEach(dia => {
+        const rut = rutinas[dia];
+        const div = document.createElement('div');
+        div.className = 'dia-semana';
         
-        if (error) throw error;
-        
-        if (data && data.length > 0) {
-            return data[0].peso_levantado;
-        }
-    } catch (e) {
-        console.warn("No se pudo obtener el historial:", e.message);
-    }
-    return null;
-}
+        let htmlEjercicios = rut.ejercicios.length > 0 
+            ? rut.ejercicios.map(e => `<li>${e}</li>`).join('') 
+            : `<li>Día de Ciclismo</li>`;
 
-async function guardarPeso(ejercicio) {
-    if (!supabase) {
-        alert("No hay conexión con la base de datos.");
-        return;
-    }
-
-    const idSeguro = btoa(unescape(encodeURIComponent(ejercicio)));
-    const inputElement = document.getElementById(`peso-${idSeguro}`);
-    const pesoValue = parseFloat(inputElement.value);
-
-    if (isNaN(pesoValue) || pesoValue <= 0) {
-        alert("Por favor ingresa un peso válido.");
-        return;
-    }
-
-    const { data, error } = await supabase
-        .from('historial_entrenamiento')
-        .insert([{
-            ejercicio: ejercicio,
-            peso_levantado: pesoValue,
-            repeticiones: 0 
-        }]);
-
-    if (error) {
-        alert("Error al guardar en BD: " + error.message);
-    } else {
-        inputElement.style.backgroundColor = "#e8f8f5"; 
-        setTimeout(() => { inputElement.style.backgroundColor = ""; }, 1500);
-        inputElement.value = ''; 
-        inputElement.placeholder = pesoValue + " Kg (Guardado)";
-    }
-}
-
-async function verHistorial(ejercicio) {
-    if (!supabase) {
-        alert("No hay conexión con la base de datos.");
-        return;
-    }
-
-    document.getElementById('modal-historial').classList.remove('hidden');
-    document.getElementById('titulo-grafica').innerText = "Historial: " + ejercicio;
-
-    const { data, error } = await supabase
-        .from('historial_entrenamiento')
-        .select('fecha, peso_levantado')
-        .eq('ejercicio', ejercicio)
-        .order('fecha', { ascending: true });
-
-    if (error) {
-        console.error(error);
-        return;
-    }
-
-    const fechas = data.map(registro => new Date(registro.fecha).toLocaleDateString('es-MX'));
-    const pesos = data.map(registro => registro.peso_levantado);
-
-    const ctx = document.getElementById('graficaPesos').getContext('2d');
-    
-    if (myChart) {
-        myChart.destroy();
-    }
-
-    myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: fechas.length > 0 ? fechas : ['Sin datos'],
-            datasets: [{
-                label: 'Peso (Kg)',
-                data: pesos.length > 0 ? pesos : [0],
-                borderColor: '#3498db',
-                backgroundColor: 'rgba(52, 152, 219, 0.2)',
-                borderWidth: 2,
-                fill: true,
-                tension: 0.2
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: { beginAtZero: false }
-            }
-        }
+        div.innerHTML = `
+            <h3>${rut.nombre}</h3>
+            <p><strong>Foco:</strong> ${rut.cardio}</p>
+            <ul>${htmlEjercicios}</ul>
+        `;
+        contenedor.appendChild(div);
     });
 }
 
-function cerrarModal() {
-    document.getElementById('modal-historial').classList.add('hidden');
+function toggleVista() {
+    const vistaHoy = document.getElementById('vista-hoy');
+    const vistaSemana = document.getElementById('vista-semana');
+    
+    if (vistaHoy.classList.contains('hidden')) {
+        vistaHoy.classList.remove('hidden');
+        vistaSemana.classList.add('hidden');
+    } else {
+        vistaHoy.classList.add('hidden');
+        vistaSemana.classList.remove('hidden');
+    }
 }
