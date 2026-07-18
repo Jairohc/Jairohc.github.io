@@ -1,6 +1,3 @@
-// ==========================================
-// 1. BASES DE DATOS LOCALES
-// ==========================================
 const planNutricion = {
     desayuno: [
         "A: Huevo Clásico (3 enteros + 150g claras + 3 tortillas + 5g aceite)",
@@ -95,9 +92,6 @@ const rutinas = {
     }
 };
 
-// ==========================================
-// 2. LÓGICA DE RENDERIZADO
-// ==========================================
 document.addEventListener('DOMContentLoaded', () => {
     actualizarReloj();
     setInterval(actualizarReloj, 60000);
@@ -109,7 +103,8 @@ document.addEventListener('DOMContentLoaded', () => {
 function actualizarReloj() {
     const ahora = new Date();
     const opciones = { weekday: 'long', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-    document.getElementById('fecha-hora').innerText = ahora.toLocaleDateString('es-MX', opciones).toUpperCase();
+    const relojElemento = document.getElementById('fecha-hora');
+    if (relojElemento) relojElemento.innerText = ahora.toLocaleDateString('es-MX', opciones).toUpperCase();
 }
 
 function renderizarHoy() {
@@ -117,64 +112,68 @@ function renderizarHoy() {
     const diaSemana = ahora.getDay();
     const hora = ahora.getHours();
 
-    // Determinar qué comida mostrar por defecto según la hora
-    let comidaActual = 'cena'; // Por defecto
-    if (hora >= 4 && hora < 12) {
-        comidaActual = 'desayuno';
-    } else if (hora >= 12 && hora < 18) {
-        comidaActual = 'comida';
-    }
+    // Comida por defecto
+    let comidaActual = 'cena';
+    if (hora >= 4 && hora < 12) comidaActual = 'desayuno';
+    else if (hora >= 12 && hora < 18) comidaActual = 'comida';
     mostrarComida(comidaActual);
 
     // Alerta Dominical
     if (diaSemana === 0) {
-        document.getElementById('alerta-domingo').classList.remove('hidden');
+        document.getElementById('alerta-domingo')?.classList.remove('hidden');
     }
 
     // Entrenamiento
     const rutinaDia = rutinas[diaSemana];
-    document.getElementById('nombre-rutina').innerText = rutinaDia.nombre;
-    document.getElementById('bloque-cardio').innerText = "Cardio/Actividad: " + rutinaDia.cardio;
-
+    const nombreRutina = document.getElementById('nombre-rutina');
+    const bloqueCardio = document.getElementById('bloque-cardio');
     const listaEjercicios = document.getElementById('lista-ejercicios');
-    listaEjercicios.innerHTML = ''; // Limpiar previo
 
-    if (rutinaDia.ejercicios.length > 0) {
-        rutinaDia.ejercicios.forEach(ej => {
-            const details = document.createElement('details');
-            details.innerHTML = `
-                <summary>${ej.nombre}</summary>
-                <div class="detalle-ejercicio">${ej.detalle}</div>
-            `;
-            listaEjercicios.appendChild(details);
-        });
-    } else {
-        listaEjercicios.innerHTML = "<p style='padding: 10px; background: #eee; border-radius: 4px;'>Carga tus rutas y monitorea FC en Garmin Connect.</p>";
+    if (nombreRutina) nombreRutina.innerText = rutinaDia.nombre;
+    if (bloqueCardio) bloqueCardio.innerText = "Foco: " + rutinaDia.cardio;
+    
+    if (listaEjercicios) {
+        listaEjercicios.innerHTML = '';
+        if (rutinaDia.ejercicios.length > 0) {
+            rutinaDia.ejercicios.forEach(ej => {
+                const details = document.createElement('details');
+                details.innerHTML = `
+                    <summary>${ej.nombre}</summary>
+                    <div class="detalle-ejercicio">${ej.detalle}</div>
+                `;
+                listaEjercicios.appendChild(details);
+            });
+        } else {
+            listaEjercicios.innerHTML = "<p style='padding: 10px; background: #eee; border-radius: 4px; font-weight: bold;'>Día enfocado en ciclismo. Carga la ruta en tu Garmin.</p>";
+        }
     }
 }
 
 function mostrarComida(tipo) {
-    // 1. Quitar la clase 'activo' de todos los botones
-    document.getElementById('btn-desayuno').classList.remove('activo');
-    document.getElementById('btn-comida').classList.remove('activo');
-    document.getElementById('btn-cena').classList.remove('activo');
+    // Resetear clases con Optional Chaining para que no explote si falta un ID
+    document.getElementById('btn-desayuno')?.classList.remove('activo');
+    document.getElementById('btn-comida')?.classList.remove('activo');
+    document.getElementById('btn-cena')?.classList.remove('activo');
     
-    // 2. Activar el botón seleccionado
-    document.getElementById(`btn-${tipo}`).classList.add('activo');
+    document.getElementById(`btn-${tipo}`)?.classList.add('activo');
     
-    // 3. Renderizar la lista
     const listaComidas = document.getElementById('lista-comidas');
-    listaComidas.innerHTML = '';
+    if (!listaComidas) return; // Salir limpio si no existe la etiqueta en HTML
     
-    planNutricion[tipo].forEach(item => {
-        const li = document.createElement('li');
-        li.innerText = item;
-        listaComidas.appendChild(li);
-    });
+    listaComidas.innerHTML = '';
+    if (planNutricion[tipo]) {
+        planNutricion[tipo].forEach(item => {
+            const li = document.createElement('li');
+            li.innerText = item;
+            listaComidas.appendChild(li);
+        });
+    }
 }
 
 function renderizarSnacks() {
     const listaSnacks = document.getElementById('lista-snacks');
+    if (!listaSnacks) return;
+
     planNutricion.snacks.forEach(item => {
         const li = document.createElement('li');
         li.innerText = item;
@@ -184,8 +183,9 @@ function renderizarSnacks() {
 
 function renderizarSemana() {
     const contenedor = document.getElementById('contenedor-semana');
-    const ordenDias = [1, 2, 3, 4, 5, 6, 0]; 
+    if (!contenedor) return;
 
+    const ordenDias = [1, 2, 3, 4, 5, 6, 0]; 
     ordenDias.forEach(dia => {
         const rut = rutinas[dia];
         const div = document.createElement('div');
@@ -193,7 +193,7 @@ function renderizarSemana() {
         
         let htmlEjercicios = rut.ejercicios.length > 0 
             ? rut.ejercicios.map(e => `<li>${e.nombre}</li>`).join('') 
-            : `<li>Día de Ciclismo</li>`;
+            : `<li>MTB / Ciclismo</li>`;
 
         div.innerHTML = `
             <h3>${rut.nombre}</h3>
@@ -208,11 +208,13 @@ function toggleVista() {
     const vistaHoy = document.getElementById('vista-hoy');
     const vistaSemana = document.getElementById('vista-semana');
     
-    if (vistaHoy.classList.contains('hidden')) {
-        vistaHoy.classList.remove('hidden');
-        vistaSemana.classList.add('hidden');
-    } else {
-        vistaHoy.classList.add('hidden');
-        vistaSemana.classList.remove('hidden');
+    if (vistaHoy && vistaSemana) {
+        if (vistaHoy.classList.contains('hidden')) {
+            vistaHoy.classList.remove('hidden');
+            vistaSemana.classList.add('hidden');
+        } else {
+            vistaHoy.classList.add('hidden');
+            vistaSemana.classList.remove('hidden');
+        }
     }
 }
