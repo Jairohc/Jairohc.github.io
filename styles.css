@@ -16,7 +16,6 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    /* Evita el rebote excesivo al hacer scroll en iOS */
     overscroll-behavior-y: none; 
 }
 
@@ -43,11 +42,37 @@ header p { margin: 0; font-size: 0.85em; color: #666; }
 }
 
 .card h2 { margin-top: 0; font-size: 1.3em; border-bottom: 2px solid #eee; padding-bottom: 10px; }
-
 .titulo-destacado { color: var(--primary); margin-bottom: 5px; }
 .info-texto { font-size: 0.9em; color: #666; margin-top: 0; font-weight: bold; }
 
-/* NUEVO: Tarjetas de Ejercicios Optimizadas para Registro Rápido */
+/* Selector de día manual */
+.selector-dia-override {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #e9ecef;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.selector-dia-override label {
+    font-size: 0.85em;
+    font-weight: bold;
+    color: var(--primary);
+}
+
+.selector-dia-override select {
+    flex: 1;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: #ffffff;
+    color: var(--primary);
+    font-weight: 500;
+}
+
 .ejercicio-card {
     background: #f9f9f9;
     border-left: 4px solid var(--primary);
@@ -70,7 +95,7 @@ header p { margin: 0; font-size: 0.85em; color: #666; }
     padding: 12px;
     border: 1px solid #ccc;
     border-radius: 6px;
-    font-size: 16px; /* Evita el zoom automático en Safari iOS */
+    font-size: 16px; 
 }
 
 .btn-guardar {
@@ -87,7 +112,6 @@ header p { margin: 0; font-size: 0.85em; color: #666; }
 .ultimo-peso { font-size: 0.85em; color: #666; margin: 0; }
 .check-exito { color: var(--success); font-weight: bold; font-size: 1.2em; }
 
-/* Menú desplegable para la técnica (no estorba el registro) */
 details {
     margin-top: 10px;
     border-top: 1px dashed #ccc;
@@ -96,7 +120,6 @@ details {
 summary { font-size: 0.9em; font-weight: 600; color: #555; cursor: pointer; outline: none; }
 .detalle-tecnica { font-size: 0.85em; color: #555; margin-top: 8px; line-height: 1.4; }
 
-/* Navegación Inferior Estilo App */
 .bottom-nav {
     position: fixed;
     bottom: 0;
@@ -108,7 +131,7 @@ summary { font-size: 0.9em; font-weight: 600; color: #555; cursor: pointer; outl
     justify-content: space-around;
     align-items: center;
     box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-    padding-bottom: env(safe-area-inset-bottom); /* Soporte para el notch de iPhone */
+    padding-bottom: env(safe-area-inset-bottom); 
     z-index: 1000;
 }
 
@@ -132,7 +155,6 @@ summary { font-size: 0.9em; font-weight: 600; color: #555; cursor: pointer; outl
 .nav-item.activo { color: var(--primary); }
 .nav-item.activo .nav-icon { transform: scale(1.1); }
 
-/* Pestañas de Nutrición */
 .tabs-nutricion { display: flex; gap: 5px; margin-bottom: 15px; background-color: #e9ecef; padding: 5px; border-radius: 8px; }
 .tabs-nutricion button { flex: 1; padding: 10px; background-color: transparent; border: none; color: #495057; font-weight: bold; border-radius: 6px; cursor: pointer; }
 .tabs-nutricion button.activo { background-color: #ffffff; color: var(--primary); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
