@@ -136,10 +136,26 @@ function renderizarHoy() {
         listaEjercicios.innerHTML = '';
         if (rutinaDia.ejercicios.length > 0) {
             rutinaDia.ejercicios.forEach(ej => {
+                const idSeguro = btoa(unescape(encodeURIComponent(ej.nombre)));
+                // Leer caché de Chrome
+                const pesoGuardado = localStorage.getItem('peso_' + idSeguro) || '--';
+
                 const details = document.createElement('details');
                 details.innerHTML = `
                     <summary>${ej.nombre}</summary>
-                    <div class="detalle-ejercicio">${ej.detalle}</div>
+                    <div class="detalle-ejercicio">
+                        <p>${ej.detalle}</p>
+                        
+                        <div style="display: flex; gap: 10px; margin-top: 15px; align-items: center;">
+                            <input type="number" id="input-${idSeguro}" placeholder="${pesoGuardado !== '--' ? pesoGuardado + ' kg' : 'Kg'}" step="0.5" style="width: 80px; padding: 10px; border: 1px solid #ccc; border-radius: 4px;">
+                            <button onclick="guardarPesoLocal('${idSeguro}')" style="width: auto; padding: 10px 15px; margin: 0; background-color: #27ae60; color: white;">Guardar</button>
+                            <span id="check-${idSeguro}" class="hidden" style="color: #27ae60; font-weight: bold; font-size: 1.2em;">✔</span>
+                        </div>
+                        
+                        <p style="font-size: 0.85em; color: #666; margin-top: 10px;">
+                            Último peso registrado: <strong id="display-${idSeguro}" style="color: #2c3e50;">${pesoGuardado}</strong> kg
+                        </p>
+                    </div>
                 `;
                 listaEjercicios.appendChild(details);
             });
@@ -149,8 +165,30 @@ function renderizarHoy() {
     }
 }
 
+// Función para guardar en caché local
+function guardarPesoLocal(idSeguro) {
+    const inputElement = document.getElementById(`input-${idSeguro}`);
+    const pesoValue = inputElement.value;
+
+    if (!pesoValue || isNaN(pesoValue) || pesoValue <= 0) return;
+
+    // Escribir en el localStorage del navegador
+    localStorage.setItem('peso_' + idSeguro, pesoValue);
+
+    // Actualizar los textos visuales sin recargar la página
+    document.getElementById(`display-${idSeguro}`).innerText = pesoValue;
+    inputElement.placeholder = pesoValue + " kg";
+    inputElement.value = '';
+
+    // Mostrar palomita de confirmación
+    const checkmark = document.getElementById(`check-${idSeguro}`);
+    checkmark.classList.remove('hidden');
+    setTimeout(() => {
+        checkmark.classList.add('hidden');
+    }, 1500);
+}
+
 function mostrarComida(tipo) {
-    // Resetear clases con Optional Chaining para que no explote si falta un ID
     document.getElementById('btn-desayuno')?.classList.remove('activo');
     document.getElementById('btn-comida')?.classList.remove('activo');
     document.getElementById('btn-cena')?.classList.remove('activo');
@@ -158,7 +196,7 @@ function mostrarComida(tipo) {
     document.getElementById(`btn-${tipo}`)?.classList.add('activo');
     
     const listaComidas = document.getElementById('lista-comidas');
-    if (!listaComidas) return; // Salir limpio si no existe la etiqueta en HTML
+    if (!listaComidas) return; 
     
     listaComidas.innerHTML = '';
     if (planNutricion[tipo]) {
