@@ -1,4 +1,4 @@
-/* Corrección universal del modelo de caja para evitar desbordamientos en iOS */
+/* Universal box-sizing reset for exact touch responsiveness */
 *, *::before, *::after {
     box-sizing: border-box;
 }
@@ -50,7 +50,7 @@ header p {
     border-radius: 12px;
     padding: 20px;
     margin-bottom: 20px;
-    box-shadow: 0 2px 8 rgba(0,0,0,0.06);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
 .card h2 {
@@ -71,7 +71,7 @@ header p {
     border-left: 4px solid var(--accent);
 }
 
-/* Selector manual superior */
+/* Day Override Selector */
 .selector-dia-override {
     display: flex;
     align-items: center;
@@ -99,14 +99,19 @@ header p {
     font-weight: 500;
 }
 
-/* Tarjetas individuales (Raw Data Entry) */
+/* Individual Exercise Cards */
 .ejercicio-card {
     background: #f9f9f9;
     border-left: 4px solid var(--primary);
     border-radius: 8px;
     padding: 15px;
     margin-bottom: 15px;
-    transition: background-color 0.3s ease;
+    transition: all 0.25s ease;
+}
+
+.ejercicio-card.completed {
+    border-left-color: var(--success);
+    background-color: #f0fff4;
 }
 
 .ejercicio-card strong {
@@ -121,10 +126,10 @@ header p {
     margin: 0 0 12px 0;
 }
 
-/* Contenedor de fichas de sobrecarga rápida */
+/* Quick Overload Chips */
 .quick-chips {
     display: flex;
-    gap: 8px;
+    gap: 6px;
     margin-bottom: 10px;
     width: 100%;
 }
@@ -136,7 +141,7 @@ header p {
     border: none;
     padding: 8px 4px;
     border-radius: 6px;
-    font-size: 0.85em;
+    font-size: 0.8em;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.1s ease;
@@ -146,7 +151,7 @@ header p {
 
 .btn-chip:active {
     background-color: #cbd5e1;
-    transform: scale(0.97);
+    transform: scale(0.96);
 }
 
 .registro {
@@ -185,7 +190,7 @@ header p {
     transform: scale(1.03);
 }
 
-/* Alternativas técnicas */
+/* Alternative Exercises Accordion */
 details {
     margin-top: 12px;
     border-top: 1px dashed #ccc;
@@ -209,13 +214,10 @@ details ul {
 
 details li {
     margin-bottom: 6px;
-    border: none;
-    background: transparent;
-    padding: 0;
     list-style-type: square;
 }
 
-/* Barra de navegación inferior */
+/* Bottom Navigation Bar */
 .bottom-nav {
     position: fixed;
     bottom: 0;
@@ -255,25 +257,28 @@ details li {
     color: var(--primary);
 }
 
-/* Nutrición */
+/* Nutrition Section */
 .tabs-nutricion {
     display: flex;
-    gap: 5px;
+    gap: 4px;
     margin-bottom: 15px;
     background-color: #e9ecef;
-    padding: 5px;
+    padding: 4px;
     border-radius: 8px;
+    overflow-x: auto;
 }
 
 .tabs-nutricion button {
     flex: 1;
-    padding: 10px;
+    padding: 8px 6px;
     background-color: transparent;
     border: none;
     color: #495057;
     font-weight: bold;
+    font-size: 0.8em;
     border-radius: 6px;
     cursor: pointer;
+    white-space: nowrap;
 }
 
 .tabs-nutricion button.activo {
@@ -282,16 +287,23 @@ details li {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.snacks-container {
-    margin-top: 25px;
+.action-container {
+    margin-top: 20px;
     padding-top: 15px;
     border-top: 2px dashed #ccc;
 }
 
-.snacks-container h3 {
-    font-size: 1.1em;
-    color: var(--success);
-    margin: 0 0 10px 0;
+.btn-action {
+    width: 100%;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 0.95em;
+    cursor: pointer;
+    transition: background-color 0.2s;
 }
 
 ul {
