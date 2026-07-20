@@ -21,8 +21,8 @@
     "snacks": [
       "Snack A: 1 scoop Whey + 150g fruta + 15g nueces",
       "Snack B: 150g yogur griego + 150g fruta + 15g nueces",
-      "Snack C: 1 scoop Whey + 150g fruta + 15g crema de cacahuate",
-      "Libre: Gelatina Light (0% azúcar) consumo ilimitado"
+      "Libre: Gelatina Light (0% azúcar) consumo ilimitado",
+      "Snack C: 1 scoop Whey + 150g fruta + 15g crema de cacahuate"
     ]
   },
   "rutinas": {
@@ -30,55 +30,55 @@
       "nombre": "Lunes: Empuje (Pecho/Hombro/Tríceps)",
       "cardio": "20 min | 5% inclinación | 4.2-4.8 km/h",
       "ejercicios": [
-        { "nombre": "Press de banca: 3x6-8", "detalle": "Retracción escapular obligatoria. Los pies empujan el piso. Baja la barra al nivel de los pezones." },
-        { "nombre": "Press inclinado mancuerna: 3x8-10", "detalle": "Banco a 30-45 grados. Baja hasta sentir el estiramiento en el pectoral superior." },
-        { "nombre": "Press militar sentado: 3x8-10", "detalle": "Core apretado, no arquees la espalda baja. Rango de movimiento completo." },
-        { "nombre": "Elevaciones laterales: 3x12-15", "detalle": "Lidera el movimiento con los codos ligeramente flexionados." },
-        { "nombre": "Extensión de tríceps polea: 3x10-12", "detalle": "Codos pegados a las costillas en todo momento. Aprieta un segundo abajo." }
+        { "nombre": "Press de banca: 3x6-8", "detalle": "Retracción escapular obligatoria. Baja al nivel de los pezones.", "alternativas": ["Press mancuernas inclinado", "Press máquina convergente", "Flexiones lastradas"] },
+        { "nombre": "Press inclinado mancuerna: 3x8-10", "detalle": "Banco a 30-45 grados. Siente el estiramiento en el pectoral superior.", "alternativas": ["Press inclinado en máquina", "Aperturas inclinadas"] },
+        { "nombre": "Press militar sentado: 3x8-10", "detalle": "Core apretado, no arquees la espalda baja. Rango completo.", "alternativas": ["Press hombro mancuernas", "Press hombro máquina", "Elevaciones laterales pesadas"] },
+        { "nombre": "Elevaciones laterales: 3x12-15", "detalle": "Lidera el movimiento con los codos ligeramente flexionados.", "alternativas": ["Elevaciones en polea", "Pájaros en máquina"] },
+        { "nombre": "Extensión de tríceps polea: 3x10-12", "detalle": "Codos pegados a las costillas. Aprieta un segundo abajo.", "alternativas": ["Press francés", "Extensión con cuerda"] }
       ]
     },
     "2": {
       "nombre": "Martes: Pierna 1 (Foco Cuádriceps) + Core",
       "cardio": "20 min plana | 0% | 4.0 km/h",
       "ejercicios": [
-        { "nombre": "Sentadilla libre o Hack: 3x6-8", "detalle": "Romper el paralelo. Foco en empujar con toda la planta del pie." },
-        { "nombre": "Prensa de piernas: 3x10-12", "detalle": "Pies en la parte baja de la plataforma. No bloquees las rodillas al extender." },
-        { "nombre": "Extensión de cuádriceps: 3x12-15", "detalle": "Movimiento controlado, pausa de 1 segundo en la máxima contracción arriba." },
-        { "nombre": "Curl de isquios tumbado: 3x10-12", "detalle": "Mantén la cadera pegada al banco. Controla la bajada en 3 segundos." },
-        { "nombre": "Elevación de talones + Core: 4x10-15", "detalle": "Alterna con 3 series de Crunch en polea alta." }
+        { "nombre": "Sentadilla libre o Hack: 3x6-8", "detalle": "Romper el paralelo. Foco en empujar con toda la planta del pie.", "alternativas": ["Prensa de piernas (pies bajos)", "Sentadilla búlgara", "Sentadilla goblet"] },
+        { "nombre": "Prensa de piernas: 3x10-12", "detalle": "Pies en la parte baja de la plataforma. No bloquees rodillas.", "alternativas": ["Hack Squat", "Zancadas con mancuernas"] },
+        { "nombre": "Extensión de cuádriceps: 3x12-15", "detalle": "Movimiento controlado, pausa de 1 segundo arriba.", "alternativas": ["Sentadilla sissy", "Zancadas estáticas"] },
+        { "nombre": "Curl de isquios tumbado: 3x10-12", "detalle": "Cadera pegada al banco. Controla la bajada en 3 segundos.", "alternativas": ["Curl de isquios sentado", "Peso muerto piernas rígidas"] },
+        { "nombre": "Elevación de talones + Core: 4x10-15", "detalle": "Alterna pantorrillas con 3 series de Crunch en polea alta.", "alternativas": ["Elevación de talones sentado", "Planchas isométricas"] }
       ]
     },
     "3": {
       "nombre": "Miércoles: Tirón (Espalda/Bíceps)",
       "cardio": "20 min | 5% inclinación | 4.2-4.8 km/h",
       "ejercicios": [
-        { "nombre": "Dominadas o Jalón al pecho: 3x6-8", "detalle": "Depresión escapular antes de flexionar. Lleva la barra/pecho hacia arriba." },
-        { "nombre": "Remo con barra/máquina: 3x8-10", "detalle": "Torso firme. Tira desde los codos rozando las costillas." },
-        { "nombre": "Pullover en polea alta: 2x12-15", "detalle": "Brazos semirrectos, siente el estiramiento en los dorsales." },
-        { "nombre": "Face pulls: 3x12-15", "detalle": "Tira hacia tu frente separando la cuerda. Siente el trabajo en el deltoides posterior." },
-        { "nombre": "Curl de bíceps mancuerna: 3x10-12", "detalle": "Codos fijos. Supinación (girar la muñeca) al subir." }
+        { "nombre": "Dominadas o Jalón al pecho: 3x6-8", "detalle": "Depresión escapular antes de flexionar. Lleva pecho a la barra.", "alternativas": ["Jalón al pecho agarre cerrado", "Dominadas asistidas"] },
+        { "nombre": "Remo con barra/máquina: 3x8-10", "detalle": "Torso firme. Tira desde los codos rozando las costillas.", "alternativas": ["Remo en polea baja", "Remo con mancuerna a una mano"] },
+        { "nombre": "Pullover en polea alta: 2x12-15", "detalle": "Brazos semirrectos, siente el estiramiento en los dorsales.", "alternativas": ["Pullover con mancuerna", "Jalón con brazos rectos"] },
+        { "nombre": "Face pulls: 3x12-15", "detalle": "Tira hacia tu frente separando la cuerda. Siente el deltoides posterior.", "alternativas": ["Pájaros con mancuernas", "Vuelos inversos en máquina"] },
+        { "nombre": "Curl de bíceps mancuerna: 3x10-12", "detalle": "Codos fijos. Supinación (girar la muñeca) al subir.", "alternativas": ["Curl con barra Z", "Curl martillo", "Curl en polea"] }
       ]
     },
     "4": {
       "nombre": "Jueves: Pierna 2 (Isquios/Glúteo) + Core",
       "cardio": "20 min plana | 0% | 4.0 km/h",
       "ejercicios": [
-        { "nombre": "Peso muerto rumano: 3x8-10", "detalle": "Empuja la cadera hacia atrás. Espalda recta, barra pegada a las piernas." },
-        { "nombre": "Zancadas búlgaras: 3x10-12", "detalle": "Torso ligeramente inclinado hacia adelante. Baja profundo." },
-        { "nombre": "Curl de isquios sentado: 3x12-15", "detalle": "Ajusta la almohadilla firme contra los muslos." },
-        { "nombre": "Prensa pies altos: 2x12-15", "detalle": "Pies colocados alto y separados. Baja hasta que las rodillas se acerquen al pecho." },
-        { "nombre": "Elevación talones + Core: 4x10-15", "detalle": "Alterna con 3 series de Rueda abdominal." }
+        { "nombre": "Peso muerto rumano: 3x8-10", "detalle": "Empuja la cadera hacia atrás. Espalda recta, barra pegada.", "alternativas": ["Buenos días", "Peso muerto convencional"] },
+        { "nombre": "Zancadas búlgaras: 3x10-12", "detalle": "Torso ligeramente inclinado hacia adelante. Baja profundo.", "alternativas": ["Prensa a una pierna", "Zancadas inversas"] },
+        { "nombre": "Curl de isquios sentado: 3x12-15", "detalle": "Ajusta la almohadilla firme contra los muslos.", "alternativas": ["Curl de isquios tumbado", "Deslizamientos de isquios"] },
+        { "nombre": "Prensa pies altos: 2x12-15", "detalle": "Pies colocados alto y separados. Rodillas hacia el pecho.", "alternativas": ["Hip Thrust", "Sentadilla sumo"] },
+        { "nombre": "Elevación talones + Core: 4x10-15", "detalle": "Alterna pantorrillas con 3 series de Rueda abdominal.", "alternativas": ["Elevación de talones en prensa", "Crunch en polea"] }
       ]
     },
     "5": {
       "nombre": "Viernes: Torso (Mantenimiento)",
       "cardio": "20 min | 6% inclinación | 4.5 km/h",
       "ejercicios": [
-        { "nombre": "Aperturas en polea (pecho): 3x10-12", "detalle": "Siente el estiramiento profundo y abraza un barril imaginario al cerrar." },
-        { "nombre": "Remo unilateral mancuerna: 3x8-10", "detalle": "Tira de la mancuerna hacia tu cadera, no hacia tu pecho." },
-        { "nombre": "Press hombros máquina: 3x10-12", "detalle": "Movimiento constante. No dejes que el peso descanse en la pila." },
-        { "nombre": "Curl bíceps polea: 2x12-15", "detalle": "Tensión constante. Aprieta un segundo arriba." },
-        { "nombre": "Extensión tríceps copa: 2x12-15", "detalle": "Codos apuntando hacia arriba y cerrados. Estira completamente." }
+        { "nombre": "Aperturas en polea (pecho): 3x10-12", "detalle": "Siente el estiramiento y abraza un barril imaginario al cerrar.", "alternativas": ["Pec Deck", "Aperturas con mancuernas"] },
+        { "nombre": "Remo unilateral mancuerna: 3x8-10", "detalle": "Tira de la mancuerna hacia tu cadera, no hacia tu pecho.", "alternativas": ["Remo en máquina Hammer", "Remo polea baja a una mano"] },
+        { "nombre": "Press hombros máquina: 3x10-12", "detalle": "Movimiento constante. No dejes que el peso descanse en la pila.", "alternativas": ["Press Arnold", "Press militar con mancuernas"] },
+        { "nombre": "Curl bíceps polea: 2x12-15", "detalle": "Tensión constante. Aprieta un segundo arriba.", "alternativas": ["Curl concentrado", "Curl predicador"] },
+        { "nombre": "Extensión tríceps copa: 2x12-15", "detalle": "Codos apuntando hacia arriba y cerrados. Estira completamente.", "alternativas": ["Rompecráneos", "Extensión tríceps a una mano"] }
       ]
     },
     "6": {
