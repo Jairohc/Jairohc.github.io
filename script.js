@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('main-content').innerHTML = `
             <div class="card" style="text-align: center; color: red;">
                 <h2>Error de conexión</h2>
-                <p>No se pudo cargar data.json.</p>
+                <p>No se pudo cargar data.json de forma local.</p>
             </div>
         `;
     }
@@ -88,6 +88,27 @@ function renderizarRutina() {
             rutinaDia.ejercicios.forEach(ej => {
                 const idSeguro = btoa(unescape(encodeURIComponent(ej.nombre)));
                 const pesoGuardado = localStorage.getItem('peso_' + idSeguro) || '';
+                const basePeso = pesoGuardado ? parseFloat(pesoGuardado) : 0;
+
+                // Render de Fichas de Sobrecarga Rápida
+                let htmlChips = '';
+                if (basePeso > 0) {
+                    htmlChips = `
+                        <div class="quick-chips" id="chips-${idSeguro}">
+                            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', ${basePeso})">=${basePeso} kg</button>
+                            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', ${basePeso + 2.5})">+2.5 kg</button>
+                            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', ${basePeso + 5})">+5 kg</button>
+                        </div>
+                    `;
+                } else {
+                    htmlChips = `
+                        <div class="quick-chips" id="chips-${idSeguro}">
+                            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', 20)">20 kg</button>
+                            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', 40)">40 kg</button>
+                            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', 60)">60 kg</button>
+                        </div>
+                    `;
+                }
 
                 const listaAlts = (ej.alternativas && ej.alternativas.length > 0) 
                     ? ej.alternativas.map(alt => `<li>${alt}</li>`).join('') 
@@ -95,12 +116,15 @@ function renderizarRutina() {
 
                 const div = document.createElement('div');
                 div.className = 'ejercicio-card';
+                div.id = `card-${idSeguro}`;
                 div.innerHTML = `
                     <strong>${ej.nombre}</strong>
                     <p>${ej.detalle}</p>
                     
+                    ${htmlChips}
+
                     <div class="registro">
-                        <input type="number" id="input-${idSeguro}" placeholder="${pesoGuardado ? pesoGuardado + ' kg (último)' : 'Kg'}" step="0.5">
+                        <input type="number" id="input-${idSeguro}" placeholder="${pesoGuardado ? pesoGuardado + ' kg (último)' : 'Kg'}" step="0.5" inputmode="decimal" pattern="[0-9]*">
                         <button id="btn-${idSeguro}" class="btn-guardar" onclick="guardarPesoLocal('${idSeguro}')">Guardar</button>
                     </div>
 
@@ -118,10 +142,11 @@ function renderizarRutina() {
     }
 }
 
-function guardarPesoLocal(idSeguro) {
+function guardarPesoLocal(idSeguro, valorEspecifco = null) {
     const inputElement = document.getElementById(`input-${idSeguro}`);
     const boton = document.getElementById(`btn-${idSeguro}`);
-    const pesoValue = inputElement.value;
+    
+    let pesoValue = valorEspecifco !== null ? valorEspecifco : inputElement.value;
 
     if (!pesoValue || isNaN(pesoValue) || pesoValue <= 0) return;
 
@@ -130,12 +155,29 @@ function guardarPesoLocal(idSeguro) {
     inputElement.placeholder = pesoValue + " kg (último)";
     inputElement.value = '';
 
+    // Actualizar dinámicamente los chips de sobrecarga en caliente sin perder scroll
+    const contenedorChips = document.getElementById(`chips-${idSeguro}`);
+    if (contenedorChips) {
+        const basePeso = parseFloat(pesoValue);
+        contenedorChips.innerHTML = `
+            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', ${basePeso})">=${basePeso} kg</button>
+            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', ${basePeso + 2.5})">+2.5 kg</button>
+            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', ${basePeso + 5})">+5 kg</button>
+        `;
+    }
+
+    // Ejecutar vibración física corta si la API nativa está disponible
+    if ("vibrate" in navigator) {
+        navigator.vibrate(40);
+    }
+
+    // Micro-animación visual táctil
     boton.innerText = "✔";
     boton.classList.add('guardado');
     setTimeout(() => { 
         boton.innerText = "Guardar"; 
         boton.classList.remove('guardado');
-    }, 1500);
+    }, 1200);
 }
 
 function renderizarDieta() {
