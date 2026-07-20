@@ -1,97 +1,101 @@
 {
-  "planNutricion": {
-    "desayuno": [
-      "A: Huevo Clásico (3 enteros + 150g claras + 3 tortillas + 5g aceite)",
-      "B: Avena Dulce (1.5 scoop Whey + 50g avena + 15g crema cacahuate + 80g frutos rojos)",
-      "C: Tacos de Pollo (150g pechuga + 3 tortillas + 50g aguacate)",
-      "D: Pasta Roja (1 huevo + 150g claras + 170g pasta preparada)",
-      "E: Tacos Jamón/Queso (150g claras + 60g jamón + 40g queso + 3 tortillas + 50g aguacate)"
+  "nutritionPlan": {
+    "breakfast": [
+      "Option A: Classic Eggs (3 whole + 150g egg whites + 3 tortillas + 5g oil)",
+      "Option B: Sweet Oatmeal (1.5 scoops Whey + 50g oats + 15g peanut butter + 80g berries)",
+      "Option C: Chicken Tacos (150g breast + 3 tortillas + 50g avocado)",
+      "Option D: Red Pasta (1 egg + 150g egg whites + 170g cooked pasta)",
+      "Option E: Ham & Cheese Tacos (150g egg whites + 60g ham + 40g cheese + 3 tortillas + 50g avocado)"
     ],
-    "comida": [
-      "A: Base Arroz/Pasta (200g carne magra + 70g arroz/pasta seco + 10g aceite)",
-      "B: Base Papa (200g carne magra + 200g papa + 10g aceite)"
+    "lunch": [
+      "Option A: Rice/Pasta Base (200g lean meat + 70g dry rice/pasta + 10g oil)",
+      "Option B: Potato Base (200g lean meat + 200g boiled potato + 10g oil)"
     ],
-    "cena": [
-      "A: Tacos Atún (200g atún + 3 tortillas + 50g aguacate)",
-      "B: Pasta con Pollo (200g pollo + 60g pasta seco + 10g aceite)",
-      "C: Tacos Pescado (200g tilapia + 4 tortillas + 50g aguacate)",
-      "D: Tacos Pollo (200g pollo + 3 tortillas + 50g aguacate)",
-      "E: Tacos Res (200g bistec + 3 tortillas + 50g aguacate)"
+    "dinner": [
+      "Option A: Tuna Tacos (200g tuna + 3 tortillas + 50g avocado)",
+      "Option B: Chicken Pasta (200g chicken + 60g dry pasta + 10g oil)",
+      "Option C: Fish Tacos (200g tilapia + 4 tortillas + 50g avocado)",
+      "Option D: Chicken Tacos (200g chicken + 3 tortillas + 50g avocado)",
+      "Option E: Beef Tacos (200g steak + 3 tortillas + 50g avocado)"
     ],
     "snacks": [
-      "Snack A: 1 scoop Whey + 150g fruta + 15g nueces",
-      "Snack B: 150g yogur griego + 150g fruta + 15g nueces",
-      "Snack C: 1 scoop Whey + 150g fruta + 15g crema de cacahuate",
-      "Libre: Gelatina Light (0% azúcar) consumo ilimitado"
+      "Snack A: 1 scoop Whey + 150g fruit + 15g nuts",
+      "Snack B: 150g Greek yogurt + 150g fruit + 15g nuts",
+      "Free Ingestion: Light Jello (0% sugar) unlimited"
+    ],
+    "equivalents": [
+      "Protein: 200g Lean Beef = 200g Chicken Breast = 200g Tilapia = 2 cans Tuna in water",
+      "Carbohydrates: 70g Dry Rice = 70g Dry Pasta = 220g Potato = 4 Corn Tortillas = 60g Oats",
+      "Fats: 50g Avocado = 15g Peanut Butter = 15g Nuts = 10g Olive/Cooking Oil"
     ]
   },
-  "rutinas": {
+  "routines": {
     "1": {
-      "nombre": "Lunes: Empuje (Pecho/Hombro/Tríceps)",
-      "cardio": "Caminadora: 20 min | 5% incl. | 4.2 - 4.8 km/h (2.6 - 3.0 mph) [Alts: Escaladora Nivel 5-6 | Elíptica Resistencia 6-7]",
-      "ejercicios": [
-        { "nombre": "Press de banca: 3x6-8", "detalle": "Retracción escapular obligatoria. Baja al nivel de los pezones.", "alternativas": ["Press mancuernas inclinado", "Press máquina convergente", "Flexiones lastradas"] },
-        { "nombre": "Press inclinado mancuerna: 3x8-10", "detalle": "Banco a 30-45 grados. Siente el estiramiento en el pectoral superior.", "alternativas": ["Press inclinado en máquina", "Aperturas inclinadas"] },
-        { "nombre": "Press militar sentado: 3x8-10", "detalle": "Core apretado, no arquees la espalda baja. Rango completo.", "alternativas": ["Press hombro mancuernas", "Press hombro máquina", "Elevaciones laterales pesadas"] },
-        { "nombre": "Elevaciones laterales: 3x12-15", "detalle": "Lidera el movimiento con los codos ligeramente flexionados.", "alternativas": ["Elevaciones en polea", "Pájaros en máquina"] },
-        { "nombre": "Extensión de tríceps polea: 3x10-12", "detalle": "Codos pegados a las costillas. Aprieta un segundo abajo.", "alternativas": ["Press francés", "Extensión con cuerda"] }
+      "name": "Monday: Push (Chest/Shoulders/Triceps)",
+      "cardio": "Treadmill: 20 min | 5% incl. | 4.2 - 4.8 km/h (2.6 - 3.0 mph) [Alts: Stair Climber Lvl 5-6 | Elliptical Res 6-7]",
+      "exercises": [
+        { "name": "Flat Bench Press: 3x6-8", "detail": "Mandatory scapular retraction. Lower bar to lower chest level.", "alternatives": ["Incline dumbbell press", "Convergent machine press", "Weighted push-ups"] },
+        { "name": "Incline Dumbbell Press: 3x8-10", "detail": "Bench set to 30-45 degrees. Deep stretch on upper chest.", "alternatives": ["Incline machine press", "Incline dumbbell flyes"] },
+        { "name": "Seated Military Press: 3x8-10", "detail": "Core tight, do not arch lower back. Full range of motion.", "alternatives": ["Dumbbell shoulder press", "Machine shoulder press", "Heavy lateral raises"] },
+        { "name": "Dumbbell Lateral Raises: 3x12-15", "detail": "Lead with elbows slightly bent. Controlled tempo on descent.", "alternatives": ["Cable lateral raises", "Reverse pec deck"] },
+        { "name": "Cable Triceps Pushdown: 3x10-12", "detail": "Elbows pinned to ribs. Squeeze peak contraction for 1 sec.", "alternatives": ["EZ-bar skullcrushers", "Rope overhead triceps extension"] }
       ]
     },
     "2": {
-      "nombre": "Martes: Pierna 1 (Foco Cuádriceps) + Abdomen",
-      "cardio": "Caminadora: 20 min | 0% incl. | 4.0 km/h (2.5 mph) [Alts: Escaladora Nivel 4 | Elíptica Resistencia 5]",
-      "ejercicios": [
-        { "nombre": "Sentadilla libre o Hack: 3x6-8", "detalle": "Romper el paralelo. Foco en empujar con toda la planta del pie.", "alternativas": ["Prensa de piernas (pies bajos)", "Sentadilla búlgara", "Sentadilla goblet"] },
-        { "nombre": "Prensa de piernas: 3x10-12", "detalle": "Pies en la parte baja de la plataforma. No bloquees rodillas.", "alternativas": ["Hack Squat", "Zancadas con mancuernas"] },
-        { "nombre": "Extensión de cuádriceps: 3x12-15", "detalle": "Movimiento controlado, pausa de 1 segundo arriba.", "alternativas": ["Sentadilla sissy", "Zancadas estáticas"] },
-        { "nombre": "Curl de isquios tumbado: 3x10-12", "detalle": "Cadera pegada al banco. Controla la bajada en 3 segundos.", "alternativas": ["Curl de isquios sentado", "Peso muerto piernas rígidas"] },
-        { "nombre": "Elevación de talones: 4x10-15", "detalle": "Rango de movimiento completo en escalón o máquina.", "alternativas": ["Elevación de talones en prensa", "Elevación de talones sentado"] },
-        { "nombre": "Crunch en polea alta (Abdomen): 3x12-15", "detalle": "Foco en flexionar la columna, no jalar con los brazos. Mantén la cadera fija.", "alternativas": ["Crunch tradicional con disco", "Elevaciones de piernas en banco"] }
+      "name": "Tuesday: Legs 1 (Quad Focus) + Abs",
+      "cardio": "Treadmill: 20 min | 0% incl. | 4.0 km/h (2.5 mph) [Alts: Stair Climber Lvl 4 | Elliptical Res 5]",
+      "exercises": [
+        { "name": "Barbell Squat or Hack Squat: 3x6-8", "detail": "Break parallel depth. Push firmly through full foot plant.", "alternatives": ["Leg press (low feet placement)", "Bulgarian split squat", "Goblet squat"] },
+        { "name": "Leg Press: 3x10-12", "detail": "Feet low on platform. Do not lock knees at full extension.", "alternatives": ["Hack squat machine", "Dumbbell walking lunges"] },
+        { "name": "Leg Extension: 3x12-15", "detail": "Controlled concentric, 1-second hold at peak contraction.", "alternatives": ["Sissy squat", "Static bodyweight lunges"] },
+        { "name": "Lying Leg Curl: 3x10-12", "detail": "Hips glued to bench. 3-second controlled eccentric phase.", "alternatives": ["Seated leg curl", "Stiff-legged dumbbell deadlift"] },
+        { "name": "Standing Calf Raises: 4x10-15", "detail": "Full stretch at bottom step, squeeze calves hard at top.", "alternatives": ["Leg press calf raises", "Seated calf raise machine"] },
+        { "name": "Cable Kneeling Crunch (Abs): 3x12-15", "detail": "Flex spine downward, do not pull with arms. Keep hips locked.", "alternatives": ["Weighted decline crunch", "Hanging leg raises"] }
       ]
     },
     "3": {
-      "nombre": "Miércoles: Tirón (Espalda/Bíceps)",
-      "cardio": "Caminadora: 20 min | 5% incl. | 4.2 - 4.8 km/h (2.6 - 3.0 mph) [Alts: Escaladora Nivel 5-6 | Elíptica Resistencia 6-7]",
-      "ejercicios": [
-        { "nombre": "Dominadas o Jalón al pecho: 3x6-8", "detalle": "Depresión escapular antes de flexionar. Lleva pecho a la barra.", "alternativas": ["Jalón al pecho agarre cerrado", "Dominadas asistidas"] },
-        { "nombre": "Remo con barra/máquina: 3x8-10", "detalle": "Torso firme. Tira desde los codos rozando las costillas.", "alternativas": ["Remo en polea baja", "Remo con mancuerna a una mano"] },
-        { "nombre": "Pullover en polea alta: 2x12-15", "detalle": "Brazos semirrectos, siente el estiramiento en los dorsales.", "alternativas": ["Pullover con mancuerna", "Jalón con brazos rectos"] },
-        { "nombre": "Face pulls: 3x12-15", "detalle": "Tira hacia tu frente separando la cuerda. Siente el deltoides posterior.", "alternativas": ["Pájaros con mancuernas", "Vuelos inversos en máquina"] },
-        { "nombre": "Curl de bíceps mancuerna: 3x10-12", "detalle": "Codos fijos. Supinación (girar la muñeca) al subir.", "alternativas": ["Curl con barra Z", "Curl martillo", "Curl en polea"] }
+      "name": "Wednesday: Pull (Back/Biceps)",
+      "cardio": "Treadmill: 20 min | 5% incl. | 4.2 - 4.8 km/h (2.6 - 3.0 mph) [Alts: Stair Climber Lvl 5-6 | Elliptical Res 6-7]",
+      "exercises": [
+        { "name": "Pull-ups or Lat Pulldown: 3x6-8", "detail": "Depress scapulae before pulling. Touch upper chest to bar.", "alternatives": ["Close-grip pulldown", "Assisted pull-up machine"] },
+        { "name": "Barbell or Machine Row: 3x8-10", "detail": "Torso steady. Pull elbows close along ribs toward hip.", "alternatives": ["Seated cable row", "Single-arm dumbbell row"] },
+        { "name": "Straight-Arm Cable Pullover: 2x12-15", "detail": "Slight elbow bend, feel deep lat stretch at top position.", "alternatives": ["Dumbbell pullover", "Rope lat pulldown"] },
+        { "name": "Face Pulls: 3x12-15", "detail": "Pull toward forehead, flare rope ends apart. Target rear delts.", "alternatives": ["Bent-over dumbbell flyes", "Reverse machine flyes"] },
+        { "name": "Dumbbell Biceps Curl: 3x10-12", "detail": "Elbows fixed at sides. Supinate wrist at peak contraction.", "alternatives": ["EZ-bar curl", "Hammer curl", "Cable curl"] }
       ]
     },
     "4": {
-      "nombre": "Jueves: Pierna 2 (Isquios/Glúteo) + Abdomen",
-      "cardio": "Caminadora: 20 min | 0% incl. | 4.0 km/h (2.5 mph) [Alts: Escaladora Nivel 4 | Elíptica Resistencia 5]",
-      "ejercicios": [
-        { "nombre": "Peso muerto rumano: 3x8-10", "detalle": "Empuja la cadera hacia atrás. Espalda recta, barra pegada.", "alternativas": ["Buenos días", "Peso muerto convencional"] },
-        { "nombre": "Zancadas búlgaras: 3x10-12", "detalle": "Torso ligeramente inclinado hacia adelante. Baja profundo.", "alternativas": ["Prensa a una pierna", "Zancadas inversas"] },
-        { "nombre": "Curl de isquios sentado: 3x12-15", "detalle": "Ajusta la almohadilla firme contra los muslos.", "alternativas": ["Curl de isquios tumbado", "Deslizamientos de isquios"] },
-        { "nombre": "Prensa pies altos: 2x12-15", "detalle": "Pies colocados alto y separados. Rodillas hacia el pecho.", "alternativas": ["Hip Thrust", "Sentadilla sumo"] },
-        { "nombre": "Elevación talones: 4x10-15", "detalle": "Controla la fase excéntrica y aguanta un segundo abajo.", "alternativas": ["Elevación talones en prensa", "Elevación talones de pie solo"] },
-        { "nombre": "Rueda abdominal (Abdomen): 3x Fallo", "detalle": "Core tenso, no hiperextiendas la espalda baja al regresar. Control total.", "alternativas": ["Plancha isométrica con peso", "Elevación de piernas colgado"] }
+      "name": "Thursday: Legs 2 (Hamstrings/Glutes) + Abs",
+      "cardio": "Treadmill: 20 min | 0% incl. | 4.0 km/h (2.5 mph) [Alts: Stair Climber Lvl 4 | Elliptical Res 5]",
+      "exercises": [
+        { "name": "Romanian Deadlift: 3x8-10", "detail": "Hinge hips backward. Neutral spine, bar tracking close to shins.", "alternatives": ["Good mornings", "Conventional deadlift"] },
+        { "name": "Bulgarian Split Squat: 3x10-12", "detail": "Torso slightly leaned forward. Lower hips deep into movement.", "alternatives": ["Single-leg press", "Reverse lunges"] },
+        { "name": "Seated Leg Curl: 3x12-15", "detail": "Adjust thigh pad firmly. Squeeze hamstrings forcefully.", "alternatives": ["Lying leg curl", "Nordic hamstring curl"] },
+        { "name": "High-Foot Leg Press: 2x12-15", "detail": "Feet high and wide on platform. Drive knees toward chest.", "alternatives": ["Barbell hip thrust", "Sumo squat"] },
+        { "name": "Standing Calf Raises: 4x10-15", "detail": "Strict eccentric control, pause 1 second in bottom stretch.", "alternatives": ["Press calf raises", "Bodyweight single-leg calf raise"] },
+        { "name": "Ab Wheel Rollout (Abs): 3x Failure", "detail": "Brace core tight, do not arch lower back on return extension.", "alternatives": ["Weighted plank hold", "Hanging knees to chest"] }
       ]
     },
     "5": {
-      "nombre": "Viernes: Torso (Mantenimiento)",
-      "cardio": "Caminadora: 20 min | 6% incl. | 4.5 km/h (2.8 mph) [Alts: Escaladora Nivel 6 | Elíptica Resistencia 7]",
-      "ejercicios": [
-        { "nombre": "Aperturas en polea (pecho): 3x10-12", "detalle": "Siente el estiramiento y abraza un barril imaginario al cerrar.", "alternativas": ["Pec Deck", "Aperturas con mancuernas"] },
-        { "nombre": "Remo unilateral mancuerna: 3x8-10", "detalle": "Tira de la mancuerna hacia tu cadera, no hacia tu pecho.", "alternativas": ["Remo en máquina Hammer", "Remo polea baja a una mano"] },
-        { "nombre": "Press hombros máquina: 3x10-12", "detalle": "Movimiento constante. No dejes que el peso descanse en la pila.", "alternativas": ["Press Arnold", "Press militar con mancuernas"] },
-        { "nombre": "Curl bíceps polea: 2x12-15", "detalle": "Tensión constante. Aprieta un segundo arriba.", "alternativas": ["Curl concentrado", "Curl predicador"] },
-        { "nombre": "Extensión tríceps copa: 2x12-15", "detalle": "Codos apuntando hacia arriba y cerrados. Estira completamente.", "alternativas": ["Rompecráneos", "Extensión tríceps a una mano"] }
+      "name": "Friday: Torso (Maintenance)",
+      "cardio": "Treadmill: 20 min | 6% incl. | 4.5 km/h (2.8 mph) [Alts: Stair Climber Lvl 6 | Elliptical Res 7]",
+      "exercises": [
+        { "name": "Cable Chest Flyes: 3x10-12", "detail": "Feel deep pectoral stretch, squeeze hands together at peak.", "alternatives": ["Pec deck flye machine", "Flat dumbbell flyes"] },
+        { "name": "Single-Arm Dumbbell Row: 3x8-10", "detail": "Pull dumbbell directly toward hip pocket, not upper chest.", "alternatives": ["Hammer Strength row", "Single-arm cable row"] },
+        { "name": "Machine Overhead Press: 3x10-12", "detail": "Constant tension. Do not let weight stack touch bottom.", "alternatives": ["Arnold dumbbell press", "Dumbbell military press"] },
+        { "name": "Cable Biceps Curl: 2x12-15", "detail": "Constant cable tension. Hold peak squeeze for 1 second.", "alternatives": ["Concentration curl", "Preacher curl"] },
+        { "name": "Overhead Dumbbell Triceps Extension: 2x12-15", "detail": "Elbows pointing up and tucked close. Extend fully overhead.", "alternatives": ["Lying triceps extensions", "Single-arm cable overhead extension"] }
       ]
     },
     "6": {
-      "nombre": "Sábado: Ciclismo de Montaña (MTB)",
-      "cardio": "Duración: 90-120 min | Zonas FC: 2 a 4. [Alts: Elíptica en modo cardio continuo por 60 min]",
-      "ejercicios": []
+      "name": "Saturday: Mountain Biking (MTB)",
+      "cardio": "Duration: 90-120 min | HR Zones: 2 to 4 [Alts: Steady-state Elliptical 60 min]",
+      "exercises": []
     },
     "0": {
-      "nombre": "Domingo: Ciclismo Recuperación",
-      "cardio": "Duración: 45-60 min | Zona FC: 1 y 2 estrictas. [Alts: Elíptica regenerativa baja resistencia]",
-      "ejercicios": []
+      "name": "Sunday: Recovery Cycling",
+      "cardio": "Duration: 45-60 min | HR Zones: 1 and 2 strict [Alts: Low-resistance Regenerative Elliptical]",
+      "exercises": []
     }
   }
 }
