@@ -1,4 +1,4 @@
-/* Corrección universal del modelo de caja para evitar desbordamientos */
+/* Corrección universal del modelo de caja para evitar desbordamientos en iOS */
 *, *::before, *::after {
     box-sizing: border-box;
 }
@@ -50,7 +50,7 @@ header p {
     border-radius: 12px;
     padding: 20px;
     margin-bottom: 20px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    box-shadow: 0 2px 8 rgba(0,0,0,0.06);
 }
 
 .card h2 {
@@ -99,13 +99,14 @@ header p {
     font-weight: 500;
 }
 
-/* Tarjetas individuales de entrada de datos (Raw Data Entry) */
+/* Tarjetas individuales (Raw Data Entry) */
 .ejercicio-card {
     background: #f9f9f9;
     border-left: 4px solid var(--primary);
     border-radius: 8px;
     padding: 15px;
     margin-bottom: 15px;
+    transition: background-color 0.3s ease;
 }
 
 .ejercicio-card strong {
@@ -118,6 +119,34 @@ header p {
     font-size: 0.85em;
     color: #666;
     margin: 0 0 12px 0;
+}
+
+/* Contenedor de fichas de sobrecarga rápida */
+.quick-chips {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.btn-chip {
+    flex: 1;
+    background-color: #e2e8f0;
+    color: #475569;
+    border: none;
+    padding: 8px 4px;
+    border-radius: 6px;
+    font-size: 0.85em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    white-space: nowrap;
+    text-align: center;
+}
+
+.btn-chip:active {
+    background-color: #cbd5e1;
+    transform: scale(0.97);
 }
 
 .registro {
@@ -134,7 +163,7 @@ header p {
     border-radius: 6px;
     font-size: 16px;
     background: #fff;
-    min-width: 0; /* Permite que el flexbox reduzca el input correctamente */
+    min-width: 0;
 }
 
 .btn-guardar {
@@ -146,16 +175,17 @@ header p {
     font-weight: bold;
     font-size: 1em;
     cursor: pointer;
-    transition: 0.2s;
-    white-space: nowrap; /* Protege el texto contra deformaciones o saltos de línea */
-    flex-shrink: 0; /* Impide que el botón colapse en pantallas pequeñas */
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .btn-guardar.guardado {
     background-color: #2980b9;
+    transform: scale(1.03);
 }
 
-/* Acordeón de alternativas técnicas */
+/* Alternativas técnicas */
 details {
     margin-top: 12px;
     border-top: 1px dashed #ccc;
@@ -225,11 +255,7 @@ details li {
     color: var(--primary);
 }
 
-.nav-item.activo .nav-icon {
-    transform: scale(1.1);
-}
-
-/* Pestañas e interfaz de Nutrición */
+/* Nutrición */
 .tabs-nutricion {
     display: flex;
     gap: 5px;
@@ -283,7 +309,6 @@ ul {
     font-size: 0.95em;
 }
 
-/* Utilidades globales */
 .alerta {
     background-color: var(--warning);
     color: white;
