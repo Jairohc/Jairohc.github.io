@@ -1,3 +1,8 @@
+/* Corrección universal del modelo de caja para evitar desbordamientos */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 :root {
     --bg-color: #f0f2f5;
     --text-color: #333;
@@ -9,54 +14,296 @@
     --nav-height: 70px;
 }
 
-body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 0; box-sizing: border-box; overscroll-behavior-y: none; }
-header { text-align: center; padding: 15px 20px; background: var(--card-bg); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-header h1 { margin: 0 0 5px 0; font-size: 1.5em; }
-header p { margin: 0; font-size: 0.85em; color: #666; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    overscroll-behavior-y: none;
+}
 
-#main-content { padding: 15px 15px calc(var(--nav-height) + 20px) 15px; }
+header {
+    text-align: center;
+    padding: 15px 20px;
+    background: var(--card-bg);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
 
-.card { background: var(--card-bg); border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-.card h2 { margin-top: 0; font-size: 1.3em; border-bottom: 2px solid #eee; padding-bottom: 10px; }
-.info-texto { font-size: 0.9em; color: #2c3e50; margin-top: 8px; font-weight: bold; background: #e8f4f8; padding: 10px; border-radius: 6px; border-left: 4px solid var(--accent); }
+header h1 {
+    margin: 0 0 5px 0;
+    font-size: 1.5em;
+}
+
+header p {
+    margin: 0;
+    font-size: 0.85em;
+    color: #666;
+}
+
+#main-content {
+    padding: 15px 15px calc(var(--nav-height) + 20px) 15px;
+}
+
+.card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.card h2 {
+    margin-top: 0;
+    font-size: 1.3em;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+}
+
+.info-texto {
+    font-size: 0.9em;
+    color: #2c3e50;
+    margin-top: 8px;
+    font-weight: bold;
+    background: #e8f4f8;
+    padding: 10px;
+    border-radius: 6px;
+    border-left: 4px solid var(--accent);
+}
 
 /* Selector manual superior */
-.selector-dia-override { display: flex; align-items: center; gap: 10px; background: #e9ecef; padding: 10px; border-radius: 8px; margin-bottom: 15px; }
-.selector-dia-override label { font-size: 0.85em; font-weight: bold; color: var(--primary); }
-.selector-dia-override select { flex: 1; padding: 8px; font-size: 16px; border: 1px solid #ccc; border-radius: 6px; background: #ffffff; color: var(--primary); font-weight: 500; }
+.selector-dia-override {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #e9ecef;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
 
-/* Tarjetas individuales */
-.ejercicio-card { background: #f9f9f9; border-left: 4px solid var(--primary); border-radius: 8px; padding: 15px; margin-bottom: 15px; }
-.ejercicio-card strong { font-size: 1.05em; display: block; margin-bottom: 4px; }
-.ejercicio-card p { font-size: 0.85em; color: #666; margin: 0 0 12px 0; }
+.selector-dia-override label {
+    font-size: 0.85em;
+    font-weight: bold;
+    color: var(--primary);
+}
 
-.registro { display: flex; gap: 10px; align-items: center; }
-.registro input { flex: 1; padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 16px; background: #fff; }
-.btn-guardar { background-color: var(--success); color: white; border: none; padding: 12px 20px; border-radius: 6px; font-weight: bold; font-size: 1em; cursor: pointer; transition: 0.2s; }
-.btn-guardar.guardado { background-color: #2980b9; }
+.selector-dia-override select {
+    flex: 1;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: #ffffff;
+    color: var(--primary);
+    font-weight: 500;
+}
 
-details { margin-top: 12px; border-top: 1px dashed #ccc; padding-top: 10px; }
-summary { font-size: 0.85em; font-weight: 600; color: #555; cursor: pointer; outline: none; }
-details ul { margin: 8px 0 0 0; padding-left: 20px; font-size: 0.85em; color: #555; }
-details li { margin-bottom: 4px; border: none; background: transparent; padding: 0; list-style-type: square; }
+/* Tarjetas individuales de entrada de datos (Raw Data Entry) */
+.ejercicio-card {
+    background: #f9f9f9;
+    border-left: 4px solid var(--primary);
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
 
-/* Botones inferiores e interfaz base */
-.bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: var(--nav-height); background-color: #ffffff; display: flex; justify-content: space-around; align-items: center; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); padding-bottom: env(safe-area-inset-bottom); z-index: 1000; }
-.nav-item { background: transparent; border: none; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #999; font-size: 0.75em; font-weight: bold; width: 100%; height: 100%; cursor: pointer; }
-.nav-icon { font-size: 1.8em; margin-bottom: 4px; }
-.nav-item.activo { color: var(--primary); }
-.nav-item.activo .nav-icon { transform: scale(1.1); }
+.ejercicio-card strong {
+    font-size: 1.05em;
+    display: block;
+    margin-bottom: 4px;
+}
 
-.tabs-nutricion { display: flex; gap: 5px; margin-bottom: 15px; background-color: #e9ecef; padding: 5px; border-radius: 8px; }
-.tabs-nutricion button { flex: 1; padding: 10px; background-color: transparent; border: none; color: #495057; font-weight: bold; border-radius: 6px; cursor: pointer; }
-.tabs-nutricion button.activo { background-color: #ffffff; color: var(--primary); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+.ejercicio-card p {
+    font-size: 0.85em;
+    color: #666;
+    margin: 0 0 12px 0;
+}
 
-.snacks-container { margin-top: 25px; padding-top: 15px; border-top: 2px dashed #ccc; }
-.snacks-container h3 { font-size: 1.1em; color: var(--success); margin: 0 0 10px 0; }
-ul { list-style-type: none; padding: 0; margin: 0; }
-.card ul li { background: #f9f9f9; margin: 8px 0; padding: 12px; border-left: 4px solid var(--accent); border-radius: 4px; font-size: 0.95em; }
+.registro {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+}
 
-.alerta { background-color: var(--warning); color: white; padding: 10px; border-radius: 4px; margin-bottom: 15px; font-weight: bold; }
-.dia-semana { border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 15px; }
-.dia-semana h3 { color: var(--accent); margin: 0 0 5px 0; }
-.hidden { display: none !important; }
+.registro input {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    background: #fff;
+    min-width: 0; /* Permite que el flexbox reduzca el input correctamente */
+}
+
+.btn-guardar {
+    background-color: var(--success);
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 1em;
+    cursor: pointer;
+    transition: 0.2s;
+    white-space: nowrap; /* Protege el texto contra deformaciones o saltos de línea */
+    flex-shrink: 0; /* Impide que el botón colapse en pantallas pequeñas */
+}
+
+.btn-guardar.guardado {
+    background-color: #2980b9;
+}
+
+/* Acordeón de alternativas técnicas */
+details {
+    margin-top: 12px;
+    border-top: 1px dashed #ccc;
+    padding-top: 10px;
+}
+
+summary {
+    font-size: 0.85em;
+    font-weight: 600;
+    color: #555;
+    cursor: pointer;
+    outline: none;
+}
+
+details ul {
+    margin: 8px 0 0 0;
+    padding-left: 20px;
+    font-size: 0.85em;
+    color: #555;
+}
+
+details li {
+    margin-bottom: 6px;
+    border: none;
+    background: transparent;
+    padding: 0;
+    list-style-type: square;
+}
+
+/* Barra de navegación inferior */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: var(--nav-height);
+    background-color: #ffffff;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    padding-bottom: env(safe-area-inset-bottom);
+    z-index: 1000;
+}
+
+.nav-item {
+    background: transparent;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+    font-size: 0.75em;
+    font-weight: bold;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.nav-icon {
+    font-size: 1.8em;
+    margin-bottom: 4px;
+}
+
+.nav-item.activo {
+    color: var(--primary);
+}
+
+.nav-item.activo .nav-icon {
+    transform: scale(1.1);
+}
+
+/* Pestañas e interfaz de Nutrición */
+.tabs-nutricion {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 15px;
+    background-color: #e9ecef;
+    padding: 5px;
+    border-radius: 8px;
+}
+
+.tabs-nutricion button {
+    flex: 1;
+    padding: 10px;
+    background-color: transparent;
+    border: none;
+    color: #495057;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.tabs-nutricion button.activo {
+    background-color: #ffffff;
+    color: var(--primary);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.snacks-container {
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 2px dashed #ccc;
+}
+
+.snacks-container h3 {
+    font-size: 1.1em;
+    color: var(--success);
+    margin: 0 0 10px 0;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.card ul li {
+    background: #f9f9f9;
+    margin: 8px 0;
+    padding: 12px;
+    border-left: 4px solid var(--accent);
+    border-radius: 4px;
+    font-size: 0.95em;
+}
+
+/* Utilidades globales */
+.alerta {
+    background-color: var(--warning);
+    color: white;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.dia-semana {
+    border-bottom: 2px solid #eee;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+.dia-semana h3 {
+    color: var(--accent);
+    margin: 0 0 5px 0;
+}
+
+.hidden {
+    display: none !important;
+}
