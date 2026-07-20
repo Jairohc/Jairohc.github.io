@@ -18,6 +18,22 @@
     <main id="main-content">
         <div id="vista-rutina" class="vista">
             <div class="card">
+                <h2>🏋️ Entrenamiento del Día</h2>
+                
+                <div class="selector-dia-override">
+                    <label for="select-dia">Cambiar rutina:</label>
+                    <select id="select-dia" onchange="cambiarDiaRutina(this.value)">
+                        <option value="auto">Día Actual (Automático)</option>
+                        <option value="1">Lunes: Empuje</option>
+                        <option value="2">Martes: Pierna + Abdomen</option>
+                        <option value="3">Miércoles: Tirón</option>
+                        <option value="4">Jueves: Isquios + Abdomen</option>
+                        <option value="5">Viernes: Torso</option>
+                        <option value="6">Sábado: MTB</option>
+                        <option value="0">Domingo: Ciclismo Rec.</option>
+                    </select>
+                </div>
+
                 <h3 id="nombre-rutina"></h3>
                 <p id="bloque-cardio" class="info-texto"></p>
                 <div id="lista-ejercicios"></div>
