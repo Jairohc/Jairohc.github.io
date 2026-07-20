@@ -1,36 +1,36 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Protocolo">
-    <title>Protocolo | Nutrición & Entrenamiento</title>
+    <meta name="apple-mobile-web-app-title" content="Protocol">
+    <title>Protocol | Workout & Nutrition</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
-        <h1>Rutina de entrenamiento</h1>
+        <h1>My Protocol</h1>
         <p id="fecha-hora"></p>
     </header>
 
     <main id="main-content">
         <div id="vista-rutina" class="vista">
             <div class="card">
-                <h2>🏋️ Entrenamiento del Día</h2>
+                <h2>🏋️ Today's Workout</h2>
                 
                 <div class="selector-dia-override">
-                    <label for="select-dia">Cambiar rutina:</label>
+                    <label for="select-dia">Select Routine:</label>
                     <select id="select-dia" onchange="cambiarDiaRutina(this.value)">
-                        <option value="auto">Día Actual (Automático)</option>
-                        <option value="1">Lunes: Empuje</option>
-                        <option value="2">Martes: Pierna + Abdomen</option>
-                        <option value="3">Miércoles: Tirón</option>
-                        <option value="4">Jueves: Isquios + Abdomen</option>
-                        <option value="5">Viernes: Torso</option>
-                        <option value="6">Sábado: MTB</option>
-                        <option value="0">Domingo: Ciclismo Rec.</option>
+                        <option value="auto">Current Day (Auto)</option>
+                        <option value="1">Monday: Push</option>
+                        <option value="2">Tuesday: Legs 1 + Abs</option>
+                        <option value="3">Wednesday: Pull</option>
+                        <option value="4">Thursday: Legs 2 + Abs</option>
+                        <option value="5">Friday: Torso</option>
+                        <option value="6">Saturday: MTB</option>
+                        <option value="0">Sunday: Recovery Cycling</option>
                     </select>
                 </div>
 
@@ -42,26 +42,28 @@
 
         <div id="vista-dieta" class="vista hidden">
             <div class="card">
-                <h2>🍽️ Menú del Día</h2>
+                <h2>🍽️ Daily Nutrition Menu</h2>
                 <div id="alerta-domingo" class="alerta hidden">
-                    ⚠️ Mantenimiento Dominical: Añadir 1 huevo entero o 30% más de carbohidratos base.
+                    ⚠️ Sunday Maintenance: Add 1 whole egg or 30% additional base carbs.
                 </div>
                 <div class="tabs-nutricion">
-                    <button id="btn-desayuno" onclick="mostrarComida('desayuno')">Desayuno</button>
-                    <button id="btn-comida" onclick="mostrarComida('comida')">Comida</button>
-                    <button id="btn-cena" onclick="mostrarComida('cena')">Cena</button>
+                    <button id="btn-desayuno" onclick="mostrarComida('desayuno')">Breakfast</button>
+                    <button id="btn-comida" onclick="mostrarComida('comida')">Lunch</button>
+                    <button id="btn-cena" onclick="mostrarComida('cena')">Dinner</button>
+                    <button id="btn-snacks" onclick="mostrarComida('snacks')">Snacks</button>
+                    <button id="btn-equivalents" onclick="mostrarComida('equivalents')">Subs</button>
                 </div>
                 <ul id="lista-comidas"></ul>
-                <div class="snacks-container">
-                    <h3>🍎 Snacks y Extras</h3>
-                    <ul id="lista-snacks"></ul>
+
+                <div class="action-container">
+                    <button class="btn-action" onclick="copiarListaSuper()">🛒 Copy Grocery List</button>
                 </div>
             </div>
         </div>
 
         <div id="vista-semana" class="vista hidden">
             <div class="card">
-                <h2>📅 Resumen Semanal</h2>
+                <h2>📅 Weekly Overview</h2>
                 <div id="contenedor-semana"></div>
             </div>
         </div>
@@ -69,13 +71,13 @@
 
     <nav class="bottom-nav">
         <button id="nav-rutina" class="nav-item activo" onclick="cambiarVista('rutina')">
-            <span class="nav-icon">🏋️</span><span>Rutina</span>
+            <span class="nav-icon">🏋️</span><span>Routine</span>
         </button>
         <button id="nav-dieta" class="nav-item" onclick="cambiarVista('dieta')">
-            <span class="nav-icon">🍽️</span><span>Dieta</span>
+            <span class="nav-icon">🍽️</span><span>Diet</span>
         </button>
         <button id="nav-semana" class="nav-item" onclick="cambiarVista('semana')">
-            <span class="nav-icon">📅</span><span>Semana</span>
+            <span class="nav-icon">📅</span><span>Week</span>
         </button>
     </nav>
 
