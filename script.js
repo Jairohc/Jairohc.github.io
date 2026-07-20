@@ -1,5 +1,7 @@
 let planNutricion = {};
 let rutinas = {};
+let diaOverride = null;
+let diaEnMemoria = new Date().getDay();
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {
@@ -39,6 +41,13 @@ function actualizarReloj() {
     const opciones = { weekday: 'long', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
     const relojElemento = document.getElementById('fecha-hora');
     if (relojElemento) relojElemento.innerText = ahora.toLocaleDateString('es-MX', opciones).toUpperCase();
+
+    if (ahora.getDay() !== diaEnMemoria) {
+        diaEnMemoria = ahora.getDay();
+        if (diaOverride === null) {
+            renderizarRutina();
+        }
+    }
 }
 
 function cambiarVista(vistaDestino) {
@@ -52,16 +61,26 @@ function cambiarVista(vistaDestino) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+function cambiarDiaRutina(valor) {
+    if (valor === "auto") {
+        diaOverride = null;
+    } else {
+        diaOverride = parseInt(valor);
+    }
+    renderizarRutina();
+}
+
 function renderizarRutina() {
-    const diaSemana = new Date().getDay();
-    const rutinaDia = rutinas[diaSemana] || rutinas[1]; // Fallback por seguridad
+    const ahora = new Date();
+    const diaSemana = diaOverride !== null ? diaOverride : ahora.getDay();
+    const rutinaDia = rutinas[diaSemana] || rutinas[1];
     
     const nombreRutina = document.getElementById('nombre-rutina');
     const bloqueCardio = document.getElementById('bloque-cardio');
     const listaEjercicios = document.getElementById('lista-ejercicios');
 
     if (nombreRutina) nombreRutina.innerText = rutinaDia.nombre;
-    if (bloqueCardio) bloqueCardio.innerText = "Foco: " + rutinaDia.cardio;
+    if (bloqueCardio) bloqueCardio.innerText = rutinaDia.cardio;
     
     if (listaEjercicios) {
         listaEjercicios.innerHTML = '';
@@ -111,7 +130,6 @@ function guardarPesoLocal(idSeguro) {
     inputElement.placeholder = pesoValue + " kg (último)";
     inputElement.value = '';
 
-    // Retroalimentación visual inmediata
     boton.innerText = "✔";
     boton.classList.add('guardado');
     setTimeout(() => { 
@@ -134,7 +152,6 @@ function renderizarDieta() {
         document.getElementById('alerta-domingo')?.classList.remove('hidden');
     }
 
-    // Renderizar Snacks
     const listaSnacks = document.getElementById('lista-snacks');
     if (listaSnacks && planNutricion.snacks) {
         listaSnacks.innerHTML = '';
