@@ -115,33 +115,50 @@ function renderizarRutina() {
                     ? ej.alternatives.map(alt => `<li>${alt}</li>`).join('') 
                     : '';
 
-                const isCompleted = pesoGuardado ? 'completed' : '';
-
                 const div = document.createElement('div');
-                div.className = `ejercicio-card ${isCompleted}`;
+                div.className = `ejercicio-card`;
                 div.id = `card-${idSeguro}`;
                 div.innerHTML = `
-                    <strong>${ej.name}</strong>
-                    <p>${ej.detail}</p>
-                    
-                    ${htmlChips}
-
-                    <div class="registro">
-                        <input type="number" id="input-${idSeguro}" placeholder="${pesoGuardado ? pesoGuardado + ' kg (last)' : 'Kg'}" step="0.5" inputmode="decimal" pattern="[0-9]*" onkeydown="detectarEnter(event, '${idSeguro}')">
-                        <button id="btn-${idSeguro}" class="btn-guardar" onclick="guardarPesoLocal('${idSeguro}')">Save</button>
+                    <div class="card-header" onclick="toggleCard('${idSeguro}')">
+                        <strong>${ej.name}</strong>
+                        <span id="summary-${idSeguro}" class="completed-summary"></span>
                     </div>
+                    
+                    <div class="card-body">
+                        <p>${ej.detail}</p>
+                        
+                        ${htmlChips}
 
-                    ${listaAlts ? `
-                    <details>
-                        <summary>Alternatives</summary>
-                        <ul>${listaAlts}</ul>
-                    </details>` : ''}
+                        <div class="registro">
+                            <input type="number" id="input-${idSeguro}" placeholder="${pesoGuardado ? pesoGuardado + ' kg (last)' : 'Kg'}" step="0.5" inputmode="decimal" pattern="[0-9]*" onfocus="autoCompletarInput(this, '${pesoGuardado}')" onkeydown="detectarEnter(event, '${idSeguro}')">
+                            <button id="btn-${idSeguro}" class="btn-guardar" onclick="guardarPesoLocal('${idSeguro}')">Save</button>
+                        </div>
+
+                        ${listaAlts ? `
+                        <details>
+                            <summary>Alternatives</summary>
+                            <ul>${listaAlts}</ul>
+                        </details>` : ''}
+                    </div>
                 `;
                 listaEjercicios.appendChild(div);
             });
         } else {
             listaEjercicios.innerHTML = "<p style='padding: 15px; background: #e8f8f5; color: #27ae60; border-radius: 8px; font-weight: bold; text-align: center;'>Cycling focused day. Load route on your Garmin device.</p>";
         }
+    }
+}
+
+function autoCompletarInput(inputElement, ultimoPeso) {
+    if (!inputElement.value && ultimoPeso && ultimoPeso !== '0') {
+        inputElement.value = ultimoPeso;
+    }
+}
+
+function toggleCard(idSeguro) {
+    const tarjeta = document.getElementById(`card-${idSeguro}`);
+    if (tarjeta && tarjeta.classList.contains('completed')) {
+        tarjeta.classList.remove('completed');
     }
 }
 
@@ -157,6 +174,7 @@ function guardarPesoLocal(idSeguro, valorEspecifco = null) {
     const inputElement = document.getElementById(`input-${idSeguro}`);
     const boton = document.getElementById(`btn-${idSeguro}`);
     const tarjeta = document.getElementById(`card-${idSeguro}`);
+    const summary = document.getElementById(`summary-${idSeguro}`);
     
     let pesoValue = valorEspecifco !== null ? valorEspecifco : inputElement.value;
 
@@ -178,6 +196,11 @@ function guardarPesoLocal(idSeguro, valorEspecifco = null) {
         `;
     }
 
+    if (summary) {
+        summary.innerText = `✔️ ${pesoValue} kg`;
+    }
+    
+    // Trigger Auto-Collapse
     tarjeta?.classList.add('completed');
 
     if ("vibrate" in navigator) {
