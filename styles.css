@@ -99,7 +99,7 @@ header p {
     font-weight: 500;
 }
 
-/* Individual Exercise Cards */
+/* Individual Exercise Cards (With Auto-Collapse Logic) */
 .ejercicio-card {
     background: #f9f9f9;
     border-left: 4px solid var(--primary);
@@ -107,17 +107,55 @@ header p {
     padding: 15px;
     margin-bottom: 15px;
     transition: all 0.25s ease;
+    overflow: hidden;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.ejercicio-card:not(.completed) .card-header {
+    align-items: flex-start;
+    flex-direction: column;
+}
+
+.ejercicio-card:not(.completed) .card-header strong {
+    margin-bottom: 4px;
 }
 
 .ejercicio-card.completed {
     border-left-color: var(--success);
     background-color: #f0fff4;
+    padding: 12px 15px;
+}
+
+.ejercicio-card.completed .card-header {
+    cursor: pointer;
+    flex-direction: row;
+}
+
+.ejercicio-card.completed .card-body {
+    display: none;
 }
 
 .ejercicio-card strong {
     font-size: 1.05em;
     display: block;
-    margin-bottom: 4px;
+}
+
+.completed-summary {
+    display: none;
+    font-weight: bold;
+    color: var(--success);
+    font-size: 1.05em;
+    white-space: nowrap;
+}
+
+.ejercicio-card.completed .completed-summary {
+    display: block;
 }
 
 .ejercicio-card p {
