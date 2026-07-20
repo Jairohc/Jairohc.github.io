@@ -167,7 +167,6 @@ function guardarPesoLocal(idSeguro, valorEspecifco = null) {
     inputElement.placeholder = pesoValue + " kg (last)";
     inputElement.value = '';
 
-    // Update chips dynamically
     const contenedorChips = document.getElementById(`chips-${idSeguro}`);
     if (contenedorChips) {
         const basePeso = parseFloat(pesoValue);
@@ -179,15 +178,12 @@ function guardarPesoLocal(idSeguro, valorEspecifco = null) {
         `;
     }
 
-    // Mark card as completed
     tarjeta?.classList.add('completed');
 
-    // Tactile vibration feedback
     if ("vibrate" in navigator) {
         navigator.vibrate(40);
     }
 
-    // Micro-animation
     boton.innerText = "✔";
     boton.classList.add('guardado');
     setTimeout(() => { 
@@ -212,23 +208,13 @@ function renderizarDieta() {
 }
 
 function mostrarComida(tipo) {
-    document.getElementById('btn-desayuno')?.classList.remove('activo');
-    document.getElementById('btn-comida')?.classList.remove('activo');
-    document.getElementById('btn-cena')?.classList.remove('activo');
+    document.getElementById('btn-breakfast')?.classList.remove('activo');
+    document.getElementById('btn-lunch')?.classList.remove('activo');
+    document.getElementById('btn-dinner')?.classList.remove('activo');
     document.getElementById('btn-snacks')?.classList.remove('activo');
     document.getElementById('btn-equivalents')?.classList.remove('activo');
     
-    let btnMap = {
-        'breakfast': 'btn-desayuno',
-        'lunch': 'btn-comida',
-        'dinner': 'btn-cena',
-        'snacks': 'btn-snacks',
-        'equivalents': 'btn-equivalents'
-    };
-
-    if (btnMap[tipo]) {
-        document.getElementById(btnMap[tipo])?.classList.add('activo');
-    }
+    document.getElementById(`btn-${tipo}`)?.classList.add('activo');
     
     const listaComidas = document.getElementById('lista-comidas');
     if (!listaComidas) return; 
