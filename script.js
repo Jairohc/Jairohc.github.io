@@ -4,6 +4,13 @@ let diaOverride = null;
 let diaEnMemoria = new Date().getDay();
 
 document.addEventListener('DOMContentLoaded', async () => {
+    // Registro del Service Worker para funcionamiento Offline
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./sw.js')
+            .then(() => console.log('Service Worker registrado con éxito'))
+            .catch(err => console.error('Fallo al registrar Service Worker:', err));
+    }
+
     try {
         const respuesta = await fetch('data.json');
         if (!respuesta.ok) throw new Error('Failed to load JSON');
@@ -118,10 +125,16 @@ function renderizarRutina() {
                 const div = document.createElement('div');
                 div.className = `ejercicio-card`;
                 div.id = `card-${idSeguro}`;
+                
+                // Si ya tiene registro guardado previamente, inicializa colapsada
+                if (pesoGuardado) {
+                    div.classList.add('completed');
+                }
+
                 div.innerHTML = `
                     <div class="card-header" onclick="toggleCard('${idSeguro}')">
                         <strong>${ej.name}</strong>
-                        <span id="summary-${idSeguro}" class="completed-summary"></span>
+                        <span id="summary-${idSeguro}" class="completed-summary">${pesoGuardado ? '✔️ ' + pesoGuardado + ' kg' : ''}</span>
                     </div>
                     
                     <div class="card-body">
