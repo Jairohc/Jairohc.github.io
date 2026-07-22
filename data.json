@@ -50,7 +50,7 @@
         { "name": "Leg Extension: 3x12-15", "detail": "Controlled concentric, 1-second hold at peak contraction.", "alternatives": ["Sissy squat", "Static bodyweight lunges"] },
         { "name": "Lying Leg Curl: 3x10-12", "detail": "Hips glued to bench. 3-second controlled eccentric phase.", "alternatives": ["Seated leg curl", "Stiff-legged dumbbell deadlift"] },
         { "name": "Standing Calf Raises: 4x10-15", "detail": "Full stretch at bottom step, squeeze calves hard at top.", "alternatives": ["Leg press calf raises", "Seated calf raise machine"] },
-        { "name": "Cable Kneeling Crunch (Abs): 3x12-15", "detail": "Flex spine downward, do not pull with arms. Keep hips locked.", "alternatives": ["Weighted decline crunch", "Hanging leg raises"] }
+        { "name": "Decline Bench Crunch (Abs): 3x12-15", "detail": "Anchor feet securely on the decline board. Flex the spine (roll the torso), do not just hinge at the hips. Hold a weight plate across the chest if bodyweight is too easy.", "alternatives": ["Weighted cable crunch", "Hanging leg raises"] }
       ]
     },
     "3": {
@@ -73,7 +73,7 @@
         { "name": "Seated Leg Curl: 3x12-15", "detail": "Adjust thigh pad firmly. Squeeze hamstrings forcefully.", "alternatives": ["Lying leg curl", "Nordic hamstring curl"] },
         { "name": "High-Foot Leg Press: 2x12-15", "detail": "Feet high and wide on platform. Drive knees toward chest.", "alternatives": ["Barbell hip thrust", "Sumo squat"] },
         { "name": "Standing Calf Raises: 4x10-15", "detail": "Strict eccentric control, pause 1 second in bottom stretch.", "alternatives": ["Press calf raises", "Bodyweight single-leg calf raise"] },
-        { "name": "Ab Wheel Rollout (Abs): 3x Failure", "detail": "Brace core tight, do not arch lower back on return extension.", "alternatives": ["Weighted plank hold", "Hanging knees to chest"] }
+        { "name": "Flat Bench Lying Leg Raises (Abs): 3x12-15", "detail": "Lie on a flat bench, grab the bench behind your head. Keep legs slightly bent, focus on rolling the pelvis upward off the bench to engage the lower rectus abdominis.", "alternatives": ["Ab wheel rollout", "Hanging knees to chest"] }
       ]
     },
     "5": {
