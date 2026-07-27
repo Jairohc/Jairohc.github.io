@@ -282,7 +282,10 @@ function renderizarIngredientes(optionIndex) {
     const grid = document.getElementById('ingredients-grid');
     grid.innerHTML = '';
     
-    const mealData = planNutricion[currentMealCategory][optionIndex];
+    // Parseo a número para asegurar integridad al buscar en el objeto
+    const optIdx = parseInt(optionIndex);
+    const mealData = planNutricion[currentMealCategory][optIdx];
+    
     if (!mealData || !mealData.ingredients) return;
 
     mealData.ingredients.forEach((ing, i) => {
@@ -291,12 +294,11 @@ function renderizarIngredientes(optionIndex) {
         
         div.className = `ing-tile ${hasSubs ? 'has-sub' : ''}`;
         div.id = `tile-${i}`;
-        
-        // Atributo local para rastrear el sub activo (0 = original, 1 = primer sub, etc)
         div.dataset.subIdx = 0; 
         
+        // Asignación directa del evento click pasando índices limpios
         if (hasSubs) {
-            div.setAttribute('onclick', `rotarSubstituto('${i}', ${JSON.stringify(ing).replace(/"/g, '&quot;')})`);
+            div.onclick = () => rotarSubstituto(optIdx, i);
         }
 
         div.innerHTML = generarHTMLFicha(ing, hasSubs);
@@ -304,21 +306,15 @@ function renderizarIngredientes(optionIndex) {
     });
 }
 
-function generarHTMLFicha(ing, isRotatable) {
-    return `
-        ${isRotatable ? `<div class="swap-badge">↻</div>` : ''}
-        <div class="ing-icon">${ing.icon}</div>
-        <div class="ing-qty">${ing.qty} <span style="font-size: 0.6em">${ing.unit}</span></div>
-        <div class="ing-name">${ing.name}</div>
-    `;
-}
-
-function rotarSubstituto(tileId, ingObj) {
-    const tile = document.getElementById(`tile-${tileId}`);
+function rotarSubstituto(optionIndex, ingIndex) {
+    const tile = document.getElementById(`tile-${ingIndex}`);
     if (!tile) return;
 
+    // Busca el ingrediente base directamente en el objeto maestro
+    const ingObj = planNutricion[currentMealCategory][optionIndex].ingredients[ingIndex];
+    
     let currentIdx = parseInt(tile.dataset.subIdx);
-    const totalOptions = ingObj.subs.length + 1; // Original + Subs
+    const totalOptions = ingObj.subs.length + 1;
     
     currentIdx = (currentIdx + 1) % totalOptions;
     tile.dataset.subIdx = currentIdx;
@@ -328,6 +324,15 @@ function rotarSubstituto(tileId, ingObj) {
     tile.innerHTML = generarHTMLFicha(activeIng, true);
 
     if ("vibrate" in navigator) navigator.vibrate(20);
+}
+
+function generarHTMLFicha(ing, isRotatable) {
+    return `
+        ${isRotatable ? `<div class="swap-badge">↻</div>` : ''}
+        <div class="ing-icon">${ing.icon}</div>
+        <div class="ing-qty">${ing.qty} <span style="font-size: 0.6em">${ing.unit}</span></div>
+        <div class="ing-name">${ing.name}</div>
+    `;
 }
 
 function copiarListaSuper() {
