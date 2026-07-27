@@ -20,18 +20,23 @@
             <div class="card">
                 <h2>🏋️ Today's Workout</h2>
                 
-                <div class="selector-dia-override">
-                    <label for="select-dia">Select Routine:</label>
-                    <select id="select-dia" onchange="cambiarDiaRutina(this.value)">
-                        <option value="auto">Current Day (Auto)</option>
-                        <option value="1">Monday: Push</option>
-                        <option value="2">Tuesday: Legs 1 + Abs</option>
-                        <option value="3">Wednesday: Pull</option>
-                        <option value="4">Thursday: Legs 2 + Abs</option>
-                        <option value="5">Friday: Torso</option>
-                        <option value="6">Saturday: MTB</option>
-                        <option value="0">Sunday: Recovery Cycling</option>
-                    </select>
+                <div class="header-rutina-controles">
+                    <div class="selector-dia-override">
+                        <label for="select-dia">Select Routine:</label>
+                        <select id="select-dia" onchange="cambiarDiaRutina(this.value)">
+                            <option value="auto">Current Day (Auto)</option>
+                            <option value="1">Monday: Push</option>
+                            <option value="2">Tuesday: Legs 1 + Abs</option>
+                            <option value="3">Wednesday: Pull</option>
+                            <option value="4">Thursday: Legs 2 + Abs</option>
+                            <option value="5">Friday: Torso</option>
+                            <option value="6">Saturday: MTB</option>
+                            <option value="0">Sunday: Recovery Cycling</option>
+                        </select>
+                    </div>
+                    <button id="btn-express" class="btn-express" onclick="toggleExpressMode()">
+                        ⚡ Modo Exprés (Desactivado)
+                    </button>
                 </div>
 
                 <h3 id="nombre-rutina"></h3>
@@ -55,7 +60,7 @@
                     <button id="btn-equivalents" onclick="cambiarComida('equivalents')">Subs</button>
                 </div>
 
-                <div id="meal-selector-container" class="selector-dia-override hidden">
+                <div id="meal-selector-container" class="selector-dia-override hidden" style="margin-bottom: 15px;">
                     <label for="select-meal-opt">Select Option:</label>
                     <select id="select-meal-opt" onchange="renderizarIngredientes(this.value)"></select>
                 </div>
