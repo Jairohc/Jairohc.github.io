@@ -1,4 +1,4 @@
-const CACHE_NAME = 'protocol-cache-v1';
+const CACHE_NAME = 'protocol-cache-v2';
 const ASSETS = [
     './',
     './index.html',
@@ -9,9 +9,7 @@ const ASSETS = [
 
 self.addEventListener('install', (event) => {
     event.waitUntil(
-        caches.open(CACHE_NAME).then((cache) => {
-            return cache.addAll(ASSETS);
-        })
+        caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
     );
     self.skipWaiting();
 });
@@ -21,9 +19,7 @@ self.addEventListener('activate', (event) => {
         caches.keys().then((keys) => {
             return Promise.all(
                 keys.map((key) => {
-                    if (key !== CACHE_NAME) {
-                        return caches.delete(key);
-                    }
+                    if (key !== CACHE_NAME) return caches.delete(key);
                 })
             );
         })
@@ -34,10 +30,7 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
     event.respondWith(
         caches.match(event.request).then((cachedResponse) => {
-            if (cachedResponse) {
-                return cachedResponse;
-            }
-            return fetch(event.request);
+            return cachedResponse || fetch(event.request);
         })
     );
 });
