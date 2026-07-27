@@ -168,6 +168,30 @@
         ]
       },
       {
+        "name": "Snack D: Flex Option (Sweet Bread)",
+        "ingredients": [
+          { "icon": "🥐", "qty": "1", "unit": "pc", "name": "Sweet Bread (~250-300 kcal)" },
+          { "icon": "⚠️", "qty": "0", "unit": "g", "name": "Fat in dinner (Must remove avocado/oil)" },
+          { "icon": "🥛", "qty": "1", "unit": "scoop", "name": "Whey (To cover protein gap)" }
+        ]
+      },
+      {
+        "name": "Snack E: Protein Oats",
+        "ingredients": [
+          { "icon": "🥛", "qty": "1", "unit": "scoop", "name": "Whey" },
+          { "icon": "🌾", "qty": "30", "unit": "g", "name": "Oats" },
+          { "icon": "🥜", "qty": "15", "unit": "g", "name": "Nuts or PB" }
+        ]
+      },
+      {
+        "name": "Snack F: Yogurt Oats",
+        "ingredients": [
+          { "icon": "🥣", "qty": "150", "unit": "g", "name": "Greek Yogurt" },
+          { "icon": "🌾", "qty": "30", "unit": "g", "name": "Oats" },
+          { "icon": "🥜", "qty": "15", "unit": "g", "name": "Nuts or PB" }
+        ]
+      },
+      {
         "name": "Free Ingestion",
         "ingredients": [
           { "icon": "🍮", "qty": "∞", "unit": "Free", "name": "Light Jello (0% sugar)" }
@@ -178,7 +202,8 @@
       "🥩 Protein: 200g Lean Beef = 200g Chicken Breast = 200g Tilapia = 2 cans Tuna in water",
       "🍚 Carbs: 70g Dry Rice = 70g Dry Pasta = 220g Potato = 4 Corn Tortillas = 60g Oats",
       "🥑 Fats: 50g Avocado = 60g Yogurt Dressing = 30g/30g Mix = 15g Peanut Butter = 15g Nuts = 10g Cooking Oil",
-      "🚴 Leg Day Opt: Tue/Thu increase Lunch/Dinner carbs by 15% (+1 tortilla / +10g rice) & remove nuts from snack."
+      "🚴 Leg Day Opt: Tue/Thu increase Lunch/Dinner carbs by 15% (+1 tortilla / +10g rice) & remove nuts from snack.",
+      "⏱️ Timing Rules: Snack A-F at 11:30 AM. Lunch at 3:30 PM is Pre-Workout. Zero food 2 hours before 6:30 PM gym."
     ]
   },
   "routines": {
@@ -186,68 +211,8 @@
       "name": "Monday: Push (Chest/Shoulders/Triceps)",
       "cardio": "🏃 Treadmill: 20 min | 5% incl. | 4.2 - 4.8 km/h [Alts: Stair Climber Lvl 5-6 | Elliptical Res 6-7]",
       "exercises": [
-        { "name": "Flat Bench Press: 3x6-8", "isMain": true, "detail": "Mandatory scapular retraction. Lower bar to lower chest level.", "alternatives": ["Incline dumbbell press", "Convergent machine press", "Weighted push-ups"] },
-        { "name": "Incline Dumbbell Press: 3x8-10", "isMain": true, "detail": "Bench set to 30-45 degrees. Deep stretch on upper chest.", "alternatives": ["Incline machine press", "Incline dumbbell flyes"] },
-        { "name": "Seated Military Press: 3x8-10", "isMain": true, "detail": "Core tight, do not arch lower back. Full range of motion.", "alternatives": ["Dumbbell shoulder press", "Machine shoulder press", "Heavy lateral raises"] },
-        { "name": "Dumbbell Lateral Raises: 3x12-15", "isMain": false, "detail": "Lead with elbows slightly bent. Controlled tempo on descent.", "tempo": "3s Down (Eccentric)", "alternatives": ["Cable lateral raises", "Reverse pec deck"] },
-        { "name": "Cable Triceps Pushdown: 3x10-12", "isMain": false, "detail": "Elbows pinned to ribs. Squeeze peak contraction for 1 sec.", "tempo": "1s Peak Squeeze", "alternatives": ["EZ-bar skullcrushers", "Rope overhead triceps extension"] }
-      ]
-    },
-    "2": {
-      "name": "Tuesday: Legs 1 (Quad Focus) + Abs",
-      "cardio": "🏃 Treadmill: 20 min | 0% incl. | 4.0 km/h [Alts: Stair Climber Lvl 4 | Elliptical Res 5]",
-      "exercises": [
-        { "name": "Barbell Squat or Hack Squat: 3x6-8", "isMain": true, "detail": "Break parallel depth. Push firmly through full foot plant.", "alternatives": ["Leg press (low feet placement)", "Bulgarian split squat", "Goblet squat"] },
-        { "name": "Leg Press: 3x10-12", "isMain": true, "detail": "Feet low on platform. Do not lock knees at full extension.", "alternatives": ["Hack squat machine", "Dumbbell walking lunges"] },
-        { "name": "Leg Extension: 3x12-15", "isMain": false, "detail": "Controlled concentric, 1-second hold at peak contraction.", "tempo": "1s Peak Squeeze", "alternatives": ["Sissy squat", "Static bodyweight lunges"] },
-        { "name": "Lying Leg Curl: 3x10-12", "isMain": false, "detail": "Hips glued to bench. 3-second controlled eccentric phase.", "tempo": "3s Down (Eccentric)", "alternatives": ["Seated leg curl", "Stiff-legged dumbbell deadlift"] },
-        { "name": "Standing Calf Raises: 4x10-15", "isMain": false, "detail": "Full stretch at bottom step, squeeze calves hard at top.", "tempo": "1s Hold Bottom Stretch", "alternatives": ["Leg press calf raises", "Seated calf raise machine"] },
-        { "name": "Decline Bench Crunch (Abs): 3x12-15", "isMain": false, "detail": "Anchor feet securely. Flex spine, do not just hinge hips. Hold weight plate if easy.", "alternatives": ["Weighted cable crunch", "Hanging leg raises"] }
-      ]
-    },
-    "3": {
-      "name": "Wednesday: Pull (Back/Biceps)",
-      "cardio": "🏃 Treadmill: 20 min | 5% incl. | 4.2 - 4.8 km/h [Alts: Stair Climber Lvl 5-6 | Elliptical Res 6-7]",
-      "exercises": [
-        { "name": "Pull-ups or Lat Pulldown: 3x6-8", "isMain": true, "detail": "Depress scapulae before pulling. Touch upper chest to bar.", "alternatives": ["Close-grip pulldown", "Assisted pull-up machine"] },
-        { "name": "Barbell or Machine Row: 3x8-10", "isMain": true, "detail": "Torso steady. Pull elbows close along ribs toward hip.", "alternatives": ["Seated cable row", "Single-arm dumbbell row"] },
-        { "name": "Straight-Arm Cable Pullover: 2x12-15", "isMain": false, "detail": "Slight elbow bend, feel deep lat stretch at top position.", "tempo": "1s Top Stretch", "alternatives": ["Dumbbell pullover", "Rope lat pulldown"] },
-        { "name": "Face Pulls: 3x12-15", "isMain": false, "detail": "Pull toward forehead, flare rope ends apart. Target rear delts.", "alternatives": ["Bent-over dumbbell flyes", "Reverse machine flyes"] },
-        { "name": "Dumbbell Biceps Curl: 3x10-12", "isMain": false, "detail": "Elbows fixed at sides. Supinate wrist at peak contraction.", "tempo": "2s Down (Eccentric)", "alternatives": ["EZ-bar curl", "Hammer curl", "Cable curl"] }
-      ]
-    },
-    "4": {
-      "name": "Thursday: Legs 2 (Hamstrings/Glutes) + Abs",
-      "cardio": "🏃 Treadmill: 20 min | 0% incl. | 4.0 km/h [Alts: Stair Climber Lvl 4 | Elliptical Res 5]",
-      "exercises": [
-        { "name": "Romanian Deadlift: 3x8-10", "isMain": true, "detail": "Hinge hips backward. Neutral spine, bar tracking close to shins.", "alternatives": ["Good mornings", "Conventional deadlift"] },
-        { "name": "Bulgarian Split Squat: 3x10-12", "isMain": true, "detail": "Torso slightly leaned forward. Lower hips deep into movement.", "alternatives": ["Single-leg press", "Reverse lunges"] },
-        { "name": "Seated Leg Curl: 3x12-15", "isMain": false, "detail": "Adjust thigh pad firmly. Squeeze hamstrings forcefully.", "tempo": "1s Peak Squeeze", "alternatives": ["Lying leg curl", "Nordic hamstring curl"] },
-        { "name": "High-Foot Leg Press: 2x12-15", "isMain": false, "detail": "Feet high and wide on platform. Drive knees toward chest.", "alternatives": ["Barbell hip thrust", "Sumo squat"] },
-        { "name": "Standing Calf Raises: 4x10-15", "isMain": false, "detail": "Strict eccentric control, pause 1 second in bottom stretch.", "tempo": "1s Hold Bottom Stretch", "alternatives": ["Press calf raises", "Bodyweight single-leg calf raise"] },
-        { "name": "Flat Bench Lying Leg Raises (Abs): 3x12-15", "isMain": false, "detail": "Lie on bench, grab behind head. Roll pelvis upward off bench to engage lower rectus.", "alternatives": ["Ab wheel rollout", "Hanging knees to chest"] }
-      ]
-    },
-    "5": {
-      "name": "Friday: Torso (Maintenance)",
-      "cardio": "🏃 Treadmill: 20 min | 6% incl. | 4.5 km/h [Alts: Stair Climber Lvl 6 | Elliptical Res 7]",
-      "exercises": [
-        { "name": "Cable Chest Flyes: 3x10-12", "isMain": true, "detail": "Feel deep pectoral stretch, squeeze hands together at peak.", "alternatives": ["Pec deck flye machine", "Flat dumbbell flyes"] },
-        { "name": "Single-Arm Dumbbell Row: 3x8-10", "isMain": true, "detail": "Pull dumbbell directly toward hip pocket, not upper chest.", "alternatives": ["Hammer Strength row", "Single-arm cable row"] },
-        { "name": "Machine Overhead Press: 3x10-12", "isMain": true, "detail": "Constant tension. Do not let weight stack touch bottom.", "alternatives": ["Arnold dumbbell press", "Dumbbell military press"] },
-        { "name": "Cable Biceps Curl: 2x12-15", "isMain": false, "detail": "Constant cable tension. Hold peak squeeze for 1 second.", "tempo": "1s Peak Squeeze", "alternatives": ["Concentration curl", "Preacher curl"] },
-        { "name": "Overhead Dumbbell Triceps Extension: 2x12-15", "isMain": false, "detail": "Elbows pointing up and tucked close. Extend fully overhead.", "alternatives": ["Lying triceps extensions", "Single-arm cable overhead extension"] }
-      ]
-    },
-    "6": {
-      "name": "Saturday: Mountain Biking (MTB)",
-      "cardio": "🚵 Duration: 90-120 min | HR Zones: 2 to 4 [Alts: Steady-state Elliptical 60 min]",
-      "exercises": []
-    },
-    "0": {
-      "name": "Sunday: Recovery Cycling",
-      "cardio": "🚴 Duration: 45-60 min | HR Zones: 1 and 2 strict [Alts: Low-resistance Regenerative Elliptical]",
-      "exercises": []
-    }
-  }
-}
+        { "name": "Flat Bench Press: 3x6-8", "isMain": true, "rir": "1-2", "detail": "Mandatory scapular retraction. Lower bar to lower chest level.", "alternatives": ["Incline dumbbell press", "Convergent machine press", "Weighted push-ups"] },
+        { "name": "Incline Dumbbell Press: 3x8-10", "isMain": true, "rir": "1-2", "detail": "Bench set to 30-45 degrees. Deep stretch on upper chest.", "alternatives": ["Incline machine press", "Incline dumbbell flyes"] },
+        { "name": "Seated Military Press: 3x8-10", "isMain": true, "rir": "1-2", "detail": "Core tight, do not arch lower back. Full range of motion.", "alternatives": ["Dumbbell shoulder press", "Machine shoulder press", "Heavy lateral raises"] },
+        { "name": "Dumbbell Lateral Raises: 3x12-15", "isMain": false, "rir": "0", "detail": "Lead with elbows slightly bent. Controlled tempo on descent.", "tempo": "3s Down (Eccentric)", "alternatives": ["Cable lateral raises", "Reverse pec deck"] },
+        { "name": "
