@@ -1,36 +1,184 @@
 {
   "nutritionPlan": {
     "breakfast": [
-      "🍳 Option A (Classic Eggs): [ 🥚 3 whole eggs | 🌮 3 tortillas | 🥣 15g Greek Yogurt Dressing ]",
-      "🥣 Option B (Sweet Oatmeal): [ 🥛 1.5 scoops Whey | 🌾 50g oats | 🥜 15g peanut butter | 🫐 80g berries ] ⚠️ Omit peanut butter if Pre-MTB",
-      "🌮 Option C (Chicken Tacos): [ 🍗 150g breast | 🌮 3 tortillas | 🥑 50g avocado OR 🥣 60g Yogurt Dressing OR 🥑+🥣 30g/30g Mix ]",
-      "🍝 Option D (Red Pasta): [ 🥚 3 whole eggs | 🥓 60g ham | 🍝 170g cooked pasta ]",
-      "🧀 Option E (Creamy Ham Tacos): [ 🥚 2 whole eggs | 🥓 60g ham | 🧀 30g cheese | 🌮 3 tortillas | 🥣 30g Yogurt Dressing ]",
-      "🐟 Option F (Creamy Tuna Tacos): [ 🥫 2 cans Tuna | 🌮 3 tortillas | 🥑 50g avocado OR 🥣 60g Yogurt Dressing OR 🥑+🥣 30g/30g Mix ]",
-      "🍳 Option G (Ham & Eggs): [ 🥚 3 whole eggs | 🥓 60g ham | 🌮 3 tortillas | 🥑 50g avocado OR 🥣 60g Yogurt Dressing OR 🥑+🥣 30g/30g Mix ]"
+      {
+        "name": "Option A: Classic Eggs",
+        "ingredients": [
+          { "icon": "🥚", "qty": "3", "unit": "whole", "name": "Eggs" },
+          { "icon": "🌮", "qty": "3", "unit": "pcs", "name": "Tortillas" },
+          { "icon": "🥣", "qty": "15", "unit": "g", "name": "Yogurt Dressing" }
+        ]
+      },
+      {
+        "name": "Option B: Sweet Oatmeal",
+        "ingredients": [
+          { "icon": "🥛", "qty": "1.5", "unit": "scoops", "name": "Whey Protein" },
+          { "icon": "🌾", "qty": "50", "unit": "g", "name": "Oats" },
+          { "icon": "🥜", "qty": "15", "unit": "g", "name": "Peanut Butter (Skip if MTB)" },
+          { "icon": "🫐", "qty": "80", "unit": "g", "name": "Berries" }
+        ]
+      },
+      {
+        "name": "Option C: Chicken Tacos",
+        "ingredients": [
+          { "icon": "🍗", "qty": "150", "unit": "g", "name": "Chicken Breast" },
+          { "icon": "🌮", "qty": "3", "unit": "pcs", "name": "Tortillas" },
+          { "icon": "🥑", "qty": "50", "unit": "g", "name": "Avocado", "subs": [
+              { "icon": "🥣", "qty": "60", "unit": "g", "name": "Yogurt Dressing" },
+              { "icon": "🥑🥣", "qty": "30/30", "unit": "g", "name": "Avo/Yogurt Mix" }
+          ]}
+        ]
+      },
+      {
+        "name": "Option D: Red Pasta",
+        "ingredients": [
+          { "icon": "🥚", "qty": "3", "unit": "whole", "name": "Eggs" },
+          { "icon": "🥓", "qty": "60", "unit": "g", "name": "Ham" },
+          { "icon": "🍝", "qty": "170", "unit": "g", "name": "Cooked Pasta" }
+        ]
+      },
+      {
+        "name": "Option E: Creamy Ham Tacos",
+        "ingredients": [
+          { "icon": "🥚", "qty": "2", "unit": "whole", "name": "Eggs" },
+          { "icon": "🥓", "qty": "60", "unit": "g", "name": "Ham" },
+          { "icon": "🧀", "qty": "30", "unit": "g", "name": "Cheese" },
+          { "icon": "🌮", "qty": "3", "unit": "pcs", "name": "Tortillas" },
+          { "icon": "🥣", "qty": "30", "unit": "g", "name": "Yogurt Dressing" }
+        ]
+      },
+      {
+        "name": "Option F: Creamy Tuna Tacos",
+        "ingredients": [
+          { "icon": "🥫", "qty": "2", "unit": "cans", "name": "Tuna in water" },
+          { "icon": "🌮", "qty": "3", "unit": "pcs", "name": "Tortillas" },
+          { "icon": "🥑", "qty": "50", "unit": "g", "name": "Avocado", "subs": [
+              { "icon": "🥣", "qty": "60", "unit": "g", "name": "Yogurt Dressing" },
+              { "icon": "🥑🥣", "qty": "30/30", "unit": "g", "name": "Avo/Yogurt Mix" }
+          ]}
+        ]
+      },
+      {
+        "name": "Option G: Ham & Eggs",
+        "ingredients": [
+          { "icon": "🥚", "qty": "3", "unit": "whole", "name": "Eggs" },
+          { "icon": "🥓", "qty": "60", "unit": "g", "name": "Ham" },
+          { "icon": "🌮", "qty": "3", "unit": "pcs", "name": "Tortillas" },
+          { "icon": "🥑", "qty": "50", "unit": "g", "name": "Avocado", "subs": [
+              { "icon": "🥣", "qty": "60", "unit": "g", "name": "Yogurt Dressing" },
+              { "icon": "🥑🥣", "qty": "30/30", "unit": "g", "name": "Avo/Yogurt Mix" }
+          ]}
+        ]
+      }
     ],
     "lunch": [
-      "🍚 Option A (Rice/Pasta Base): [ 🥩 200g lean meat | 🍚 70g dry rice/pasta | 🫒 10g oil ]",
-      "🥔 Option B (Potato Base): [ 🥩 200g lean meat | 🥔 200g boiled potato | 🫒 10g oil ]"
+      {
+        "name": "Option A: Rice/Pasta Base",
+        "ingredients": [
+          { "icon": "🥩", "qty": "200", "unit": "g", "name": "Lean Meat" },
+          { "icon": "🍚", "qty": "70", "unit": "g", "name": "Dry Rice/Pasta" },
+          { "icon": "🫒", "qty": "10", "unit": "g", "name": "Oil" }
+        ]
+      },
+      {
+        "name": "Option B: Potato Base",
+        "ingredients": [
+          { "icon": "🥩", "qty": "200", "unit": "g", "name": "Lean Meat" },
+          { "icon": "🥔", "qty": "200", "unit": "g", "name": "Boiled Potato" },
+          { "icon": "🫒", "qty": "10", "unit": "g", "name": "Oil" }
+        ]
+      }
     ],
     "dinner": [
-      "🌮 Option A (Tuna Tacos): [ 🐟 200g tuna | 🌮 3 tortillas | 🥑 50g avocado OR 🥣 60g Yogurt Dressing OR 🥑+🥣 30g/30g Mix ]",
-      "🍝 Option B (Chicken Pasta): [ 🍗 200g chicken | 🍝 60g dry pasta | 🫒 10g oil ]",
-      "🌮 Option C (Fish Tacos): [ 🐟 200g tilapia | 🌮 4 tortillas | 🥑 50g avocado OR 🥣 60g Yogurt Dressing OR 🥑+🥣 30g/30g Mix ]",
-      "🌮 Option D (Chicken Tacos): [ 🍗 200g chicken | 🌮 3 tortillas | 🥑 50g avocado OR 🥣 60g Yogurt Dressing OR 🥑+🥣 30g/30g Mix ]",
-      "🥩 Option E (Beef Tacos): [ 🥩 200g steak | 🌮 3 tortillas | 🥑 50g avocado OR 🥣 60g Yogurt Dressing OR 🥑+🥣 30g/30g Mix ]"
+      {
+        "name": "Option A: Tuna Tacos",
+        "ingredients": [
+          { "icon": "🐟", "qty": "200", "unit": "g", "name": "Tuna" },
+          { "icon": "🌮", "qty": "3", "unit": "pcs", "name": "Tortillas" },
+          { "icon": "🥑", "qty": "50", "unit": "g", "name": "Avocado", "subs": [
+              { "icon": "🥣", "qty": "60", "unit": "g", "name": "Yogurt Dressing" },
+              { "icon": "🥑🥣", "qty": "30/30", "unit": "g", "name": "Avo/Yogurt Mix" }
+          ]}
+        ]
+      },
+      {
+        "name": "Option B: Chicken Pasta",
+        "ingredients": [
+          { "icon": "🍗", "qty": "200", "unit": "g", "name": "Chicken" },
+          { "icon": "🍝", "qty": "60", "unit": "g", "name": "Dry Pasta" },
+          { "icon": "🫒", "qty": "10", "unit": "g", "name": "Oil" }
+        ]
+      },
+      {
+        "name": "Option C: Fish Tacos",
+        "ingredients": [
+          { "icon": "🐟", "qty": "200", "unit": "g", "name": "Tilapia" },
+          { "icon": "🌮", "qty": "4", "unit": "pcs", "name": "Tortillas" },
+          { "icon": "🥑", "qty": "50", "unit": "g", "name": "Avocado", "subs": [
+              { "icon": "🥣", "qty": "60", "unit": "g", "name": "Yogurt Dressing" },
+              { "icon": "🥑🥣", "qty": "30/30", "unit": "g", "name": "Avo/Yogurt Mix" }
+          ]}
+        ]
+      },
+      {
+        "name": "Option D: Chicken Tacos",
+        "ingredients": [
+          { "icon": "🍗", "qty": "200", "unit": "g", "name": "Chicken" },
+          { "icon": "🌮", "qty": "3", "unit": "pcs", "name": "Tortillas" },
+          { "icon": "🥑", "qty": "50", "unit": "g", "name": "Avocado", "subs": [
+              { "icon": "🥣", "qty": "60", "unit": "g", "name": "Yogurt Dressing" },
+              { "icon": "🥑🥣", "qty": "30/30", "unit": "g", "name": "Avo/Yogurt Mix" }
+          ]}
+        ]
+      },
+      {
+        "name": "Option E: Beef Tacos",
+        "ingredients": [
+          { "icon": "🥩", "qty": "200", "unit": "g", "name": "Steak" },
+          { "icon": "🌮", "qty": "3", "unit": "pcs", "name": "Tortillas" },
+          { "icon": "🥑", "qty": "50", "unit": "g", "name": "Avocado", "subs": [
+              { "icon": "🥣", "qty": "60", "unit": "g", "name": "Yogurt Dressing" },
+              { "icon": "🥑🥣", "qty": "30/30", "unit": "g", "name": "Avo/Yogurt Mix" }
+          ]}
+        ]
+      }
     ],
     "snacks": [
-      "🥤 Snack A: [ 🥛 1 scoop Whey | 🍎 150g fruit | 🥜 15g nuts ]",
-      "🥣 Snack B: [ 🥣 150g Greek yogurt | 🍎 150g fruit | 🥜 15g nuts ]",
-      "🍎 Snack C: [ 🍎 150g fruit | 🥜 15g peanut butter ]",
-      "🍮 Free Ingestion: [ 🍮 Light Jello (0% sugar) unlimited ]"
+      {
+        "name": "Snack A: Whey & Fruit",
+        "ingredients": [
+          { "icon": "🥛", "qty": "1", "unit": "scoop", "name": "Whey" },
+          { "icon": "🍎", "qty": "150", "unit": "g", "name": "Fruit" },
+          { "icon": "🥜", "qty": "15", "unit": "g", "name": "Nuts" }
+        ]
+      },
+      {
+        "name": "Snack B: Yogurt & Fruit",
+        "ingredients": [
+          { "icon": "🥣", "qty": "150", "unit": "g", "name": "Greek Yogurt" },
+          { "icon": "🍎", "qty": "150", "unit": "g", "name": "Fruit" },
+          { "icon": "🥜", "qty": "15", "unit": "g", "name": "Nuts" }
+        ]
+      },
+      {
+        "name": "Snack C: Fruit & PB",
+        "ingredients": [
+          { "icon": "🍎", "qty": "150", "unit": "g", "name": "Fruit" },
+          { "icon": "🥜", "qty": "15", "unit": "g", "name": "Peanut Butter" }
+        ]
+      },
+      {
+        "name": "Free Ingestion",
+        "ingredients": [
+          { "icon": "🍮", "qty": "∞", "unit": "Free", "name": "Light Jello (0% sugar)" }
+        ]
+      }
     ],
     "equivalents": [
-      "🥩 Protein: 200g Lean Beef = 🍗 200g Chicken Breast = 🐟 200g Tilapia = 🥫 2 cans Tuna in water",
-      "🍚 Carbs: 70g Dry Rice = 🍝 70g Dry Pasta = 🥔 220g Potato = 🌮 4 Corn Tortillas = 🌾 60g Oats",
-      "🥑 Fats: 50g Avocado = 🥣 60g Yogurt Dressing = 🥑+🥣 30g/30g Mix = 🥜 15g Peanut Butter = 🥜 15g Nuts = 🫒 10g Cooking Oil",
-      "🚴 Leg Day Opt (Tue/Thu): ⬆️ +15% Carbs Lunch/Dinner (e.g. +1 🌮 OR +10g 🍚) ➕ 🚫 Remove nuts from daily snack."
+      "🥩 Protein: 200g Lean Beef = 200g Chicken Breast = 200g Tilapia = 2 cans Tuna in water",
+      "🍚 Carbs: 70g Dry Rice = 70g Dry Pasta = 220g Potato = 4 Corn Tortillas = 60g Oats",
+      "🥑 Fats: 50g Avocado = 60g Yogurt Dressing = 30g/30g Mix = 15g Peanut Butter = 15g Nuts = 10g Cooking Oil",
+      "🚴 Leg Day Opt: Tue/Thu increase Lunch/Dinner carbs by 15% (+1 tortilla / +10g rice) & remove nuts from snack."
     ]
   },
   "routines": {
