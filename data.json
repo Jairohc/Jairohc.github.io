@@ -1,42 +1,42 @@
 {
   "nutritionPlan": {
     "breakfast": [
-      "Option A: Classic Eggs (3 whole eggs + 3 tortillas + 15g Greek Yogurt Dressing)",
-      "Option B: Sweet Oatmeal (1.5 scoops Whey + 50g oats + 15g peanut butter + 80g berries) [Note: Omit peanut butter if taken as Pre-MTB ride meal]",
-      "Option C: Chicken Tacos (150g breast + 3 tortillas + [50g avocado OR 60g Greek Yogurt Dressing OR Avocado Dressing (30g avocado + 30g Greek Yogurt)])",
-      "Option D: Red Pasta (3 whole eggs + 60g ham + 170g cooked pasta)",
-      "Option E: Creamy Ham & Cheese Tacos (2 whole eggs + 60g ham + 30g cheese + 3 tortillas + 30g Greek Yogurt Dressing)",
-      "Option F: Creamy Tuna Tacos (2 cans Tuna in water + 3 tortillas + [50g avocado OR 60g Greek Yogurt Dressing OR Avocado Dressing (30g avocado + 30g Greek Yogurt)])",
-      "Option G: Ham & Eggs (3 whole eggs + 60g ham + 3 tortillas + [50g avocado OR 60g Greek Yogurt Dressing OR Avocado Dressing (30g avocado + 30g Greek Yogurt)])"
+      "🍳 Option A (Classic Eggs): [ 🥚 3 whole eggs | 🌮 3 tortillas | 🥣 15g Greek Yogurt Dressing ]",
+      "🥣 Option B (Sweet Oatmeal): [ 🥛 1.5 scoops Whey | 🌾 50g oats | 🥜 15g peanut butter | 🫐 80g berries ] ⚠️ Omit peanut butter if Pre-MTB",
+      "🌮 Option C (Chicken Tacos): [ 🍗 150g breast | 🌮 3 tortillas | 🥑 50g avocado OR 🥣 60g Yogurt Dressing OR 🥑+🥣 30g/30g Mix ]",
+      "🍝 Option D (Red Pasta): [ 🥚 3 whole eggs | 🥓 60g ham | 🍝 170g cooked pasta ]",
+      "🧀 Option E (Creamy Ham Tacos): [ 🥚 2 whole eggs | 🥓 60g ham | 🧀 30g cheese | 🌮 3 tortillas | 🥣 30g Yogurt Dressing ]",
+      "🐟 Option F (Creamy Tuna Tacos): [ 🥫 2 cans Tuna | 🌮 3 tortillas | 🥑 50g avocado OR 🥣 60g Yogurt Dressing OR 🥑+🥣 30g/30g Mix ]",
+      "🍳 Option G (Ham & Eggs): [ 🥚 3 whole eggs | 🥓 60g ham | 🌮 3 tortillas | 🥑 50g avocado OR 🥣 60g Yogurt Dressing OR 🥑+🥣 30g/30g Mix ]"
     ],
     "lunch": [
-      "Option A: Rice/Pasta Base (200g lean meat + 70g dry rice/pasta + 10g oil)",
-      "Option B: Potato Base (200g lean meat + 200g boiled potato + 10g oil)"
+      "🍚 Option A (Rice/Pasta Base): [ 🥩 200g lean meat | 🍚 70g dry rice/pasta | 🫒 10g oil ]",
+      "🥔 Option B (Potato Base): [ 🥩 200g lean meat | 🥔 200g boiled potato | 🫒 10g oil ]"
     ],
     "dinner": [
-      "Option A: Tuna Tacos (200g tuna + 3 tortillas + [50g avocado OR 60g Greek Yogurt Dressing OR Avocado Dressing (30g avocado + 30g Greek Yogurt)])",
-      "Option B: Chicken Pasta (200g chicken + 60g dry pasta + 10g oil)",
-      "Option C: Fish Tacos (200g tilapia + 4 tortillas + [50g avocado OR 60g Greek Yogurt Dressing OR Avocado Dressing (30g avocado + 30g Greek Yogurt)])",
-      "Option D: Chicken Tacos (200g chicken + 3 tortillas + [50g avocado OR 60g Greek Yogurt Dressing OR Avocado Dressing (30g avocado + 30g Greek Yogurt)])",
-      "Option E: Beef Tacos (200g steak + 3 tortillas + [50g avocado OR 60g Greek Yogurt Dressing OR Avocado Dressing (30g avocado + 30g Greek Yogurt)])"
+      "🌮 Option A (Tuna Tacos): [ 🐟 200g tuna | 🌮 3 tortillas | 🥑 50g avocado OR 🥣 60g Yogurt Dressing OR 🥑+🥣 30g/30g Mix ]",
+      "🍝 Option B (Chicken Pasta): [ 🍗 200g chicken | 🍝 60g dry pasta | 🫒 10g oil ]",
+      "🌮 Option C (Fish Tacos): [ 🐟 200g tilapia | 🌮 4 tortillas | 🥑 50g avocado OR 🥣 60g Yogurt Dressing OR 🥑+🥣 30g/30g Mix ]",
+      "🌮 Option D (Chicken Tacos): [ 🍗 200g chicken | 🌮 3 tortillas | 🥑 50g avocado OR 🥣 60g Yogurt Dressing OR 🥑+🥣 30g/30g Mix ]",
+      "🥩 Option E (Beef Tacos): [ 🥩 200g steak | 🌮 3 tortillas | 🥑 50g avocado OR 🥣 60g Yogurt Dressing OR 🥑+🥣 30g/30g Mix ]"
     ],
     "snacks": [
-      "Snack A: 1 scoop Whey + 150g fruit + 15g nuts",
-      "Snack B: 150g Greek yogurt + 150g fruit + 15g nuts",
-      "Snack C: 150g fruit + 15g peanut butter",
-      "Free Ingestion: Light Jello (0% sugar) unlimited"
+      "🥤 Snack A: [ 🥛 1 scoop Whey | 🍎 150g fruit | 🥜 15g nuts ]",
+      "🥣 Snack B: [ 🥣 150g Greek yogurt | 🍎 150g fruit | 🥜 15g nuts ]",
+      "🍎 Snack C: [ 🍎 150g fruit | 🥜 15g peanut butter ]",
+      "🍮 Free Ingestion: [ 🍮 Light Jello (0% sugar) unlimited ]"
     ],
     "equivalents": [
-      "Protein: 200g Lean Beef = 200g Chicken Breast = 200g Tilapia = 2 cans Tuna in water",
-      "Carbohydrates: 70g Dry Rice = 70g Dry Pasta = 220g Potato = 4 Corn Tortillas = 60g Oats",
-      "Fats/Dressings: [50g Avocado] = [60g Greek Yogurt Dressing (0% fat)] = [Avocado Dressing (30g avocado + 30g Greek Yogurt)] = 15g Peanut Butter = 15g Nuts = 10g Olive/Cooking Oil",
-      "Leg Day Optimization: On Tuesday and Thursday, increase Lunch/Dinner carbs by 15% (e.g., +1 tortilla or +10g dry rice) and remove nuts from the daily snack to balance net calories."
+      "🥩 Protein: 200g Lean Beef = 🍗 200g Chicken Breast = 🐟 200g Tilapia = 🥫 2 cans Tuna in water",
+      "🍚 Carbs: 70g Dry Rice = 🍝 70g Dry Pasta = 🥔 220g Potato = 🌮 4 Corn Tortillas = 🌾 60g Oats",
+      "🥑 Fats: 50g Avocado = 🥣 60g Yogurt Dressing = 🥑+🥣 30g/30g Mix = 🥜 15g Peanut Butter = 🥜 15g Nuts = 🫒 10g Cooking Oil",
+      "🚴 Leg Day Opt (Tue/Thu): ⬆️ +15% Carbs Lunch/Dinner (e.g. +1 🌮 OR +10g 🍚) ➕ 🚫 Remove nuts from daily snack."
     ]
   },
   "routines": {
     "1": {
       "name": "Monday: Push (Chest/Shoulders/Triceps)",
-      "cardio": "Treadmill: 20 min | 5% incl. | 4.2 - 4.8 km/h (2.6 - 3.0 mph) [Alts: Stair Climber Lvl 5-6 | Elliptical Res 6-7]",
+      "cardio": "🏃 Treadmill: 20 min | 5% incl. | 4.2 - 4.8 km/h [Alts: Stair Climber Lvl 5-6 | Elliptical Res 6-7]",
       "exercises": [
         { "name": "Flat Bench Press: 3x6-8", "detail": "Mandatory scapular retraction. Lower bar to lower chest level.", "alternatives": ["Incline dumbbell press", "Convergent machine press", "Weighted push-ups"] },
         { "name": "Incline Dumbbell Press: 3x8-10", "detail": "Bench set to 30-45 degrees. Deep stretch on upper chest.", "alternatives": ["Incline machine press", "Incline dumbbell flyes"] },
@@ -47,19 +47,19 @@
     },
     "2": {
       "name": "Tuesday: Legs 1 (Quad Focus) + Abs",
-      "cardio": "Treadmill: 20 min | 0% incl. | 4.0 km/h (2.5 mph) [Alts: Stair Climber Lvl 4 | Elliptical Res 5]",
+      "cardio": "🏃 Treadmill: 20 min | 0% incl. | 4.0 km/h [Alts: Stair Climber Lvl 4 | Elliptical Res 5]",
       "exercises": [
         { "name": "Barbell Squat or Hack Squat: 3x6-8", "detail": "Break parallel depth. Push firmly through full foot plant.", "alternatives": ["Leg press (low feet placement)", "Bulgarian split squat", "Goblet squat"] },
         { "name": "Leg Press: 3x10-12", "detail": "Feet low on platform. Do not lock knees at full extension.", "alternatives": ["Hack squat machine", "Dumbbell walking lunges"] },
         { "name": "Leg Extension: 3x12-15", "detail": "Controlled concentric, 1-second hold at peak contraction.", "alternatives": ["Sissy squat", "Static bodyweight lunges"] },
         { "name": "Lying Leg Curl: 3x10-12", "detail": "Hips glued to bench. 3-second controlled eccentric phase.", "alternatives": ["Seated leg curl", "Stiff-legged dumbbell deadlift"] },
         { "name": "Standing Calf Raises: 4x10-15", "detail": "Full stretch at bottom step, squeeze calves hard at top.", "alternatives": ["Leg press calf raises", "Seated calf raise machine"] },
-        { "name": "Decline Bench Crunch (Abs): 3x12-15", "detail": "Anchor feet securely on the decline board. Flex the spine (roll the torso), do not just hinge at the hips. Hold a weight plate across the chest if bodyweight is too easy.", "alternatives": ["Weighted cable crunch", "Hanging leg raises"] }
+        { "name": "Decline Bench Crunch (Abs): 3x12-15", "detail": "Anchor feet securely. Flex spine, do not just hinge hips. Hold weight plate if easy.", "alternatives": ["Weighted cable crunch", "Hanging leg raises"] }
       ]
     },
     "3": {
       "name": "Wednesday: Pull (Back/Biceps)",
-      "cardio": "Treadmill: 20 min | 5% incl. | 4.2 - 4.8 km/h (2.6 - 3.0 mph) [Alts: Stair Climber Lvl 5-6 | Elliptical Res 6-7]",
+      "cardio": "🏃 Treadmill: 20 min | 5% incl. | 4.2 - 4.8 km/h [Alts: Stair Climber Lvl 5-6 | Elliptical Res 6-7]",
       "exercises": [
         { "name": "Pull-ups or Lat Pulldown: 3x6-8", "detail": "Depress scapulae before pulling. Touch upper chest to bar.", "alternatives": ["Close-grip pulldown", "Assisted pull-up machine"] },
         { "name": "Barbell or Machine Row: 3x8-10", "detail": "Torso steady. Pull elbows close along ribs toward hip.", "alternatives": ["Seated cable row", "Single-arm dumbbell row"] },
@@ -70,19 +70,19 @@
     },
     "4": {
       "name": "Thursday: Legs 2 (Hamstrings/Glutes) + Abs",
-      "cardio": "Treadmill: 20 min | 0% incl. | 4.0 km/h (2.5 mph) [Alts: Stair Climber Lvl 4 | Elliptical Res 5]",
+      "cardio": "🏃 Treadmill: 20 min | 0% incl. | 4.0 km/h [Alts: Stair Climber Lvl 4 | Elliptical Res 5]",
       "exercises": [
         { "name": "Romanian Deadlift: 3x8-10", "detail": "Hinge hips backward. Neutral spine, bar tracking close to shins.", "alternatives": ["Good mornings", "Conventional deadlift"] },
         { "name": "Bulgarian Split Squat: 3x10-12", "detail": "Torso slightly leaned forward. Lower hips deep into movement.", "alternatives": ["Single-leg press", "Reverse lunges"] },
         { "name": "Seated Leg Curl: 3x12-15", "detail": "Adjust thigh pad firmly. Squeeze hamstrings forcefully.", "alternatives": ["Lying leg curl", "Nordic hamstring curl"] },
         { "name": "High-Foot Leg Press: 2x12-15", "detail": "Feet high and wide on platform. Drive knees toward chest.", "alternatives": ["Barbell hip thrust", "Sumo squat"] },
         { "name": "Standing Calf Raises: 4x10-15", "detail": "Strict eccentric control, pause 1 second in bottom stretch.", "alternatives": ["Press calf raises", "Bodyweight single-leg calf raise"] },
-        { "name": "Flat Bench Lying Leg Raises (Abs): 3x12-15", "detail": "Lie on a flat bench, grab the bench behind your head. Keep legs slightly bent, focus on rolling the pelvis upward off the bench to engage the lower rectus abdominis.", "alternatives": ["Ab wheel rollout", "Hanging knees to chest"] }
+        { "name": "Flat Bench Lying Leg Raises (Abs): 3x12-15", "detail": "Lie on bench, grab behind head. Roll pelvis upward off bench to engage lower rectus.", "alternatives": ["Ab wheel rollout", "Hanging knees to chest"] }
       ]
     },
     "5": {
       "name": "Friday: Torso (Maintenance)",
-      "cardio": "Treadmill: 20 min | 6% incl. | 4.5 km/h (2.8 mph) [Alts: Stair Climber Lvl 6 | Elliptical Res 7]",
+      "cardio": "🏃 Treadmill: 20 min | 6% incl. | 4.5 km/h [Alts: Stair Climber Lvl 6 | Elliptical Res 7]",
       "exercises": [
         { "name": "Cable Chest Flyes: 3x10-12", "detail": "Feel deep pectoral stretch, squeeze hands together at peak.", "alternatives": ["Pec deck flye machine", "Flat dumbbell flyes"] },
         { "name": "Single-Arm Dumbbell Row: 3x8-10", "detail": "Pull dumbbell directly toward hip pocket, not upper chest.", "alternatives": ["Hammer Strength row", "Single-arm cable row"] },
@@ -93,12 +93,12 @@
     },
     "6": {
       "name": "Saturday: Mountain Biking (MTB)",
-      "cardio": "Duration: 90-120 min | HR Zones: 2 to 4 [Alts: Steady-state Elliptical 60 min]",
+      "cardio": "🚵 Duration: 90-120 min | HR Zones: 2 to 4 [Alts: Steady-state Elliptical 60 min]",
       "exercises": []
     },
     "0": {
       "name": "Sunday: Recovery Cycling",
-      "cardio": "Duration: 45-60 min | HR Zones: 1 and 2 strict [Alts: Low-resistance Regenerative Elliptical]",
+      "cardio": "🚴 Duration: 45-60 min | HR Zones: 1 and 2 strict [Alts: Low-resistance Regenerative Elliptical]",
       "exercises": []
     }
   }
