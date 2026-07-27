@@ -56,29 +56,8 @@ header p { margin: 0; font-size: 0.85em; color: #666; }
     width: 100%; 
     box-sizing: border-box;
 }
-
-.selector-dia-override label { 
-    font-size: 0.85em; 
-    font-weight: bold; 
-    color: var(--primary); 
-    white-space: nowrap; 
-    flex-shrink: 0; 
-}
-
-.selector-dia-override select { 
-    flex: 1; 
-    padding: 8px; 
-    font-size: 16px; 
-    border: 1px solid #ccc; 
-    border-radius: 6px; 
-    background: #ffffff; 
-    color: var(--primary); 
-    font-weight: 500; 
-    min-width: 0; 
-    text-overflow: ellipsis; 
-    white-space: nowrap; 
-    overflow: hidden;
-}
+.selector-dia-override label { font-size: 0.85em; font-weight: bold; color: var(--primary); white-space: nowrap; flex-shrink: 0; }
+.selector-dia-override select { flex: 1; padding: 8px; font-size: 16px; border: 1px solid #ccc; border-radius: 6px; background: #ffffff; color: var(--primary); font-weight: 500; min-width: 0; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
 
 /* Exercise Cards */
 .ejercicio-card { background: #f9f9f9; border-left: 4px solid var(--primary); border-radius: 8px; padding: 15px; margin-bottom: 15px; transition: all 0.25s ease; overflow: hidden; }
@@ -104,10 +83,36 @@ header p { margin: 0; font-size: 0.85em; color: #666; }
 .btn-guardar { background-color: var(--success); color: white; border: none; padding: 12px 18px; border-radius: 6px; font-weight: bold; font-size: 1em; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; flex-shrink: 0; }
 .btn-guardar.guardado { background-color: #2980b9; transform: scale(1.03); }
 
+/* Alternative Exercises (HOT SWAP) */
 details { margin-top: 12px; border-top: 1px dashed #ccc; padding-top: 10px; }
 summary { font-size: 0.85em; font-weight: 600; color: #555; cursor: pointer; outline: none; }
-details ul { margin: 8px 0 0 0; padding-left: 20px; font-size: 0.85em; color: #555; }
-details li { margin-bottom: 6px; list-style-type: square; }
+details ul { margin: 10px 0 0 0; padding: 0; list-style-type: none; }
+
+.alt-list-item { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    background: #ffffff; 
+    padding: 8px 10px; 
+    border-radius: 6px; 
+    margin-bottom: 6px; 
+    border: 1px solid #eee; 
+}
+.alt-list-item span { font-size: 0.9em; color: #444; flex: 1; padding-right: 10px; font-weight: 500; }
+.btn-swap { 
+    background-color: var(--accent); 
+    color: white; 
+    border: none; 
+    padding: 6px 12px; 
+    border-radius: 6px; 
+    font-weight: bold; 
+    font-size: 0.85em; 
+    cursor: pointer; 
+    box-shadow: 0 2px 4px rgba(52, 152, 219, 0.2); 
+    transition: transform 0.1s; 
+    white-space: nowrap;
+}
+.btn-swap:active { transform: scale(0.95); }
 
 /* Bottom Navigation Bar */
 .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: var(--nav-height); background-color: #ffffff; display: flex; justify-content: space-around; align-items: center; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); padding-bottom: env(safe-area-inset-bottom); z-index: 1000; }
@@ -121,66 +126,19 @@ details li { margin-bottom: 6px; list-style-type: square; }
 .tabs-nutricion button.activo { background-color: #ffffff; color: var(--primary); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
 
 /* VISUAL INGREDIENTS GRID */
-.ing-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(105px, 1fr));
-    gap: 12px;
-    margin-top: 5px;
-}
-
-.ing-tile {
-    background: #fff;
-    border: 2px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 15px 5px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    transition: transform 0.1s ease, border-color 0.2s;
-    user-select: none;
-    -webkit-user-select: none;
-}
-
-.ing-tile.has-sub {
-    cursor: pointer;
-    border-color: var(--accent);
-    box-shadow: 0 4px 6px rgba(52, 152, 219, 0.15);
-}
-
-.ing-tile.has-sub:active {
-    transform: scale(0.95);
-}
-
+.ing-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(105px, 1fr)); gap: 12px; margin-top: 5px; }
+.ing-tile { background: #fff; border: 2px solid #e2e8f0; border-radius: 12px; padding: 15px 5px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; transition: transform 0.1s ease, border-color 0.2s; user-select: none; -webkit-user-select: none; }
+.ing-tile.has-sub { cursor: pointer; border-color: var(--accent); box-shadow: 0 4px 6px rgba(52, 152, 219, 0.15); }
+.ing-tile.has-sub:active { transform: scale(0.95); }
 .ing-icon { font-size: 2.8em; margin-bottom: 8px; line-height: 1; }
 .ing-qty { font-size: 1.25em; font-weight: 900; color: var(--primary); margin-bottom: 2px; }
 .ing-name { font-size: 0.75em; color: #64748b; line-height: 1.2; font-weight: 500; padding: 0 5px; }
-
-.swap-badge {
-    position: absolute;
-    top: -8px;
-    right: -8px;
-    background: var(--accent);
-    color: white;
-    font-size: 0.9em;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    font-weight: bold;
-}
+.swap-badge { position: absolute; top: -8px; right: -8px; background: var(--accent); color: white; font-size: 0.9em; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.2); font-weight: bold; }
 
 /* Equivalent List Rules */
 .equivalent-list li { background: #f9f9f9; margin: 8px 0; padding: 12px; border-left: 4px solid var(--accent); border-radius: 4px; font-size: 0.95em; list-style: none; }
-
 .action-container { margin-top: 20px; padding-top: 15px; border-top: 2px dashed #ccc; }
 .btn-action { width: 100%; background-color: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 0.95em; cursor: pointer; transition: background-color 0.2s; }
-
 .alerta { background-color: var(--warning); color: white; padding: 10px; border-radius: 4px; margin-bottom: 15px; font-weight: bold; }
 .dia-semana { border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 15px; }
 .dia-semana h3 { color: var(--accent); margin: 0 0 5px 0; }
