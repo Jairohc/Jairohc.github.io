@@ -2,14 +2,25 @@ let planNutricion = {};
 let rutinas = {};
 let diaOverride = null;
 let diaEnMemoria = new Date().getDay();
+let currentMealCategory = 'breakfast';
+let wakeLock = null;
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // Registro del Service Worker para funcionamiento Offline
+    // 1. Registro del Service Worker para funcionamiento Offline
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('./sw.js')
-            .then(() => console.log('Service Worker registrado con éxito'))
-            .catch(err => console.error('Fallo al registrar Service Worker:', err));
+            .then(() => console.log('Service Worker Registered'))
+            .catch(err => console.error('Service Worker Error:', err));
     }
+
+    // 2. Control nativo de pantalla encendida (Wake Lock API)
+    document.addEventListener('visibilitychange', async () => {
+        if (document.visibilityState === 'visible' && localStorage.getItem('vistaActiva') === 'rutina') {
+            solicitarWakeLock();
+        } else if (wakeLock !== null) {
+            wakeLock.release().then(() => wakeLock = null);
+        }
+    });
 
     try {
         const respuesta = await fetch('data.json');
@@ -31,6 +42,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
+async function solicitarWakeLock() {
+    try {
+        if ('wakeLock' in navigator) {
+            wakeLock = await navigator.wakeLock.request('screen');
+        }
+    } catch (err) {
+        console.log(`Wake Lock Error: ${err.message}`);
+    }
+}
+
 function iniciarAplicacion() {
     actualizarReloj();
     setInterval(actualizarReloj, 60000);
@@ -51,9 +72,7 @@ function actualizarReloj() {
 
     if (ahora.getDay() !== diaEnMemoria) {
         diaEnMemoria = ahora.getDay();
-        if (diaOverride === null) {
-            renderizarRutina();
-        }
+        if (diaOverride === null) { renderizarRutina(); }
     }
 }
 
@@ -66,17 +85,16 @@ function cambiarVista(vistaDestino) {
     
     localStorage.setItem('vistaActiva', vistaDestino);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    if (vistaDestino === 'rutina') solicitarWakeLock();
 }
 
 function cambiarDiaRutina(valor) {
-    if (valor === "auto") {
-        diaOverride = null;
-    } else {
-        diaOverride = parseInt(valor);
-    }
+    diaOverride = (valor === "auto") ? null : parseInt(valor);
     renderizarRutina();
 }
 
+/* ================== BLOQUE RUTINA ================== */
 function renderizarRutina() {
     const ahora = new Date();
     const diaSemana = diaOverride !== null ? diaOverride : ahora.getDay();
@@ -97,23 +115,22 @@ function renderizarRutina() {
                 const pesoGuardado = localStorage.getItem('peso_' + idSeguro) || '';
                 const basePeso = pesoGuardado ? parseFloat(pesoGuardado) : 0;
 
-                // Quick Overload Chips Render
                 let htmlChips = '';
                 if (basePeso > 0) {
                     htmlChips = `
                         <div class="quick-chips" id="chips-${idSeguro}">
-                            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', ${Math.max(0, basePeso - 2.5)})">-2.5 kg</button>
-                            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', ${basePeso})">=${basePeso} kg</button>
-                            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', ${basePeso + 2.5})">+2.5 kg</button>
-                            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', ${basePeso + 5})">+5 kg</button>
+                            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', ${Math.max(0, basePeso - 2.5)})">-2.5</button>
+                            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', ${basePeso})">=${basePeso}</button>
+                            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', ${basePeso + 2.5})">+2.5</button>
+                            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', ${basePeso + 5})">+5</button>
                         </div>
                     `;
                 } else {
                     htmlChips = `
                         <div class="quick-chips" id="chips-${idSeguro}">
-                            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', 20)">20 kg</button>
-                            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', 40)">40 kg</button>
-                            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', 60)">60 kg</button>
+                            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', 20)">20</button>
+                            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', 40)">40</button>
+                            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', 60)">60</button>
                         </div>
                     `;
                 }
@@ -126,10 +143,7 @@ function renderizarRutina() {
                 div.className = `ejercicio-card`;
                 div.id = `card-${idSeguro}`;
                 
-                // Si ya tiene registro guardado previamente, inicializa colapsada
-                if (pesoGuardado) {
-                    div.classList.add('completed');
-                }
+                if (pesoGuardado) div.classList.add('completed');
 
                 div.innerHTML = `
                     <div class="card-header" onclick="toggleCard('${idSeguro}')">
@@ -139,19 +153,12 @@ function renderizarRutina() {
                     
                     <div class="card-body">
                         <p>${ej.detail}</p>
-                        
                         ${htmlChips}
-
                         <div class="registro">
                             <input type="number" id="input-${idSeguro}" placeholder="${pesoGuardado ? pesoGuardado + ' kg (last)' : 'Kg'}" step="0.5" inputmode="decimal" pattern="[0-9]*" onfocus="autoCompletarInput(this, '${pesoGuardado}')" onkeydown="detectarEnter(event, '${idSeguro}')">
                             <button id="btn-${idSeguro}" class="btn-guardar" onclick="guardarPesoLocal('${idSeguro}')">Save</button>
                         </div>
-
-                        ${listaAlts ? `
-                        <details>
-                            <summary>Alternatives</summary>
-                            <ul>${listaAlts}</ul>
-                        </details>` : ''}
+                        ${listaAlts ? `<details><summary>Alternatives</summary><ul>${listaAlts}</ul></details>` : ''}
                     </div>
                 `;
                 listaEjercicios.appendChild(div);
@@ -190,11 +197,9 @@ function guardarPesoLocal(idSeguro, valorEspecifco = null) {
     const summary = document.getElementById(`summary-${idSeguro}`);
     
     let pesoValue = valorEspecifco !== null ? valorEspecifco : inputElement.value;
-
     if (!pesoValue || isNaN(pesoValue) || pesoValue <= 0) return;
 
     localStorage.setItem('peso_' + idSeguro, pesoValue);
-
     inputElement.placeholder = pesoValue + " kg (last)";
     inputElement.value = '';
 
@@ -202,32 +207,23 @@ function guardarPesoLocal(idSeguro, valorEspecifco = null) {
     if (contenedorChips) {
         const basePeso = parseFloat(pesoValue);
         contenedorChips.innerHTML = `
-            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', ${Math.max(0, basePeso - 2.5)})">-2.5 kg</button>
-            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', ${basePeso})">=${basePeso} kg</button>
-            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', ${basePeso + 2.5})">+2.5 kg</button>
-            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', ${basePeso + 5})">+5 kg</button>
+            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', ${Math.max(0, basePeso - 2.5)})">-2.5</button>
+            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', ${basePeso})">=${basePeso}</button>
+            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', ${basePeso + 2.5})">+2.5</button>
+            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', ${basePeso + 5})">+5</button>
         `;
     }
 
-    if (summary) {
-        summary.innerText = `✔️ ${pesoValue} kg`;
-    }
-    
-    // Trigger Auto-Collapse
+    if (summary) summary.innerText = `✔️ ${pesoValue} kg`;
     tarjeta?.classList.add('completed');
-
-    if ("vibrate" in navigator) {
-        navigator.vibrate(40);
-    }
+    if ("vibrate" in navigator) navigator.vibrate(40);
 
     boton.innerText = "✔";
     boton.classList.add('guardado');
-    setTimeout(() => { 
-        boton.innerText = "Save"; 
-        boton.classList.remove('guardado');
-    }, 1200);
+    setTimeout(() => { boton.innerText = "Save"; boton.classList.remove('guardado'); }, 1200);
 }
 
+/* ================== BLOQUE DIETA (TILE GRID) ================== */
 function renderizarDieta() {
     const ahora = new Date();
     const hora = ahora.getHours();
@@ -236,14 +232,13 @@ function renderizarDieta() {
     if (hora >= 4 && hora < 12) comidaActual = 'breakfast';
     else if (hora >= 12 && hora < 18) comidaActual = 'lunch';
     
-    mostrarComida(comidaActual);
-
-    if (ahora.getDay() === 0) {
-        document.getElementById('alerta-domingo')?.classList.remove('hidden');
-    }
+    cambiarComida(comidaActual);
+    if (ahora.getDay() === 0) document.getElementById('alerta-domingo')?.classList.remove('hidden');
 }
 
-function mostrarComida(tipo) {
+function cambiarComida(tipo) {
+    currentMealCategory = tipo;
+    
     document.getElementById('btn-breakfast')?.classList.remove('activo');
     document.getElementById('btn-lunch')?.classList.remove('activo');
     document.getElementById('btn-dinner')?.classList.remove('activo');
@@ -251,18 +246,88 @@ function mostrarComida(tipo) {
     document.getElementById('btn-equivalents')?.classList.remove('activo');
     
     document.getElementById(`btn-${tipo}`)?.classList.add('activo');
-    
-    const listaComidas = document.getElementById('lista-comidas');
-    if (!listaComidas) return; 
-    
-    listaComidas.innerHTML = '';
-    if (planNutricion[tipo]) {
-        planNutricion[tipo].forEach(item => {
-            const li = document.createElement('li');
-            li.innerText = item;
-            listaComidas.appendChild(li);
-        });
+
+    const selectorContainer = document.getElementById('meal-selector-container');
+    const selectOpt = document.getElementById('select-meal-opt');
+    const grid = document.getElementById('ingredients-grid');
+
+    if (tipo === 'equivalents') {
+        selectorContainer.classList.add('hidden');
+        grid.style.display = 'block';
+        grid.innerHTML = '<ul class="equivalent-list">' + planNutricion.equivalents.map(eq => `<li>${eq}</li>`).join('') + '</ul>';
+        return;
     }
+
+    grid.style.display = 'grid';
+    const opciones = planNutricion[tipo];
+    
+    if (opciones && opciones.length > 0) {
+        selectorContainer.classList.remove('hidden');
+        selectOpt.innerHTML = '';
+        opciones.forEach((opt, index) => {
+            const optionEl = document.createElement('option');
+            optionEl.value = index;
+            optionEl.innerText = opt.name;
+            selectOpt.appendChild(optionEl);
+        });
+        
+        renderizarIngredientes(0);
+    } else {
+        selectorContainer.classList.add('hidden');
+        grid.innerHTML = '';
+    }
+}
+
+function renderizarIngredientes(optionIndex) {
+    const grid = document.getElementById('ingredients-grid');
+    grid.innerHTML = '';
+    
+    const mealData = planNutricion[currentMealCategory][optionIndex];
+    if (!mealData || !mealData.ingredients) return;
+
+    mealData.ingredients.forEach((ing, i) => {
+        const div = document.createElement('div');
+        const hasSubs = ing.subs && ing.subs.length > 0;
+        
+        div.className = `ing-tile ${hasSubs ? 'has-sub' : ''}`;
+        div.id = `tile-${i}`;
+        
+        // Atributo local para rastrear el sub activo (0 = original, 1 = primer sub, etc)
+        div.dataset.subIdx = 0; 
+        
+        if (hasSubs) {
+            div.setAttribute('onclick', `rotarSubstituto('${i}', ${JSON.stringify(ing).replace(/"/g, '&quot;')})`);
+        }
+
+        div.innerHTML = generarHTMLFicha(ing, hasSubs);
+        grid.appendChild(div);
+    });
+}
+
+function generarHTMLFicha(ing, isRotatable) {
+    return `
+        ${isRotatable ? `<div class="swap-badge">↻</div>` : ''}
+        <div class="ing-icon">${ing.icon}</div>
+        <div class="ing-qty">${ing.qty} <span style="font-size: 0.6em">${ing.unit}</span></div>
+        <div class="ing-name">${ing.name}</div>
+    `;
+}
+
+function rotarSubstituto(tileId, ingObj) {
+    const tile = document.getElementById(`tile-${tileId}`);
+    if (!tile) return;
+
+    let currentIdx = parseInt(tile.dataset.subIdx);
+    const totalOptions = ingObj.subs.length + 1; // Original + Subs
+    
+    currentIdx = (currentIdx + 1) % totalOptions;
+    tile.dataset.subIdx = currentIdx;
+    
+    let activeIng = currentIdx === 0 ? ingObj : ingObj.subs[currentIdx - 1];
+    
+    tile.innerHTML = generarHTMLFicha(activeIng, true);
+
+    if ("vibrate" in navigator) navigator.vibrate(20);
 }
 
 function copiarListaSuper() {
@@ -277,8 +342,6 @@ function copiarListaSuper() {
     navigator.clipboard.writeText(textoLista).then(() => {
         if ("vibrate" in navigator) navigator.vibrate(30);
         alert("Grocery list copied to clipboard!");
-    }).catch(err => {
-        console.error("Copy error:", err);
     });
 }
 
@@ -294,7 +357,6 @@ function renderizarSemana() {
 
         const div = document.createElement('div');
         div.className = 'dia-semana';
-        
         let htmlEjercicios = (rut.exercises && rut.exercises.length > 0) 
             ? rut.exercises.map(e => `<li>${e.name}</li>`).join('') 
             : `<li>MTB / Recovery Cycling</li>`;
@@ -302,7 +364,9 @@ function renderizarSemana() {
         div.innerHTML = `
             <h3>${rut.name}</h3>
             <p style="margin:0 0 10px 0; font-size: 0.9em; color: #666;"><strong>Cardio:</strong> ${rut.cardio}</p>
-            <ul style="font-size: 0.9em;">${htmlEjercicios}</ul>
+            <ul style="font-size: 0.9em; padding:0; margin:0; list-style-type:none;">
+                ${rut.exercises.map(e => `<li style="padding: 5px 0; border-bottom: 1px solid #eee;">${e.name}</li>`).join('')}
+            </ul>
         `;
         contenedor.appendChild(div);
     });
