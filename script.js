@@ -7,6 +7,9 @@ let wakeLock = null;
 let activeSwaps = {};
 let isExpressMode = false; 
 
+// Base ISO Week Mon-Sun Array IDs
+const defaultSchedule = ['1', '2', '3', '4', '5', '6', '0']; 
+
 document.addEventListener('DOMContentLoaded', async () => {
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('./sw.js')
@@ -56,6 +59,7 @@ function iniciarAplicacion() {
     actualizarReloj();
     setInterval(actualizarReloj, 60000);
     
+    actualizarSelectorDias();
     renderizarRutina();
     renderizarDieta();
     renderizarSemana();
@@ -74,7 +78,9 @@ function actualizarReloj() {
         diaEnMemoria = ahora.getDay();
         if (diaOverride === null) { 
             activeSwaps = {}; 
+            actualizarSelectorDias();
             renderizarRutina(); 
+            renderizarSemana();
         }
     }
 }
@@ -92,21 +98,110 @@ function cambiarVista(vistaDestino) {
     if (vistaDestino === 'rutina') solicitarWakeLock();
 }
 
+/* ================== MOTOR DE SECUENCIA DINÁMICA ================== */
+function getWeekNumber(d) {
+    d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
+    var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+    var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
+    return d.getUTCFullYear() + "-W" + weekNo;
+}
+
+function getWeeklySchedule() {
+    let currentWeek = getWeekNumber(new Date());
+    let savedWeek = localStorage.getItem('schedule_week');
+    let savedSchedule = localStorage.getItem('schedule_order');
+
+    if (savedWeek === currentWeek && savedSchedule) {
+        return JSON.parse(savedSchedule);
+    } else {
+        localStorage.setItem('schedule_week', currentWeek);
+        localStorage.setItem('schedule_order', JSON.stringify(defaultSchedule));
+        return defaultSchedule;
+    }
+}
+
+function actualizarSelectorDias() {
+    const select = document.getElementById('select-dia');
+    if(!select) return;
+    
+    const schedule = getWeeklySchedule();
+    const diasNombres = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    
+    let html = `<option value="auto">Current Day (Auto)</option>`;
+    
+    schedule.forEach((rutinaId, index) => {
+        let jsDay = index === 6 ? 0 : index + 1; // Map 0-6 array back to JS Day
+        let rut = rutinas[rutinaId];
+        let shortName = rut.name.split(':')[1] ? rut.name.split(':')[1].split('(')[0].trim() : rut.name;
+        html += `<option value="${jsDay}">${diasNombres[index]}: ${shortName}</option>`;
+    });
+    
+    let currentVal = select.value;
+    select.innerHTML = html;
+    select.value = currentVal;
+}
+
 function cambiarDiaRutina(valor) {
     diaOverride = (valor === "auto") ? null : parseInt(valor);
     activeSwaps = {}; 
     renderizarRutina();
 }
 
+function mostrarModalShift() { document.getElementById('modal-shift').classList.remove('hidden'); }
+function cerrarModalShift() { document.getElementById('modal-shift').classList.add('hidden'); }
+
+function aplicarRodadaImprevista(tipoRodada) { 
+    let schedule = getWeeklySchedule();
+    
+    let activeJsDay = diaOverride !== null ? diaOverride : new Date().getDay();
+    let myDayIndex = activeJsDay === 0 ? 6 : activeJsDay - 1; // Mon=0, Sun=6
+
+    if (schedule[myDayIndex] === tipoRodada) {
+        cerrarModalShift();
+        return; // Ya está asignado este cardio para hoy
+    }
+
+    let targetIndex = schedule.indexOf(tipoRodada, myDayIndex);
+
+    if (targetIndex !== -1) {
+        schedule.splice(targetIndex, 1);
+    } else {
+        schedule.splice(5, 1); // Si no encuentra el cardio en el futuro, tira el sábado para empujar
+    }
+
+    schedule.splice(myDayIndex, 0, tipoRodada);
+
+    localStorage.setItem('schedule_order', JSON.stringify(schedule));
+    
+    diaOverride = null;
+    cerrarModalShift();
+    actualizarSelectorDias();
+    renderizarRutina();
+    renderizarSemana();
+    
+    if ("vibrate" in navigator) navigator.vibrate([30, 50, 30]);
+}
+
+function resetearSemana() {
+    localStorage.setItem('schedule_order', JSON.stringify(defaultSchedule));
+    diaOverride = null;
+    cerrarModalShift();
+    actualizarSelectorDias();
+    renderizarRutina();
+    renderizarSemana();
+}
+
+/* ================== MODO EXPRÉS & DISCOS ================== */
 function toggleExpressMode() {
     isExpressMode = !isExpressMode;
     const btn = document.getElementById('btn-express');
     if(isExpressMode) {
         btn.classList.add('active');
-        btn.innerHTML = '⚡ Modo Exprés (Activo - Solo Compuestos)';
+        btn.innerHTML = '⚡ Exprés (Activo)';
     } else {
         btn.classList.remove('active');
-        btn.innerHTML = '⚡ Modo Exprés (Desactivado)';
+        btn.innerHTML = '⚡ Exprés';
     }
     renderizarRutina();
 }
@@ -116,33 +211,25 @@ function calcularDiscos(pesoTotal) {
     const val = parseFloat(pesoTotal);
     if (isNaN(val) || val < pesoBarra) return '';
     if (val === pesoBarra) return 'Barra sola (20 kg)';
-
     let pesoPorLado = (val - pesoBarra) / 2;
     const discosDisponibles = [20, 15, 10, 5, 2.5, 1.25];
     let resultado = [];
-
     for (let disco of discosDisponibles) {
-        while (pesoPorLado >= disco) {
-            resultado.push(`${disco}kg`);
-            pesoPorLado -= disco;
-        }
+        while (pesoPorLado >= disco) { resultado.push(`${disco}kg`); pesoPorLado -= disco; }
     }
     return resultado.length > 0 ? `Por lado: [ ${resultado.join(' ] [ ')} ]` : '';
 }
 
 function actualizarDisplayDiscos(idSeguro, peso) {
     const infoEl = document.getElementById(`plate-info-${idSeguro}`);
-    if (infoEl) {
-        infoEl.innerText = calcularDiscos(peso);
-    }
+    if (infoEl) infoEl.innerText = calcularDiscos(peso);
 }
 
 /* ================== CHECKLIST INTRA-ENTRENO ================== */
-function renderizarChecklist(diaSemana) {
+function renderizarChecklist(idRutina) {
     const contenedor = document.getElementById('supps-checklist');
     if (!contenedor) return;
 
-    // Reseteo automático diario
     const hoyStr = new Date().toDateString();
     let savedDate = localStorage.getItem('chk_date');
     if (savedDate !== hoyStr) {
@@ -152,7 +239,7 @@ function renderizarChecklist(diaSemana) {
         localStorage.setItem('chk_date', hoyStr);
     }
 
-    const isMTB = diaSemana === 6; // Sábado
+    const isMTB = idRutina === '6'; 
     
     contenedor.innerHTML = `
         <div class="checklist-card">
@@ -174,7 +261,6 @@ function renderizarChecklist(diaSemana) {
     `;
 }
 
-// Expuesta globalmente para el onchange del HTML
 window.guardarCheck = function(id) {
     const el = document.getElementById(id);
     localStorage.setItem(id, el.checked);
@@ -183,8 +269,12 @@ window.guardarCheck = function(id) {
 /* ================== BLOQUE RUTINA ================== */
 function renderizarRutina() {
     const ahora = new Date();
-    const diaSemana = diaOverride !== null ? diaOverride : ahora.getDay();
-    const rutinaDia = rutinas[diaSemana] || rutinas[1];
+    let jsDay = diaOverride !== null ? diaOverride : ahora.getDay();
+    let myDayIndex = jsDay === 0 ? 6 : jsDay - 1; 
+    
+    let schedule = getWeeklySchedule();
+    let idRutina = schedule[myDayIndex];
+    const rutinaDia = rutinas[idRutina];
     
     const nombreRutina = document.getElementById('nombre-rutina');
     const bloqueCardio = document.getElementById('bloque-cardio');
@@ -193,8 +283,7 @@ function renderizarRutina() {
     if (nombreRutina) nombreRutina.innerText = rutinaDia.name;
     if (bloqueCardio) bloqueCardio.innerText = rutinaDia.cardio;
     
-    // Inyecta la tarjeta de Checklist antes de los ejercicios
-    renderizarChecklist(diaSemana);
+    renderizarChecklist(idRutina);
     
     if (listaEjercicios) {
         listaEjercicios.innerHTML = '';
@@ -247,7 +336,6 @@ function renderizarRutina() {
                     }).join('') 
                     : '';
 
-                // Inyección del Indicador Visual de Tempo
                 const tempoHTML = ej.tempo 
                     ? `<div class="tempo-indicator"><div class="tempo-dot"></div><span>Tempo: ${ej.tempo}</span></div>` 
                     : '';
@@ -279,23 +367,19 @@ function renderizarRutina() {
                 listaEjercicios.appendChild(div);
             });
         } else {
-            listaEjercicios.innerHTML = "<p style='padding: 15px; background: #e8f8f5; color: #27ae60; border-radius: 8px; font-weight: bold; text-align: center;'>Cycling focused day. Load route on your Garmin device.</p>";
+            listaEjercicios.innerHTML = "<p style='padding: 15px; background: #e8f8f5; color: #27ae60; border-radius: 8px; font-weight: bold; text-align: center;'>Cardio / Rest Day.</p>";
         }
     }
 }
 
 function aplicarChip(idSeguro, peso) {
     const inputElement = document.getElementById(`input-${idSeguro}`);
-    if (inputElement) {
-        inputElement.value = peso;
-        actualizarDisplayDiscos(idSeguro, peso);
-    }
+    if (inputElement) { inputElement.value = peso; actualizarDisplayDiscos(idSeguro, peso); }
     guardarPesoLocal(idSeguro, peso);
 }
 
 function ejecutarSwap(ejIndex, newNameB64) {
-    const newName = decodeURIComponent(escape(atob(newNameB64)));
-    activeSwaps[ejIndex] = newName;
+    activeSwaps[ejIndex] = decodeURIComponent(escape(atob(newNameB64)));
     renderizarRutina();
     if ("vibrate" in navigator) navigator.vibrate(20);
 }
@@ -309,9 +393,7 @@ function autoCompletarInput(inputElement, ultimoPeso, idSeguro) {
 
 function toggleCard(idSeguro) {
     const tarjeta = document.getElementById(`card-${idSeguro}`);
-    if (tarjeta && tarjeta.classList.contains('completed')) {
-        tarjeta.classList.remove('completed');
-    }
+    if (tarjeta && tarjeta.classList.contains('completed')) tarjeta.classList.remove('completed');
 }
 
 function detectarEnter(event, idSeguro) {
@@ -359,7 +441,6 @@ function guardarPesoLocal(idSeguro, valorEspecifco = null) {
 function renderizarDieta() {
     const ahora = new Date();
     const hora = ahora.getHours();
-    
     let comidaActual = 'dinner';
     if (hora >= 4 && hora < 12) comidaActual = 'breakfast';
     else if (hora >= 12 && hora < 18) comidaActual = 'lunch';
@@ -376,7 +457,6 @@ function cambiarComida(tipo) {
     document.getElementById('btn-dinner')?.classList.remove('activo');
     document.getElementById('btn-snacks')?.classList.remove('activo');
     document.getElementById('btn-equivalents')?.classList.remove('activo');
-    
     document.getElementById(`btn-${tipo}`)?.classList.add('activo');
 
     const selectorContainer = document.getElementById('meal-selector-container');
@@ -416,27 +496,19 @@ function cambiarComida(tipo) {
 
 function renderizarIngredientes(optionIndex) {
     localStorage.setItem(`pref_${currentMealCategory}`, optionIndex);
-
     const grid = document.getElementById('ingredients-grid');
     grid.innerHTML = '';
-    
     const optIdx = parseInt(optionIndex);
     const mealData = planNutricion[currentMealCategory][optIdx];
-    
     if (!mealData || !mealData.ingredients) return;
 
     mealData.ingredients.forEach((ing, i) => {
         const div = document.createElement('div');
         const hasSubs = ing.subs && ing.subs.length > 0;
-        
         div.className = `ing-tile ${hasSubs ? 'has-sub' : ''}`;
         div.id = `tile-${i}`;
         div.dataset.subIdx = 0; 
-        
-        if (hasSubs) {
-            div.onclick = () => rotarSubstituto(optIdx, i);
-        }
-
+        if (hasSubs) div.onclick = () => rotarSubstituto(optIdx, i);
         div.innerHTML = generarHTMLFicha(ing, hasSubs);
         grid.appendChild(div);
     });
@@ -445,19 +517,13 @@ function renderizarIngredientes(optionIndex) {
 function rotarSubstituto(optionIndex, ingIndex) {
     const tile = document.getElementById(`tile-${ingIndex}`);
     if (!tile) return;
-
     const ingObj = planNutricion[currentMealCategory][optionIndex].ingredients[ingIndex];
-    
     let currentIdx = parseInt(tile.dataset.subIdx);
     const totalOptions = ingObj.subs.length + 1;
-    
     currentIdx = (currentIdx + 1) % totalOptions;
     tile.dataset.subIdx = currentIdx;
-    
     let activeIng = currentIdx === 0 ? ingObj : ingObj.subs[currentIdx - 1];
-    
     tile.innerHTML = generarHTMLFicha(activeIng, true);
-
     if ("vibrate" in navigator) navigator.vibrate(20);
 }
 
@@ -471,38 +537,47 @@ function generarHTMLFicha(ing, isRotatable) {
 }
 
 function copiarListaSuper() {
-    let textoLista = "🛒 PROTOCOL GROCERY LIST:\n\n";
-    textoLista += "• Eggs & Egg Whites\n";
-    textoLista += "• Lean Beef / Chicken Breast / Tilapia / Tuna\n";
-    textoLista += "• Rice, Pasta, Potatoes & Corn Tortillas\n";
-    textoLista += "• Oats, Peanut Butter & Berries\n";
-    textoLista += "• Avocado, Greek Yogurt & Nuts\n";
-    textoLista += "• Whey Protein & Light Jello";
-
+    let textoLista = "🛒 PROTOCOL GROCERY LIST:\n\n• Eggs & Egg Whites\n• Lean Beef / Chicken Breast / Tilapia / Tuna\n• Rice, Pasta, Potatoes & Corn Tortillas\n• Oats, Peanut Butter & Berries\n• Avocado, Greek Yogurt & Nuts\n• Whey Protein & Light Jello";
     navigator.clipboard.writeText(textoLista).then(() => {
         if ("vibrate" in navigator) navigator.vibrate(30);
         alert("Grocery list copied to clipboard!");
     });
 }
 
+/* ================== BLOQUE SEMANA (ADAPTADO) ================== */
 function renderizarSemana() {
     const contenedor = document.getElementById('contenedor-semana');
     if (!contenedor) return;
     contenedor.innerHTML = '';
 
-    const ordenDias = [1, 2, 3, 4, 5, 6, 0]; 
-    ordenDias.forEach(dia => {
-        const rut = rutinas[dia];
+    const schedule = getWeeklySchedule();
+    const diasNombres = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    
+    let jsDay = new Date().getDay();
+    let myDayIndex = jsDay === 0 ? 6 : jsDay - 1;
+
+    schedule.forEach((rutinaId, index) => {
+        const rut = rutinas[rutinaId];
         if(!rut) return;
 
         const div = document.createElement('div');
         div.className = 'dia-semana';
+        
+        // Destacar el día actual
+        if (index === myDayIndex) {
+            div.style.backgroundColor = '#f0f9ff';
+            div.style.borderLeft = '4px solid #3498db';
+            div.style.paddingLeft = '10px';
+            div.style.borderRadius = '4px';
+        }
+
+        let shortName = rut.name.split(':')[1] ? rut.name.split(':')[1] : rut.name;
 
         div.innerHTML = `
-            <h3>${rut.name}</h3>
+            <h3 style="font-size: 1.1em; color: #2c3e50;">${diasNombres[index]} - ${shortName}</h3>
             <p style="margin:0 0 10px 0; font-size: 0.9em; color: #666;"><strong>Cardio:</strong> ${rut.cardio}</p>
             <ul style="font-size: 0.9em; padding:0; margin:0; list-style-type:none;">
-                ${rut.exercises ? rut.exercises.map(e => `<li style="padding: 5px 0; border-bottom: 1px solid #eee;">${e.name}</li>`).join('') : '<li>MTB / Recovery Cycling</li>'}
+                ${rut.exercises && rut.exercises.length > 0 ? rut.exercises.map(e => `<li style="padding: 5px 0; border-bottom: 1px solid #eee;">${e.name}</li>`).join('') : '<li style="padding: 5px 0;">Cycling Focus</li>'}
             </ul>
         `;
         contenedor.appendChild(div);
