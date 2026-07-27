@@ -6,7 +6,8 @@
       "Option C: Chicken Tacos (150g breast + 3 tortillas + [50g avocado OR 60g Greek Yogurt Dressing OR Avocado Dressing (30g avocado + 30g Greek Yogurt)])",
       "Option D: Red Pasta (3 whole eggs + 60g ham + 170g cooked pasta)",
       "Option E: Creamy Ham & Cheese Tacos (2 whole eggs + 60g ham + 30g cheese + 3 tortillas + 30g Greek Yogurt Dressing)",
-      "Option F: Creamy Tuna Tacos (2 cans Tuna in water + 3 tortillas + [50g avocado OR 60g Greek Yogurt Dressing OR Avocado Dressing (30g avocado + 30g Greek Yogurt)])"
+      "Option F: Creamy Tuna Tacos (2 cans Tuna in water + 3 tortillas + [50g avocado OR 60g Greek Yogurt Dressing OR Avocado Dressing (30g avocado + 30g Greek Yogurt)])",
+      "Option G: Ham & Eggs (3 whole eggs + 60g ham + 3 tortillas + [50g avocado OR 60g Greek Yogurt Dressing OR Avocado Dressing (30g avocado + 30g Greek Yogurt)])"
     ],
     "lunch": [
       "Option A: Rice/Pasta Base (200g lean meat + 70g dry rice/pasta + 10g oil)",
@@ -53,4 +54,52 @@
         { "name": "Leg Extension: 3x12-15", "detail": "Controlled concentric, 1-second hold at peak contraction.", "alternatives": ["Sissy squat", "Static bodyweight lunges"] },
         { "name": "Lying Leg Curl: 3x10-12", "detail": "Hips glued to bench. 3-second controlled eccentric phase.", "alternatives": ["Seated leg curl", "Stiff-legged dumbbell deadlift"] },
         { "name": "Standing Calf Raises: 4x10-15", "detail": "Full stretch at bottom step, squeeze calves hard at top.", "alternatives": ["Leg press calf raises", "Seated calf raise machine"] },
-        { "name": "Decline Bench Crunch (Abs): 3x12-15", "detail": "Anchor feet securely on the decline board. Flex the spine (roll the torso), do not just hinge at the hips. Hold a weight plate across the chest if bodyweight is too
+        { "name": "Decline Bench Crunch (Abs): 3x12-15", "detail": "Anchor feet securely on the decline board. Flex the spine (roll the torso), do not just hinge at the hips. Hold a weight plate across the chest if bodyweight is too easy.", "alternatives": ["Weighted cable crunch", "Hanging leg raises"] }
+      ]
+    },
+    "3": {
+      "name": "Wednesday: Pull (Back/Biceps)",
+      "cardio": "Treadmill: 20 min | 5% incl. | 4.2 - 4.8 km/h (2.6 - 3.0 mph) [Alts: Stair Climber Lvl 5-6 | Elliptical Res 6-7]",
+      "exercises": [
+        { "name": "Pull-ups or Lat Pulldown: 3x6-8", "detail": "Depress scapulae before pulling. Touch upper chest to bar.", "alternatives": ["Close-grip pulldown", "Assisted pull-up machine"] },
+        { "name": "Barbell or Machine Row: 3x8-10", "detail": "Torso steady. Pull elbows close along ribs toward hip.", "alternatives": ["Seated cable row", "Single-arm dumbbell row"] },
+        { "name": "Straight-Arm Cable Pullover: 2x12-15", "detail": "Slight elbow bend, feel deep lat stretch at top position.", "alternatives": ["Dumbbell pullover", "Rope lat pulldown"] },
+        { "name": "Face Pulls: 3x12-15", "detail": "Pull toward forehead, flare rope ends apart. Target rear delts.", "alternatives": ["Bent-over dumbbell flyes", "Reverse machine flyes"] },
+        { "name": "Dumbbell Biceps Curl: 3x10-12", "detail": "Elbows fixed at sides. Supinate wrist at peak contraction.", "alternatives": ["EZ-bar curl", "Hammer curl", "Cable curl"] }
+      ]
+    },
+    "4": {
+      "name": "Thursday: Legs 2 (Hamstrings/Glutes) + Abs",
+      "cardio": "Treadmill: 20 min | 0% incl. | 4.0 km/h (2.5 mph) [Alts: Stair Climber Lvl 4 | Elliptical Res 5]",
+      "exercises": [
+        { "name": "Romanian Deadlift: 3x8-10", "detail": "Hinge hips backward. Neutral spine, bar tracking close to shins.", "alternatives": ["Good mornings", "Conventional deadlift"] },
+        { "name": "Bulgarian Split Squat: 3x10-12", "detail": "Torso slightly leaned forward. Lower hips deep into movement.", "alternatives": ["Single-leg press", "Reverse lunges"] },
+        { "name": "Seated Leg Curl: 3x12-15", "detail": "Adjust thigh pad firmly. Squeeze hamstrings forcefully.", "alternatives": ["Lying leg curl", "Nordic hamstring curl"] },
+        { "name": "High-Foot Leg Press: 2x12-15", "detail": "Feet high and wide on platform. Drive knees toward chest.", "alternatives": ["Barbell hip thrust", "Sumo squat"] },
+        { "name": "Standing Calf Raises: 4x10-15", "detail": "Strict eccentric control, pause 1 second in bottom stretch.", "alternatives": ["Press calf raises", "Bodyweight single-leg calf raise"] },
+        { "name": "Flat Bench Lying Leg Raises (Abs): 3x12-15", "detail": "Lie on a flat bench, grab the bench behind your head. Keep legs slightly bent, focus on rolling the pelvis upward off the bench to engage the lower rectus abdominis.", "alternatives": ["Ab wheel rollout", "Hanging knees to chest"] }
+      ]
+    },
+    "5": {
+      "name": "Friday: Torso (Maintenance)",
+      "cardio": "Treadmill: 20 min | 6% incl. | 4.5 km/h (2.8 mph) [Alts: Stair Climber Lvl 6 | Elliptical Res 7]",
+      "exercises": [
+        { "name": "Cable Chest Flyes: 3x10-12", "detail": "Feel deep pectoral stretch, squeeze hands together at peak.", "alternatives": ["Pec deck flye machine", "Flat dumbbell flyes"] },
+        { "name": "Single-Arm Dumbbell Row: 3x8-10", "detail": "Pull dumbbell directly toward hip pocket, not upper chest.", "alternatives": ["Hammer Strength row", "Single-arm cable row"] },
+        { "name": "Machine Overhead Press: 3x10-12", "detail": "Constant tension. Do not let weight stack touch bottom.", "alternatives": ["Arnold dumbbell press", "Dumbbell military press"] },
+        { "name": "Cable Biceps Curl: 2x12-15", "detail": "Constant cable tension. Hold peak squeeze for 1 second.", "alternatives": ["Concentration curl", "Preacher curl"] },
+        { "name": "Overhead Dumbbell Triceps Extension: 2x12-15", "detail": "Elbows pointing up and tucked close. Extend fully overhead.", "alternatives": ["Lying triceps extensions", "Single-arm cable overhead extension"] }
+      ]
+    },
+    "6": {
+      "name": "Saturday: Mountain Biking (MTB)",
+      "cardio": "Duration: 90-120 min | HR Zones: 2 to 4 [Alts: Steady-state Elliptical 60 min]",
+      "exercises": []
+    },
+    "0": {
+      "name": "Sunday: Recovery Cycling",
+      "cardio": "Duration: 45-60 min | HR Zones: 1 and 2 strict [Alts: Low-resistance Regenerative Elliptical]",
+      "exercises": []
+    }
+  }
+}
