@@ -4,6 +4,7 @@ let diaOverride = null;
 let diaEnMemoria = new Date().getDay();
 let currentMealCategory = 'breakfast';
 let wakeLock = null;
+let activeSwaps = {}; // Memoria temporal para intercambios de ejercicios en la sesión
 
 document.addEventListener('DOMContentLoaded', async () => {
     // 1. Registro del Service Worker para funcionamiento Offline
@@ -72,7 +73,10 @@ function actualizarReloj() {
 
     if (ahora.getDay() !== diaEnMemoria) {
         diaEnMemoria = ahora.getDay();
-        if (diaOverride === null) { renderizarRutina(); }
+        if (diaOverride === null) { 
+            activeSwaps = {}; // Limpiar swaps al cambiar el día orgánicamente
+            renderizarRutina(); 
+        }
     }
 }
 
@@ -91,10 +95,11 @@ function cambiarVista(vistaDestino) {
 
 function cambiarDiaRutina(valor) {
     diaOverride = (valor === "auto") ? null : parseInt(valor);
+    activeSwaps = {}; // Limpiar swaps al forzar cambio de día manual
     renderizarRutina();
 }
 
-/* ================== BLOQUE RUTINA ================== */
+/* ================== BLOQUE RUTINA (HOT SWAP) ================== */
 function renderizarRutina() {
     const ahora = new Date();
     const diaSemana = diaOverride !== null ? diaOverride : ahora.getDay();
@@ -110,8 +115,13 @@ function renderizarRutina() {
     if (listaEjercicios) {
         listaEjercicios.innerHTML = '';
         if (rutinaDia.exercises && rutinaDia.exercises.length > 0) {
-            rutinaDia.exercises.forEach(ej => {
-                const idSeguro = btoa(unescape(encodeURIComponent(ej.name)));
+            rutinaDia.exercises.forEach((ej, index) => {
+                
+                // LÓGICA HOT SWAP: Determinar nombre activo
+                const originalName = ej.name;
+                const currentName = activeSwaps[index] || originalName;
+                
+                const idSeguro = btoa(unescape(encodeURIComponent(currentName)));
                 const pesoGuardado = localStorage.getItem('peso_' + idSeguro) || '';
                 const basePeso = pesoGuardado ? parseFloat(pesoGuardado) : 0;
 
@@ -135,8 +145,22 @@ function renderizarRutina() {
                     `;
                 }
 
-                const listaAlts = (ej.alternatives && ej.alternatives.length > 0) 
-                    ? ej.alternatives.map(alt => `<li>${alt}</li>`).join('') 
+                // LÓGICA HOT SWAP: Reconstruir lista de alternativas
+                let currentAlts = [...(ej.alternatives || [])];
+                if (currentName !== originalName) {
+                    currentAlts = currentAlts.filter(a => a !== currentName); // Quitar el actual de la lista
+                    currentAlts.unshift(originalName); // Mover el original a la lista de opciones
+                }
+
+                const listaAltsHTML = currentAlts.length > 0 
+                    ? currentAlts.map(alt => {
+                        const altB64 = btoa(unescape(encodeURIComponent(alt)));
+                        return `
+                        <li class="alt-list-item">
+                            <span>${alt}</span>
+                            <button type="button" class="btn-swap" onclick="ejecutarSwap(${index}, '${altB64}')">⇄ Swap</button>
+                        </li>`;
+                    }).join('') 
                     : '';
 
                 const div = document.createElement('div');
@@ -147,7 +171,7 @@ function renderizarRutina() {
 
                 div.innerHTML = `
                     <div class="card-header" onclick="toggleCard('${idSeguro}')">
-                        <strong>${ej.name}</strong>
+                        <strong>${currentName}</strong>
                         <span id="summary-${idSeguro}" class="completed-summary">${pesoGuardado ? '✔️ ' + pesoGuardado + ' kg' : ''}</span>
                     </div>
                     
@@ -158,7 +182,7 @@ function renderizarRutina() {
                             <input type="number" id="input-${idSeguro}" placeholder="${pesoGuardado ? pesoGuardado + ' kg (last)' : 'Kg'}" step="0.5" inputmode="decimal" pattern="[0-9]*" onfocus="autoCompletarInput(this, '${pesoGuardado}')" onkeydown="detectarEnter(event, '${idSeguro}')">
                             <button id="btn-${idSeguro}" class="btn-guardar" onclick="guardarPesoLocal('${idSeguro}')">Save</button>
                         </div>
-                        ${listaAlts ? `<details><summary>Alternatives</summary><ul>${listaAlts}</ul></details>` : ''}
+                        ${listaAltsHTML ? `<details><summary>Alternatives</summary><ul>${listaAltsHTML}</ul></details>` : ''}
                     </div>
                 `;
                 listaEjercicios.appendChild(div);
@@ -167,6 +191,14 @@ function renderizarRutina() {
             listaEjercicios.innerHTML = "<p style='padding: 15px; background: #e8f8f5; color: #27ae60; border-radius: 8px; font-weight: bold; text-align: center;'>Cycling focused day. Load route on your Garmin device.</p>";
         }
     }
+}
+
+// LÓGICA HOT SWAP: Ejecución del intercambio
+function ejecutarSwap(ejIndex, newNameB64) {
+    const newName = decodeURIComponent(escape(atob(newNameB64)));
+    activeSwaps[ejIndex] = newName; // Actualizar estado de memoria
+    renderizarRutina(); // Re-renderizar la vista para aplicar cambios
+    if ("vibrate" in navigator) navigator.vibrate(20);
 }
 
 function autoCompletarInput(inputElement, ultimoPeso) {
@@ -271,10 +303,7 @@ function cambiarComida(tipo) {
             selectOpt.appendChild(optionEl);
         });
         
-        // --- MEMORIA UX: Lee la preferencia guardada ---
         let indexGuardado = localStorage.getItem(`pref_${tipo}`) || 0;
-        
-        // Validación en caso de que el JSON cambie y el índice ya no exista
         if (indexGuardado >= opciones.length) indexGuardado = 0;
         
         selectOpt.value = indexGuardado;
@@ -286,7 +315,6 @@ function cambiarComida(tipo) {
 }
 
 function renderizarIngredientes(optionIndex) {
-    // --- MEMORIA UX: Guarda la selección automáticamente ---
     localStorage.setItem(`pref_${currentMealCategory}`, optionIndex);
 
     const grid = document.getElementById('ingredients-grid');
