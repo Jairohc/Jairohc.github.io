@@ -22,28 +22,23 @@
                 
                 <div class="header-rutina-controles">
                     <div class="selector-dia-override">
-                        <label for="select-dia">Select Routine:</label>
-                        <select id="select-dia" onchange="cambiarDiaRutina(this.value)">
-                            <option value="auto">Current Day (Auto)</option>
-                            <option value="1">Monday: Push</option>
-                            <option value="2">Tuesday: Legs 1 + Abs</option>
-                            <option value="3">Wednesday: Pull</option>
-                            <option value="4">Thursday: Legs 2 + Abs</option>
-                            <option value="5">Friday: Torso</option>
-                            <option value="6">Saturday: MTB</option>
-                            <option value="0">Sunday: Recovery Cycling</option>
-                        </select>
+                        <label for="select-dia">Select Day:</label>
+                        <select id="select-dia" onchange="cambiarDiaRutina(this.value)"></select>
                     </div>
-                    <button id="btn-express" class="btn-express" onclick="toggleExpressMode()">
-                        ⚡ Modo Exprés (Desactivado)
-                    </button>
+                    <div class="rutina-actions-row">
+                        <button id="btn-express" class="btn-express" onclick="toggleExpressMode()">
+                            ⚡ Exprés
+                        </button>
+                        <button class="btn-swap-day" onclick="mostrarModalShift()">
+                            🔄 Adaptar Semana
+                        </button>
+                    </div>
                 </div>
 
                 <h3 id="nombre-rutina"></h3>
                 <p id="bloque-cardio" class="info-texto"></p>
                 
                 <div id="supps-checklist"></div>
-
                 <div id="lista-ejercicios"></div>
             </div>
         </div>
@@ -83,6 +78,27 @@
             </div>
         </div>
     </main>
+
+    <div id="modal-shift" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h3 style="margin-top:0;">🔄 Adaptar Rutina</h3>
+            <p style="font-size:0.9em; color:#555; margin-bottom: 20px;">Si saliste a rodar hoy, la aplicación desplazará tus días de pesas hacia adelante para que no pierdas ningún entrenamiento.</p>
+            
+            <button class="btn-action" style="background-color: #f59e0b; margin-bottom: 10px;" onclick="aplicarRodadaImprevista('6')">
+                🚵‍♂️ Hoy hice MTB Fuerte
+            </button>
+            <button class="btn-action" style="background-color: #3498db; margin-bottom: 25px;" onclick="aplicarRodadaImprevista('0')">
+                🚴 Hoy hice Rodada Regenerativa
+            </button>
+            
+            <button class="btn-action" style="background-color: #e74c3c; margin-bottom: 10px;" onclick="resetearSemana()">
+                ⚠️ Restaurar Semana Original
+            </button>
+            <button class="btn-action" style="background-color: #94a3b8;" onclick="cerrarModalShift()">
+                Cancelar
+            </button>
+        </div>
+    </div>
 
     <nav class="bottom-nav">
         <button id="nav-rutina" class="nav-item activo" onclick="cambiarVista('rutina')">
