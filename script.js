@@ -5,7 +5,7 @@ let diaEnMemoria = new Date().getDay();
 let currentMealCategory = 'breakfast';
 let wakeLock = null;
 let activeSwaps = {};
-let isExpressMode = false; // Variable global de estado Exprés
+let isExpressMode = false; 
 
 document.addEventListener('DOMContentLoaded', async () => {
     if ('serviceWorker' in navigator) {
@@ -98,7 +98,6 @@ function cambiarDiaRutina(valor) {
     renderizarRutina();
 }
 
-/* ================== MODO EXPRÉS ================== */
 function toggleExpressMode() {
     isExpressMode = !isExpressMode;
     const btn = document.getElementById('btn-express');
@@ -112,11 +111,9 @@ function toggleExpressMode() {
     renderizarRutina();
 }
 
-/* ================== CÁLCULO DE DISCOS ================== */
 function calcularDiscos(pesoTotal) {
     const pesoBarra = 20;
     const val = parseFloat(pesoTotal);
-
     if (isNaN(val) || val < pesoBarra) return '';
     if (val === pesoBarra) return 'Barra sola (20 kg)';
 
@@ -130,7 +127,6 @@ function calcularDiscos(pesoTotal) {
             pesoPorLado -= disco;
         }
     }
-
     return resultado.length > 0 ? `Por lado: [ ${resultado.join(' ] [ ')} ]` : '';
 }
 
@@ -139,6 +135,49 @@ function actualizarDisplayDiscos(idSeguro, peso) {
     if (infoEl) {
         infoEl.innerText = calcularDiscos(peso);
     }
+}
+
+/* ================== CHECKLIST INTRA-ENTRENO ================== */
+function renderizarChecklist(diaSemana) {
+    const contenedor = document.getElementById('supps-checklist');
+    if (!contenedor) return;
+
+    // Reseteo automático diario
+    const hoyStr = new Date().toDateString();
+    let savedDate = localStorage.getItem('chk_date');
+    if (savedDate !== hoyStr) {
+        localStorage.removeItem('chk_creatina');
+        localStorage.removeItem('chk_agua');
+        localStorage.removeItem('chk_carbs');
+        localStorage.setItem('chk_date', hoyStr);
+    }
+
+    const isMTB = diaSemana === 6; // Sábado
+    
+    contenedor.innerHTML = `
+        <div class="checklist-card">
+            <h4>💧 Protocolo Intra-Entreno</h4>
+            <label class="chk-item">
+                <input type="checkbox" id="chk_creatina" ${localStorage.getItem('chk_creatina') === 'true' ? 'checked' : ''} onchange="guardarCheck('chk_creatina')">
+                5g Creatina Monohidratada
+            </label>
+            <label class="chk-item">
+                <input type="checkbox" id="chk_agua" ${localStorage.getItem('chk_agua') === 'true' ? 'checked' : ''} onchange="guardarCheck('chk_agua')">
+                750ml Agua c/ Electrolitos
+            </label>
+            ${isMTB ? `
+            <label class="chk-item">
+                <input type="checkbox" id="chk_carbs" ${localStorage.getItem('chk_carbs') === 'true' ? 'checked' : ''} onchange="guardarCheck('chk_carbs')">
+                Carbohidratos intra-MTB (Geles/Gomitas)
+            </label>` : ''}
+        </div>
+    `;
+}
+
+// Expuesta globalmente para el onchange del HTML
+window.guardarCheck = function(id) {
+    const el = document.getElementById(id);
+    localStorage.setItem(id, el.checked);
 }
 
 /* ================== BLOQUE RUTINA ================== */
@@ -154,14 +193,14 @@ function renderizarRutina() {
     if (nombreRutina) nombreRutina.innerText = rutinaDia.name;
     if (bloqueCardio) bloqueCardio.innerText = rutinaDia.cardio;
     
+    // Inyecta la tarjeta de Checklist antes de los ejercicios
+    renderizarChecklist(diaSemana);
+    
     if (listaEjercicios) {
         listaEjercicios.innerHTML = '';
         if (rutinaDia.exercises && rutinaDia.exercises.length > 0) {
             
-            // Iterar sobre todos para no romper el índice de Hot Swap
             rutinaDia.exercises.forEach((ej, index) => {
-                
-                // LÓGICA MODO EXPRÉS: Filtra pasivamente
                 if (isExpressMode && ej.isMain === false) return; 
 
                 const originalName = ej.name;
@@ -208,6 +247,11 @@ function renderizarRutina() {
                     }).join('') 
                     : '';
 
+                // Inyección del Indicador Visual de Tempo
+                const tempoHTML = ej.tempo 
+                    ? `<div class="tempo-indicator"><div class="tempo-dot"></div><span>Tempo: ${ej.tempo}</span></div>` 
+                    : '';
+
                 const div = document.createElement('div');
                 div.className = `ejercicio-card`;
                 div.id = `card-${idSeguro}`;
@@ -221,6 +265,7 @@ function renderizarRutina() {
                     </div>
                     
                     <div class="card-body">
+                        ${tempoHTML}
                         <p>${ej.detail}</p>
                         ${htmlChips}
                         <div class="registro">
