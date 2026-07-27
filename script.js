@@ -223,7 +223,7 @@ function guardarPesoLocal(idSeguro, valorEspecifco = null) {
     setTimeout(() => { boton.innerText = "Save"; boton.classList.remove('guardado'); }, 1200);
 }
 
-/* ================== BLOQUE DIETA (TILE GRID) ================== */
+/* ================== BLOQUE DIETA (TILE GRID CON MEMORIA) ================== */
 function renderizarDieta() {
     const ahora = new Date();
     const hora = ahora.getHours();
@@ -271,7 +271,14 @@ function cambiarComida(tipo) {
             selectOpt.appendChild(optionEl);
         });
         
-        renderizarIngredientes(0);
+        // --- MEMORIA UX: Lee la preferencia guardada ---
+        let indexGuardado = localStorage.getItem(`pref_${tipo}`) || 0;
+        
+        // Validación en caso de que el JSON cambie y el índice ya no exista
+        if (indexGuardado >= opciones.length) indexGuardado = 0;
+        
+        selectOpt.value = indexGuardado;
+        renderizarIngredientes(indexGuardado);
     } else {
         selectorContainer.classList.add('hidden');
         grid.innerHTML = '';
@@ -279,10 +286,12 @@ function cambiarComida(tipo) {
 }
 
 function renderizarIngredientes(optionIndex) {
+    // --- MEMORIA UX: Guarda la selección automáticamente ---
+    localStorage.setItem(`pref_${currentMealCategory}`, optionIndex);
+
     const grid = document.getElementById('ingredients-grid');
     grid.innerHTML = '';
     
-    // Parseo a número para asegurar integridad al buscar en el objeto
     const optIdx = parseInt(optionIndex);
     const mealData = planNutricion[currentMealCategory][optIdx];
     
@@ -296,7 +305,6 @@ function renderizarIngredientes(optionIndex) {
         div.id = `tile-${i}`;
         div.dataset.subIdx = 0; 
         
-        // Asignación directa del evento click pasando índices limpios
         if (hasSubs) {
             div.onclick = () => rotarSubstituto(optIdx, i);
         }
@@ -310,7 +318,6 @@ function rotarSubstituto(optionIndex, ingIndex) {
     const tile = document.getElementById(`tile-${ingIndex}`);
     if (!tile) return;
 
-    // Busca el ingrediente base directamente en el objeto maestro
     const ingObj = planNutricion[currentMealCategory][optionIndex].ingredients[ingIndex];
     
     let currentIdx = parseInt(tile.dataset.subIdx);
