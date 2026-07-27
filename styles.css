@@ -20,36 +20,27 @@ body {
     overscroll-behavior-y: none;
 }
 
-header {
-    text-align: center;
-    padding: 15px 20px;
-    background: var(--card-bg);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-
+header { text-align: center; padding: 15px 20px; background: var(--card-bg); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
 header h1 { margin: 0 0 5px 0; font-size: 1.5em; }
 header p { margin: 0; font-size: 0.85em; color: #666; }
 
 #main-content { padding: 15px 15px calc(var(--nav-height) + 20px) 15px; }
 
-.card {
-    background: var(--card-bg);
-    border-radius: 12px;
-    padding: 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-}
-
+.card { background: var(--card-bg); border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
 .card h2 { margin-top: 0; font-size: 1.3em; border-bottom: 2px solid #eee; padding-bottom: 10px; }
 .info-texto { font-size: 0.9em; color: #2c3e50; margin-top: 8px; font-weight: bold; background: #e8f4f8; padding: 10px; border-radius: 6px; border-left: 4px solid var(--accent); }
+
+/* Checklist de Suplementación */
+.checklist-card { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 12px 15px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.03); }
+.checklist-card h4 { margin: 0 0 10px 0; font-size: 0.95em; color: #b45309; }
+.chk-item { display: flex; align-items: center; gap: 8px; font-size: 0.9em; margin-bottom: 8px; color: #475569; font-weight: 500; }
+.chk-item input { width: 18px; height: 18px; accent-color: #f59e0b; cursor: pointer; }
 
 /* Controles de Rutina */
 .header-rutina-controles { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
 .selector-dia-override { display: flex; align-items: center; gap: 10px; background: #e9ecef; padding: 10px; border-radius: 8px; width: 100%; box-sizing: border-box; margin-bottom: 0; }
 .selector-dia-override label { font-size: 0.85em; font-weight: bold; color: var(--primary); white-space: nowrap; flex-shrink: 0; }
 .selector-dia-override select { flex: 1; padding: 8px; font-size: 16px; border: 1px solid #ccc; border-radius: 6px; background: #ffffff; color: var(--primary); font-weight: 500; min-width: 0; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
-
-/* Botón Modo Exprés */
 .btn-express { background-color: #f1f5f9; color: #475569; border: 2px solid #e2e8f0; padding: 10px; border-radius: 8px; font-weight: 700; font-size: 0.9em; cursor: pointer; transition: all 0.2s ease; display: flex; justify-content: center; align-items: center; width: 100%; }
 .btn-express.active { background-color: #fef08a; border-color: #fde047; color: #854d0e; box-shadow: 0 4px 6px rgba(250, 204, 21, 0.2); }
 
@@ -65,6 +56,11 @@ header p { margin: 0; font-size: 0.85em; color: #666; }
 .ejercicio-card.completed .completed-summary { display: block; }
 .ejercicio-card p { font-size: 0.85em; color: #666; margin: 0 0 12px 0; }
 
+/* Indicador Animado de Tempo */
+.tempo-indicator { display: inline-flex; align-items: center; gap: 8px; font-size: 0.8em; font-weight: 700; color: var(--accent); background: #e0f2fe; padding: 4px 10px; border-radius: 12px; margin-bottom: 8px; border: 1px solid #bae6fd; }
+.tempo-dot { width: 8px; height: 8px; background-color: var(--accent); border-radius: 50%; animation: tempoPulse 2s infinite ease-in-out; }
+@keyframes tempoPulse { 0% { transform: scale(0.8); opacity: 0.6; } 50% { transform: scale(1.6); opacity: 1; } 100% { transform: scale(0.8); opacity: 0.6; } }
+
 .quick-chips { display: flex; gap: 6px; margin-bottom: 10px; width: 100%; }
 .btn-chip { flex: 1; background-color: #e2e8f0; color: #475569; border: none; padding: 8px 4px; border-radius: 6px; font-size: 0.8em; font-weight: 600; cursor: pointer; transition: all 0.1s ease; white-space: nowrap; text-align: center; }
 .btn-chip:active { background-color: #cbd5e1; transform: scale(0.96); }
@@ -79,7 +75,6 @@ header p { margin: 0; font-size: 0.85em; color: #666; }
 details { margin-top: 12px; border-top: 1px dashed #ccc; padding-top: 10px; }
 summary { font-size: 0.85em; font-weight: 600; color: #555; cursor: pointer; outline: none; }
 details ul { margin: 10px 0 0 0; padding: 0; list-style-type: none; }
-
 .alt-list-item { display: flex; justify-content: space-between; align-items: center; background: #ffffff; padding: 8px 10px; border-radius: 6px; margin-bottom: 6px; border: 1px solid #eee; }
 .alt-list-item span { font-size: 0.9em; color: #444; flex: 1; padding-right: 10px; font-weight: 500; }
 .btn-swap { background-color: var(--accent); color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 0.85em; cursor: pointer; box-shadow: 0 2px 4px rgba(52, 152, 219, 0.2); transition: transform 0.1s; white-space: nowrap; }
