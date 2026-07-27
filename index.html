@@ -46,14 +46,21 @@
                 <div id="alerta-domingo" class="alerta hidden">
                     ⚠️ Sunday Maintenance: Add 1 whole egg or 30% additional base carbs.
                 </div>
+                
                 <div class="tabs-nutricion">
-                    <button id="btn-breakfast" onclick="mostrarComida('breakfast')">Breakfast</button>
-                    <button id="btn-lunch" onclick="mostrarComida('lunch')">Lunch</button>
-                    <button id="btn-dinner" onclick="mostrarComida('dinner')">Dinner</button>
-                    <button id="btn-snacks" onclick="mostrarComida('snacks')">Snacks</button>
-                    <button id="btn-equivalents" onclick="mostrarComida('equivalents')">Subs</button>
+                    <button id="btn-breakfast" onclick="cambiarComida('breakfast')">Breakfast</button>
+                    <button id="btn-lunch" onclick="cambiarComida('lunch')">Lunch</button>
+                    <button id="btn-dinner" onclick="cambiarComida('dinner')">Dinner</button>
+                    <button id="btn-snacks" onclick="cambiarComida('snacks')">Snacks</button>
+                    <button id="btn-equivalents" onclick="cambiarComida('equivalents')">Subs</button>
                 </div>
-                <ul id="lista-comidas"></ul>
+
+                <div id="meal-selector-container" class="selector-dia-override hidden">
+                    <label for="select-meal-opt">Select Option:</label>
+                    <select id="select-meal-opt" onchange="renderizarIngredientes(this.value)"></select>
+                </div>
+
+                <div id="ingredients-grid" class="ing-grid"></div>
 
                 <div class="action-container">
                     <button class="btn-action" onclick="copiarListaSuper()">🛒 Copy Grocery List</button>
