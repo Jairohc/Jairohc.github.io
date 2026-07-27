@@ -4,17 +4,16 @@ let diaOverride = null;
 let diaEnMemoria = new Date().getDay();
 let currentMealCategory = 'breakfast';
 let wakeLock = null;
-let activeSwaps = {}; // Memoria temporal para intercambios de ejercicios en la sesión
+let activeSwaps = {};
+let isExpressMode = false; // Variable global de estado Exprés
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // 1. Registro del Service Worker para funcionamiento Offline
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('./sw.js')
             .then(() => console.log('Service Worker Registered'))
             .catch(err => console.error('Service Worker Error:', err));
     }
 
-    // 2. Control nativo de pantalla encendida (Wake Lock API)
     document.addEventListener('visibilitychange', async () => {
         if (document.visibilityState === 'visible' && localStorage.getItem('vistaActiva') === 'rutina') {
             solicitarWakeLock();
@@ -74,7 +73,7 @@ function actualizarReloj() {
     if (ahora.getDay() !== diaEnMemoria) {
         diaEnMemoria = ahora.getDay();
         if (diaOverride === null) { 
-            activeSwaps = {}; // Limpiar swaps al cambiar el día orgánicamente
+            activeSwaps = {}; 
             renderizarRutina(); 
         }
     }
@@ -95,11 +94,54 @@ function cambiarVista(vistaDestino) {
 
 function cambiarDiaRutina(valor) {
     diaOverride = (valor === "auto") ? null : parseInt(valor);
-    activeSwaps = {}; // Limpiar swaps al forzar cambio de día manual
+    activeSwaps = {}; 
     renderizarRutina();
 }
 
-/* ================== BLOQUE RUTINA (HOT SWAP) ================== */
+/* ================== MODO EXPRÉS ================== */
+function toggleExpressMode() {
+    isExpressMode = !isExpressMode;
+    const btn = document.getElementById('btn-express');
+    if(isExpressMode) {
+        btn.classList.add('active');
+        btn.innerHTML = '⚡ Modo Exprés (Activo - Solo Compuestos)';
+    } else {
+        btn.classList.remove('active');
+        btn.innerHTML = '⚡ Modo Exprés (Desactivado)';
+    }
+    renderizarRutina();
+}
+
+/* ================== CÁLCULO DE DISCOS ================== */
+function calcularDiscos(pesoTotal) {
+    const pesoBarra = 20;
+    const val = parseFloat(pesoTotal);
+
+    if (isNaN(val) || val < pesoBarra) return '';
+    if (val === pesoBarra) return 'Barra sola (20 kg)';
+
+    let pesoPorLado = (val - pesoBarra) / 2;
+    const discosDisponibles = [20, 15, 10, 5, 2.5, 1.25];
+    let resultado = [];
+
+    for (let disco of discosDisponibles) {
+        while (pesoPorLado >= disco) {
+            resultado.push(`${disco}kg`);
+            pesoPorLado -= disco;
+        }
+    }
+
+    return resultado.length > 0 ? `Por lado: [ ${resultado.join(' ] [ ')} ]` : '';
+}
+
+function actualizarDisplayDiscos(idSeguro, peso) {
+    const infoEl = document.getElementById(`plate-info-${idSeguro}`);
+    if (infoEl) {
+        infoEl.innerText = calcularDiscos(peso);
+    }
+}
+
+/* ================== BLOQUE RUTINA ================== */
 function renderizarRutina() {
     const ahora = new Date();
     const diaSemana = diaOverride !== null ? diaOverride : ahora.getDay();
@@ -115,9 +157,13 @@ function renderizarRutina() {
     if (listaEjercicios) {
         listaEjercicios.innerHTML = '';
         if (rutinaDia.exercises && rutinaDia.exercises.length > 0) {
+            
+            // Iterar sobre todos para no romper el índice de Hot Swap
             rutinaDia.exercises.forEach((ej, index) => {
                 
-                // LÓGICA HOT SWAP: Determinar nombre activo
+                // LÓGICA MODO EXPRÉS: Filtra pasivamente
+                if (isExpressMode && ej.isMain === false) return; 
+
                 const originalName = ej.name;
                 const currentName = activeSwaps[index] || originalName;
                 
@@ -129,27 +175,26 @@ function renderizarRutina() {
                 if (basePeso > 0) {
                     htmlChips = `
                         <div class="quick-chips" id="chips-${idSeguro}">
-                            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', ${Math.max(0, basePeso - 2.5)})">-2.5</button>
-                            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', ${basePeso})">=${basePeso}</button>
-                            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', ${basePeso + 2.5})">+2.5</button>
-                            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', ${basePeso + 5})">+5</button>
+                            <button type="button" class="btn-chip" onclick="aplicarChip('${idSeguro}', ${Math.max(0, basePeso - 2.5)})">-2.5</button>
+                            <button type="button" class="btn-chip" onclick="aplicarChip('${idSeguro}', ${basePeso})">=${basePeso}</button>
+                            <button type="button" class="btn-chip" onclick="aplicarChip('${idSeguro}', ${basePeso + 2.5})">+2.5</button>
+                            <button type="button" class="btn-chip" onclick="aplicarChip('${idSeguro}', ${basePeso + 5})">+5</button>
                         </div>
                     `;
                 } else {
                     htmlChips = `
                         <div class="quick-chips" id="chips-${idSeguro}">
-                            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', 20)">20</button>
-                            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', 40)">40</button>
-                            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', 60)">60</button>
+                            <button type="button" class="btn-chip" onclick="aplicarChip('${idSeguro}', 20)">20</button>
+                            <button type="button" class="btn-chip" onclick="aplicarChip('${idSeguro}', 40)">40</button>
+                            <button type="button" class="btn-chip" onclick="aplicarChip('${idSeguro}', 60)">60</button>
                         </div>
                     `;
                 }
 
-                // LÓGICA HOT SWAP: Reconstruir lista de alternativas
                 let currentAlts = [...(ej.alternatives || [])];
                 if (currentName !== originalName) {
-                    currentAlts = currentAlts.filter(a => a !== currentName); // Quitar el actual de la lista
-                    currentAlts.unshift(originalName); // Mover el original a la lista de opciones
+                    currentAlts = currentAlts.filter(a => a !== currentName);
+                    currentAlts.unshift(originalName);
                 }
 
                 const listaAltsHTML = currentAlts.length > 0 
@@ -179,9 +224,10 @@ function renderizarRutina() {
                         <p>${ej.detail}</p>
                         ${htmlChips}
                         <div class="registro">
-                            <input type="number" id="input-${idSeguro}" placeholder="${pesoGuardado ? pesoGuardado + ' kg (last)' : 'Kg'}" step="0.5" inputmode="decimal" pattern="[0-9]*" onfocus="autoCompletarInput(this, '${pesoGuardado}')" onkeydown="detectarEnter(event, '${idSeguro}')">
+                            <input type="number" id="input-${idSeguro}" placeholder="${pesoGuardado ? pesoGuardado + ' kg (last)' : 'Kg'}" step="0.5" inputmode="decimal" pattern="[0-9]*" oninput="actualizarDisplayDiscos('${idSeguro}', this.value)" onfocus="autoCompletarInput(this, '${pesoGuardado}', '${idSeguro}')" onkeydown="detectarEnter(event, '${idSeguro}')">
                             <button id="btn-${idSeguro}" class="btn-guardar" onclick="guardarPesoLocal('${idSeguro}')">Save</button>
                         </div>
+                        <div id="plate-info-${idSeguro}" class="plate-info-text">${calcularDiscos(basePeso)}</div>
                         ${listaAltsHTML ? `<details><summary>Alternatives</summary><ul>${listaAltsHTML}</ul></details>` : ''}
                     </div>
                 `;
@@ -193,17 +239,26 @@ function renderizarRutina() {
     }
 }
 
-// LÓGICA HOT SWAP: Ejecución del intercambio
+function aplicarChip(idSeguro, peso) {
+    const inputElement = document.getElementById(`input-${idSeguro}`);
+    if (inputElement) {
+        inputElement.value = peso;
+        actualizarDisplayDiscos(idSeguro, peso);
+    }
+    guardarPesoLocal(idSeguro, peso);
+}
+
 function ejecutarSwap(ejIndex, newNameB64) {
     const newName = decodeURIComponent(escape(atob(newNameB64)));
-    activeSwaps[ejIndex] = newName; // Actualizar estado de memoria
-    renderizarRutina(); // Re-renderizar la vista para aplicar cambios
+    activeSwaps[ejIndex] = newName;
+    renderizarRutina();
     if ("vibrate" in navigator) navigator.vibrate(20);
 }
 
-function autoCompletarInput(inputElement, ultimoPeso) {
+function autoCompletarInput(inputElement, ultimoPeso, idSeguro) {
     if (!inputElement.value && ultimoPeso && ultimoPeso !== '0') {
         inputElement.value = ultimoPeso;
+        actualizarDisplayDiscos(idSeguro, ultimoPeso);
     }
 }
 
@@ -239,10 +294,10 @@ function guardarPesoLocal(idSeguro, valorEspecifco = null) {
     if (contenedorChips) {
         const basePeso = parseFloat(pesoValue);
         contenedorChips.innerHTML = `
-            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', ${Math.max(0, basePeso - 2.5)})">-2.5</button>
-            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', ${basePeso})">=${basePeso}</button>
-            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', ${basePeso + 2.5})">+2.5</button>
-            <button type="button" class="btn-chip" onclick="guardarPesoLocal('${idSeguro}', ${basePeso + 5})">+5</button>
+            <button type="button" class="btn-chip" onclick="aplicarChip('${idSeguro}', ${Math.max(0, basePeso - 2.5)})">-2.5</button>
+            <button type="button" class="btn-chip" onclick="aplicarChip('${idSeguro}', ${basePeso})">=${basePeso}</button>
+            <button type="button" class="btn-chip" onclick="aplicarChip('${idSeguro}', ${basePeso + 2.5})">+2.5</button>
+            <button type="button" class="btn-chip" onclick="aplicarChip('${idSeguro}', ${basePeso + 5})">+5</button>
         `;
     }
 
@@ -255,7 +310,7 @@ function guardarPesoLocal(idSeguro, valorEspecifco = null) {
     setTimeout(() => { boton.innerText = "Save"; boton.classList.remove('guardado'); }, 1200);
 }
 
-/* ================== BLOQUE DIETA (TILE GRID CON MEMORIA) ================== */
+/* ================== BLOQUE DIETA ================== */
 function renderizarDieta() {
     const ahora = new Date();
     const hora = ahora.getHours();
@@ -397,15 +452,12 @@ function renderizarSemana() {
 
         const div = document.createElement('div');
         div.className = 'dia-semana';
-        let htmlEjercicios = (rut.exercises && rut.exercises.length > 0) 
-            ? rut.exercises.map(e => `<li>${e.name}</li>`).join('') 
-            : `<li>MTB / Recovery Cycling</li>`;
 
         div.innerHTML = `
             <h3>${rut.name}</h3>
             <p style="margin:0 0 10px 0; font-size: 0.9em; color: #666;"><strong>Cardio:</strong> ${rut.cardio}</p>
             <ul style="font-size: 0.9em; padding:0; margin:0; list-style-type:none;">
-                ${rut.exercises.map(e => `<li style="padding: 5px 0; border-bottom: 1px solid #eee;">${e.name}</li>`).join('')}
+                ${rut.exercises ? rut.exercises.map(e => `<li style="padding: 5px 0; border-bottom: 1px solid #eee;">${e.name}</li>`).join('') : '<li>MTB / Recovery Cycling</li>'}
             </ul>
         `;
         contenedor.appendChild(div);
