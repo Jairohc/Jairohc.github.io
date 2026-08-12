@@ -81,6 +81,19 @@
               { "icon": "🥑🥣", "qty": "30/30", "unit": "g", "name": "Avo/Yogurt Mix" }
           ]}
         ]
+      },
+      {
+        "name": "Option I: High Volume Ham & Eggs",
+        "ingredients": [
+          { "icon": "🥚", "qty": "2", "unit": "whole", "name": "Eggs" },
+          { "icon": "🍳", "qty": "100", "unit": "g", "name": "Liquid Egg Whites" },
+          { "icon": "🥓", "qty": "50", "unit": "g", "name": "Turkey Ham" },
+          { "icon": "🌮", "qty": "3", "unit": "pcs", "name": "Tortillas" },
+          { "icon": "🥑", "qty": "50", "unit": "g", "name": "Avocado", "subs": [
+              { "icon": "🥣", "qty": "60", "unit": "g", "name": "Yogurt Dressing" },
+              { "icon": "🥑🥣", "qty": "30/30", "unit": "g", "name": "Avo/Yogurt Mix" }
+          ]}
+        ]
       }
     ],
     "lunch": [
@@ -98,6 +111,14 @@
           { "icon": "🥩", "qty": "200", "unit": "g", "name": "Lean Meat" },
           { "icon": "🥔", "qty": "200", "unit": "g", "name": "Boiled Potato" },
           { "icon": "🫒", "qty": "10", "unit": "g", "name": "Oil" }
+        ]
+      },
+      {
+        "name": "Option C: Quick Tuna/Rice Bowl (No-Cook)",
+        "ingredients": [
+          { "icon": "🐟", "qty": "2", "unit": "cans", "name": "Tuna in water" },
+          { "icon": "🍚", "qty": "70", "unit": "g", "name": "Dry Rice (or equivalent cooked)" },
+          { "icon": "🥑", "qty": "50", "unit": "g", "name": "Avocado (Replaces Oil)" }
         ]
       }
     ],
@@ -222,7 +243,7 @@
       }
     ],
     "equivalents": [
-      "🥩 Protein: 200g Lean Beef = 200g Chicken Breast = 200g Tilapia = 2 cans Tuna in water = 4 Whole Eggs = 2 Whole Eggs + 150g Egg Whites",
+      "🥩 Protein: 200g Lean Beef = 200g Chicken Breast = 200g Tilapia = 2 cans Tuna in water = 4 Whole Eggs = 2 Whole Eggs + 150g Egg Whites = 2 Whole Eggs + 100g Liquid Whites + 50g Turkey Ham",
       "🍚 Carbs: 70g Dry Rice = 70g Dry Pasta = 220g Potato = 4 Corn Tortillas = 60g Oats",
       "🥑 Fats: 50g Avocado = 60g Yogurt Dressing = 30g/30g Mix = 15g Peanut Butter = 15g Nuts = 10g Cooking Oil",
       "🚴 Leg Day Opt: Tue/Thu increase Lunch/Dinner carbs by 15% (+1 tortilla / +10g rice) & remove nuts from snack.",
@@ -231,7 +252,8 @@
       "🚵 MTB Prep (Friday): Do not skip carbs at dinner. Ensure pasta or tortillas are consumed in full to load muscle glycogen for Saturday's ride.",
       "🧂 Performance Hack: Add 0.5 tsp of sea salt to water 30 mins before Mon-Thu gym sessions for cellular hydration and pump.",
       "⚙️ NEAT Protocol: Stand up and move for 3 mins every 60 mins of seated desk work to prevent metabolic slowdown.",
-      "⚠️ Macro-Token (Snack D): Execute ONLY on days with severe CNS fatigue, stalled gym lifts, or stress-fragmented sleep."
+      "⚠️ Macro-Token (Snack D): Execute ONLY on days with severe CNS fatigue, stalled gym lifts, or stress-fragmented sleep.",
+      "🧠 Cognitive Load Protocol: On days with intense architecture design or heavy coding tasks, prioritize an extra hour of sleep over forced cardio. The brain consumes ~20% of basal glucose; chronic mental fatigue will spike cortisol and freeze the scale just like physical overtraining."
     ]
   },
   "routines": {
