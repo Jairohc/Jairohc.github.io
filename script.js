@@ -2,16 +2,17 @@ let appData = {};
 
 document.addEventListener("DOMContentLoaded", async () => {
     await loadData();
+    checkDailyReset(); // Reinicia checkboxes si es un nuevo día
     
-    // Configurar Entrenamiento
+    // Configurar UI
     setupDaySelector();
     const today = new Date().getDay().toString();
     const initialDay = appData.routines[today] ? today : "1";
     document.getElementById('daySelector').value = initialDay;
+    
     renderRoutine(initialDay);
-
-    // Configurar Nutrición Inteligente
     renderNutrition();
+    setupLocalBackend();
 
     // Eventos de Pestañas
     document.getElementById('tabWorkout').addEventListener('click', () => switchTab('workout'));
@@ -26,7 +27,7 @@ function switchTab(tabName) {
     document.getElementById('dietSection').classList.toggle('active', tabName === 'diet');
 }
 
-// --- DATOS ---
+// --- DATOS Y RESET ---
 async function loadData() {
     const localData = localStorage.getItem('miEntrenamiento');
     if (localData) {
@@ -43,6 +44,20 @@ async function loadData() {
 
 function saveData() {
     localStorage.setItem('miEntrenamiento', JSON.stringify(appData));
+}
+
+// Reinicia los checkboxes si detecta que cambió de día
+function checkDailyReset() {
+    const todayStr = new Date().toLocaleDateString();
+    if (appData.lastLoginDate !== todayStr) {
+        for (let day in appData.routines) {
+            appData.routines[day].exercises.forEach(ex => {
+                ex.completed = false;
+            });
+        }
+        appData.lastLoginDate = todayStr;
+        saveData();
+    }
 }
 
 // --- ENTRENAMIENTO ---
@@ -73,11 +88,8 @@ function renderRoutine(dayKey) {
 
     routine.exercises.forEach((exercise) => {
         if (typeof exercise.completed === 'undefined') exercise.completed = false;
-        
-        // Guardar el nombre original para no perderlo al hacer intercambios
-        if (!exercise.originalName) {
-            exercise.originalName = exercise.name;
-        }
+        if (!exercise.originalName) exercise.originalName = exercise.name;
+        if (!exercise.lastRecord) exercise.lastRecord = ''; // Inicializar campo de pesos
 
         const card = document.createElement('div');
         card.className = `exercise-card ${exercise.completed ? 'completed' : ''}`;
@@ -108,6 +120,14 @@ function renderRoutine(dayKey) {
             <p><strong>RIR Objetivo:</strong> ${exercise.rir || 'N/A'}</p>
         `;
 
+        // Input minimalista de pesos
+        const recordDiv = document.createElement('div');
+        recordDiv.innerHTML = `<input type="text" class="weight-input" placeholder="Registro: Ej. 80kg x 8,8,6" value="${exercise.lastRecord}">`;
+        recordDiv.querySelector('input').addEventListener('change', (e) => {
+            exercise.lastRecord = e.target.value;
+            saveData();
+        });
+
         const altsDiv = document.createElement('div');
         altsDiv.className = 'exercise-alternatives';
         
@@ -115,7 +135,6 @@ function renderRoutine(dayKey) {
             const selectAlt = document.createElement('select');
             selectAlt.innerHTML = `<option value="">🔄 Cambiar ejercicio...</option>`;
             
-            // Si el nombre actual NO es el original, agregar la opción para regresar
             if (exercise.name !== exercise.originalName) {
                 const optOriginal = document.createElement('option');
                 optOriginal.value = exercise.originalName;
@@ -123,7 +142,6 @@ function renderRoutine(dayKey) {
                 selectAlt.appendChild(optOriginal);
             }
 
-            // Agregar las alternativas que no estén activas actualmente
             exercise.alternatives.forEach(alt => {
                 if (alt !== exercise.name) {
                     const opt = document.createElement('option');
@@ -136,7 +154,7 @@ function renderRoutine(dayKey) {
             selectAlt.onchange = (e) => {
                 if (e.target.value) {
                     exercise.name = e.target.value;
-                    exercise.completed = false; // Reinicia el checkbox al cambiar
+                    exercise.completed = false; 
                     saveData();
                     renderRoutine(dayKey);
                 }
@@ -146,6 +164,7 @@ function renderRoutine(dayKey) {
 
         card.appendChild(header);
         card.appendChild(details);
+        card.appendChild(recordDiv); // Se añade el input de peso
         card.appendChild(altsDiv);
         exercisesContainer.appendChild(card);
     });
@@ -171,7 +190,6 @@ function renderNutrition() {
     }
 
     const currentCat = getCurrentMealCategory();
-
     const categories = [
         { key: 'breakfast', title: '🍳 Desayuno' },
         { key: 'snacks', title: '🍎 Snacks' },
@@ -183,16 +201,13 @@ function renderNutrition() {
         if (plan[cat.key] && plan[cat.key].length > 0) {
             const section = document.createElement('div');
             section.className = 'nutrition-category';
-            
             const card = document.createElement('div');
             card.className = `meal-card ${currentCat === cat.key ? 'active-time' : ''}`;
 
             const headerInfo = document.createElement('div');
             headerInfo.className = 'meal-header-info';
             let headerHTML = `<h2>${cat.title}</h2>`;
-            if(currentCat === cat.key) {
-                headerHTML += `<span class="current-badge">¡Hora Actual!</span>`;
-            }
+            if(currentCat === cat.key) headerHTML += `<span class="current-badge">¡Hora Actual!</span>`;
             headerInfo.innerHTML = headerHTML;
             card.appendChild(headerInfo);
 
@@ -209,7 +224,6 @@ function renderNutrition() {
             select.value = savedIndex;
 
             const ingredientsDiv = document.createElement('div');
-            
             const renderIngredients = (index) => {
                 const meal = plan[cat.key][index];
                 let ingHtml = `<ul class="ingredient-list">`;
@@ -255,4 +269,43 @@ function renderNutrition() {
         });
         container.appendChild(eqSection);
     }
+}
+
+// --- BACKEND LOCAL (EXPORTAR / IMPORTAR) ---
+function setupLocalBackend() {
+    // Exportar
+    document.getElementById('btnExport').addEventListener('click', () => {
+        const dataStr = JSON.stringify(appData, null, 2);
+        const blob = new Blob([dataStr], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        const date = new Date().toISOString().split('T')[0];
+        a.download = `gym_backup_${date}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+    });
+
+    // Importar
+    document.getElementById('fileImport').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            try {
+                const importedData = JSON.parse(event.target.result);
+                if (importedData.routines && importedData.nutritionPlan) {
+                    appData = importedData;
+                    saveData();
+                    alert("¡Respaldo importado con éxito!");
+                    location.reload(); 
+                } else {
+                    alert("Formato incorrecto. Asegúrate de subir el archivo correcto.");
+                }
+            } catch (err) {
+                alert("Error al procesar el archivo JSON.");
+            }
+        };
+        reader.readAsText(file);
+    });
 }
