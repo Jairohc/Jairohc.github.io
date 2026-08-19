@@ -2,18 +2,32 @@ let appData = {};
 
 document.addEventListener("DOMContentLoaded", async () => {
     await loadData();
+    
+    // Configurar Entrenamiento
     setupDaySelector();
-    
-    // Obtener el día actual (0 = Domingo, 1 = Lunes, etc.)
     const today = new Date().getDay().toString();
-    
-    // Si el día existe en la rutina, lo selecciona, si no, carga el lunes ("1")
     const initialDay = appData.routines[today] ? today : "1";
     document.getElementById('daySelector').value = initialDay;
     renderRoutine(initialDay);
+
+    // Configurar Nutrición
+    renderNutrition();
+
+    // Eventos de Pestañas
+    document.getElementById('tabWorkout').addEventListener('click', () => switchTab('workout'));
+    document.getElementById('tabDiet').addEventListener('click', () => switchTab('diet'));
 });
 
-// Carga datos de localStorage o del archivo data.json la primera vez
+// Función de Pestañas
+function switchTab(tabName) {
+    document.getElementById('tabWorkout').classList.toggle('active', tabName === 'workout');
+    document.getElementById('tabDiet').classList.toggle('active', tabName === 'diet');
+    
+    document.getElementById('workoutSection').classList.toggle('active', tabName === 'workout');
+    document.getElementById('dietSection').classList.toggle('active', tabName === 'diet');
+}
+
+// Carga datos
 async function loadData() {
     const localData = localStorage.getItem('miEntrenamiento');
     if (localData) {
@@ -24,17 +38,15 @@ async function loadData() {
             appData = await response.json();
         } catch (error) {
             console.error("Error cargando data.json:", error);
-            document.getElementById('exercisesContainer').innerHTML = "<p>Error cargando la rutina.</p>";
         }
     }
 }
 
-// Guarda el estado actual en el navegador
 function saveData() {
     localStorage.setItem('miEntrenamiento', JSON.stringify(appData));
 }
 
-// Llena el selector de días
+// --- LÓGICA DE ENTRENAMIENTO ---
 function setupDaySelector() {
     const selector = document.getElementById('daySelector');
     selector.innerHTML = '';
@@ -42,7 +54,6 @@ function setupDaySelector() {
     for (let dayKey in appData.routines) {
         const option = document.createElement('option');
         option.value = dayKey;
-        // Muestra solo el nombre del día (ej. "Monday", "Tuesday")
         option.textContent = appData.routines[dayKey].name.split(':')[0]; 
         selector.appendChild(option);
     }
@@ -50,25 +61,20 @@ function setupDaySelector() {
     selector.addEventListener('change', (e) => renderRoutine(e.target.value));
 }
 
-// Dibuja las tarjetas de los ejercicios
 function renderRoutine(dayKey) {
     const routine = appData.routines[dayKey];
     const exercisesContainer = document.getElementById('exercisesContainer');
     const cardioSection = document.getElementById('cardioSection');
 
-    // Renderizar Cardio
     cardioSection.innerHTML = `<strong>Cardio:</strong> ${routine.cardio}`;
     exercisesContainer.innerHTML = '';
 
-    // Manejar días de descanso
     if (!routine.exercises || routine.exercises.length === 0) {
-        exercisesContainer.innerHTML = '<p>Día de descanso o actividad sin pesas programada.</p>';
+        exercisesContainer.innerHTML = '<p>Día de descanso o actividad libre.</p>';
         return;
     }
 
-    // Renderizar Ejercicios
     routine.exercises.forEach((exercise) => {
-        // Asegurar que el ejercicio tenga la propiedad completed
         if (typeof exercise.completed === 'undefined') exercise.completed = false;
 
         const card = document.createElement('div');
@@ -116,12 +122,10 @@ function renderRoutine(dayKey) {
 
             selectAlt.onchange = (e) => {
                 if (e.target.value) {
-                    // Actualiza el nombre del ejercicio
                     exercise.name = e.target.value;
-                    // Resetea el checkbox al cambiar de ejercicio
                     exercise.completed = false; 
                     saveData();
-                    renderRoutine(dayKey); // Recarga la vista para reflejar el cambio
+                    renderRoutine(dayKey);
                 }
             };
             altsDiv.appendChild(selectAlt);
@@ -130,7 +134,70 @@ function renderRoutine(dayKey) {
         card.appendChild(header);
         card.appendChild(details);
         card.appendChild(altsDiv);
-
         exercisesContainer.appendChild(card);
     });
+}
+
+// --- LÓGICA DE NUTRICIÓN ---
+function renderNutrition() {
+    const container = document.getElementById('nutritionContainer');
+    const plan = appData.nutritionPlan;
+    if (!plan) return;
+
+    let html = '';
+
+    // Diccionario de categorías para títulos bonitos
+    const categories = [
+        { key: 'breakfast', title: '🍳 Desayuno' },
+        { key: 'lunch', title: '🍲 Comida (Pre-Entreno)' },
+        { key: 'snacks', title: '🍎 Snacks' },
+        { key: 'dinner', title: '🍽️ Cena (Post-Entreno)' }
+    ];
+
+    categories.forEach(cat => {
+        if (plan[cat.key] && plan[cat.key].length > 0) {
+            html += `<div class="nutrition-category"><h2>${cat.title}</h2>`;
+            
+            plan[cat.key].forEach(meal => {
+                html += `<div class="meal-card">
+                            <h4>${meal.name}</h4>
+                            <ul class="ingredient-list">`;
+                
+                meal.ingredients.forEach(ing => {
+                    html += `<li><span>${ing.icon}</span> <span><strong>${ing.qty} ${ing.unit}</strong> ${ing.name}</span></li>`;
+                    
+                    // Renderizar sustituciones (subs) si existen (ej. el aguacate por aderezo)
+                    if (ing.subs && ing.subs.length > 0) {
+                        html += `<ul class="subs-list">`;
+                        ing.subs.forEach(sub => {
+                            html += `<li>Opción: ${sub.icon} <strong>${sub.qty} ${sub.unit}</strong> ${sub.name}</li>`;
+                        });
+                        html += `</ul>`;
+                    }
+                });
+                
+                html += `</ul></div>`;
+            });
+            html += `</div>`;
+        }
+    });
+
+    // Renderizar sección de Equivalencias y Reglas
+    if (plan.equivalents && plan.equivalents.length > 0) {
+        html += `<div class="nutrition-category">
+                    <h2>⚠️ Reglas y Equivalencias</h2>
+                    <div class="equivalents-card">
+                        <ul class="ingredient-list">`;
+        plan.equivalents.forEach(rule => {
+            // Separa el ícono del texto para que se vea limpio
+            const icon = rule.split(' ')[0];
+            const text = rule.substring(icon.length).trim();
+            html += `<li><span>${icon}</span> <span>${text}</span></li>`;
+        });
+        html += `       </ul>
+                    </div>
+                 </div>`;
+    }
+
+    container.innerHTML = html;
 }
