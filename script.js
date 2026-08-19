@@ -1,5 +1,6 @@
 let appData = {};
 let restTimerInterval;
+let progressChartInstance = null; // Variable global para la gráfica
 
 document.addEventListener("DOMContentLoaded", async () => {
     await loadData();
@@ -14,16 +15,29 @@ document.addEventListener("DOMContentLoaded", async () => {
     renderNutrition();
     setupLocalBackend();
 
+    // Configurar color base de Chart.js para modo oscuro
+    Chart.defaults.color = '#a0a0a0';
+    Chart.defaults.font.family = 'system-ui, -apple-system, sans-serif';
+
     document.getElementById('tabWorkout').addEventListener('click', () => switchTab('workout'));
     document.getElementById('tabDiet').addEventListener('click', () => switchTab('diet'));
+    document.getElementById('tabProgress').addEventListener('click', () => switchTab('progress'));
 });
 
 // --- PESTAÑAS ---
 function switchTab(tabName) {
     document.getElementById('tabWorkout').classList.toggle('active', tabName === 'workout');
     document.getElementById('tabDiet').classList.toggle('active', tabName === 'diet');
+    document.getElementById('tabProgress').classList.toggle('active', tabName === 'progress');
+    
     document.getElementById('workoutSection').classList.toggle('active', tabName === 'workout');
     document.getElementById('dietSection').classList.toggle('active', tabName === 'diet');
+    document.getElementById('progressSection').classList.toggle('active', tabName === 'progress');
+
+    // Renderizar gráfico solo cuando se abre la pestaña
+    if(tabName === 'progress') {
+        initProgressTab();
+    }
 }
 
 // --- DATOS Y RESET AUTOMÁTICO ---
@@ -123,6 +137,23 @@ function getWarmupSetsHTML(targetWeight) {
     </ul>`;
 }
 
+// Guarda la tendencia de peso histórico
+function recordWeightHistory(exercise) {
+    if (!exercise.history) exercise.history = [];
+    const todayISO = new Date().toISOString().split('T')[0]; // Ej. 2026-08-19
+    
+    // Busca si ya hay un registro de hoy
+    let todayLog = exercise.history.find(h => h.date === todayISO);
+    if (todayLog) {
+        todayLog.weight = exercise.weight;
+    } else {
+        // Solo guardar si el peso es mayor a cero para no ensuciar la gráfica
+        if(exercise.weight > 0) {
+            exercise.history.push({ date: todayISO, weight: exercise.weight });
+        }
+    }
+}
+
 function renderRoutine(dayKey) {
     const routine = appData.routines[dayKey];
     const exercisesContainer = document.getElementById('exercisesContainer');
@@ -142,6 +173,7 @@ function renderRoutine(dayKey) {
         if (typeof exercise.weight === 'undefined') exercise.weight = 0;
         if (typeof exercise.prevWeight === 'undefined') exercise.prevWeight = exercise.weight;
         if (typeof exercise.reps === 'undefined') exercise.reps = '';
+        if (typeof exercise.history === 'undefined') exercise.history = [];
 
         const card = document.createElement('div');
         card.className = `exercise-card ${exercise.completed ? 'completed' : ''}`;
@@ -207,6 +239,8 @@ function renderRoutine(dayKey) {
                 const val = parseFloat(e.target.getAttribute('data-val'));
                 exercise.weight = Math.max(0, parseFloat((exercise.weight + val).toFixed(1)));
                 updateDeltaVisual(exercise, weightSpan);
+                recordWeightHistory(exercise); // Guardar punto en la gráfica
+                
                 if(warmupContent.style.display === 'block') {
                     warmupContent.innerHTML = getWarmupSetsHTML(exercise.weight);
                 }
@@ -267,6 +301,114 @@ function renderRoutine(dayKey) {
         card.appendChild(trackerDiv);
         card.appendChild(altsDiv);
         exercisesContainer.appendChild(card);
+    });
+}
+
+// --- GRÁFICOS DE PROGRESO ---
+function initProgressTab() {
+    const selector = document.getElementById('chartExerciseSelector');
+    const msg = document.getElementById('noDataMessage');
+    const canvas = document.getElementById('progressChart');
+    
+    // Recolectar todos los ejercicios que tengan historial guardado
+    let exercisesWithHistory = [];
+    for (let dayKey in appData.routines) {
+        appData.routines[dayKey].exercises.forEach(ex => {
+            if (ex.history && ex.history.length > 0) {
+                exercisesWithHistory.push(ex);
+            }
+        });
+    }
+
+    if (exercisesWithHistory.length === 0) {
+        selector.style.display = 'none';
+        canvas.style.display = 'none';
+        msg.style.display = 'block';
+        return;
+    }
+
+    msg.style.display = 'none';
+    selector.style.display = 'block';
+    canvas.style.display = 'block';
+
+    // Llenar el selector evitando duplicados
+    selector.innerHTML = '';
+    let addedNames = new Set();
+    
+    exercisesWithHistory.forEach(ex => {
+        let name = ex.originalName || ex.name;
+        // Solo usar la parte antes de los dos puntos para que se vea limpio
+        let cleanName = name.split(':')[0];
+        
+        if (!addedNames.has(cleanName)) {
+            const opt = document.createElement('option');
+            opt.value = ex.name; // Value exacto para buscarlo luego
+            opt.textContent = cleanName;
+            selector.appendChild(opt);
+            addedNames.add(cleanName);
+        }
+    });
+
+    // Dibujar gráfico inicial
+    drawChart(selector.value, exercisesWithHistory);
+
+    // Evento al cambiar ejercicio
+    selector.onchange = (e) => {
+        drawChart(e.target.value, exercisesWithHistory);
+    };
+}
+
+function drawChart(exerciseName, allExercises) {
+    const exercise = allExercises.find(ex => ex.name === exerciseName);
+    if (!exercise || !exercise.history) return;
+
+    const ctx = document.getElementById('progressChart').getContext('2d');
+    
+    if (progressChartInstance) {
+        progressChartInstance.destroy();
+    }
+
+    // Formatear datos para Chart.js
+    const labels = exercise.history.map(item => {
+        // Cortar el año para que quede ej. "08-19"
+        let parts = item.date.split('-');
+        return `${parts[1]}-${parts[2]}`;
+    });
+    const dataPoints = exercise.history.map(item => item.weight);
+
+    progressChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Peso de Trabajo (kg)',
+                data: dataPoints,
+                borderColor: '#00bcd4',
+                backgroundColor: 'rgba(0, 188, 212, 0.15)',
+                borderWidth: 3,
+                pointBackgroundColor: '#1e1e1e',
+                pointBorderColor: '#00bcd4',
+                pointBorderWidth: 2,
+                pointRadius: 5,
+                fill: true,
+                tension: 0.3 // Curva suave
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    grid: { color: 'rgba(255,255,255,0.05)' }
+                },
+                x: {
+                    grid: { display: false }
+                }
+            }
+        }
     });
 }
 
