@@ -5,11 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gym & Diet Tracker</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- Librería para Gráficos -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div class="container">
+    <!-- Pantalla de Bloqueo Anti-Pérdida de Datos -->
+    <div id="importOverlay" class="import-overlay" style="display: none;">
+        <div class="import-modal">
+            <h2>⚠️ Caché Vacía</h2>
+            <p>No se detectó historial en este navegador. Sube tu último respaldo para recuperar tus pesos y gráficas.</p>
+            <label for="overlayFileImport" class="btn-primary">📂 Subir Respaldo</label>
+            <input type="file" id="overlayFileImport" accept=".json" style="display: none;">
+            <button id="btnStartFresh" class="btn-text">Iniciar desde cero (Base limpia)</button>
+        </div>
+    </div>
+
+    <div class="container" id="mainAppContainer" style="display: none;">
         <!-- Navegación por Pestañas -->
         <nav class="tabs">
             <button id="tabWorkout" class="tab-btn active">💪 Entrenamiento</button>
@@ -47,9 +57,9 @@
             </div>
         </main>
 
-        <!-- BACKEND LOCAL: Exportar / Importar -->
+        <!-- BACKEND LOCAL: Exportar / Importar Manual -->
         <div class="backend-controls">
-            <button id="btnExport" class="btn-secondary">💾 Respaldo</button>
+            <button id="btnExport" class="btn-secondary">💾 Forzar Respaldo</button>
             <label for="fileImport" class="btn-secondary">📂 Importar</label>
             <input type="file" id="fileImport" accept=".json" style="display: none;">
         </div>
