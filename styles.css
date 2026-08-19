@@ -10,15 +10,7 @@
     --danger: #f44336;
 }
 
-body {
-    font-family: system-ui, -apple-system, sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    margin: 0;
-    padding: 15px;
-    padding-bottom: 40px;
-}
-
+body { font-family: system-ui, -apple-system, sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 15px; padding-bottom: 40px; }
 .container { max-width: 600px; margin: 0 auto; }
 
 /* Navegación */
@@ -45,55 +37,39 @@ input[type="checkbox"] { transform: scale(1.8); cursor: pointer; margin-left: 15
 .exercise-alternatives { margin-top: 15px; }
 .exercise-alternatives select { width: 100%; background: #2a2a2a; }
 
-/* NUEVO: Tracker de Peso con Botones */
-.tracker-container {
-    background: #111;
-    border: 1px solid #333;
-    border-radius: 8px;
-    padding: 12px;
-    margin-top: 15px;
-}
-.weight-display {
-    text-align: center;
-    font-size: 1.3rem;
-    font-weight: bold;
-    color: var(--accent);
-    margin-bottom: 12px;
-}
-.weight-controls {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-bottom: 12px;
-}
-.weight-btn {
-    background: #2a2a2a;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 10px 0;
-    font-size: 0.95rem;
-    font-weight: bold;
-    cursor: pointer;
-    flex: 1 1 calc(25% - 6px); /* 4 botones por fila */
-    transition: 0.2s;
-}
+/* Tracker de Peso con Botones */
+.tracker-container { background: #111; border: 1px solid #333; border-radius: 8px; padding: 12px; margin-top: 15px; }
+.weight-display { text-align: center; font-size: 1.3rem; font-weight: bold; color: var(--accent); margin-bottom: 12px; }
+
+/* Delta Visual */
+.delta-val { font-size: 0.85rem; margin-left: 8px; font-weight: bold; vertical-align: middle; }
+.delta-positive { color: var(--success); }
+.delta-negative { color: var(--danger); }
+.delta-neutral { color: var(--text-muted); }
+
+.weight-controls { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.weight-btn { background: #2a2a2a; color: white; border: none; border-radius: 4px; padding: 10px 0; font-size: 0.95rem; font-weight: bold; cursor: pointer; flex: 1 1 calc(25% - 6px); transition: 0.2s; }
 .weight-btn:active { transform: scale(0.95); }
 .weight-btn.sub { border-bottom: 2px solid var(--danger); }
 .weight-btn.add { border-bottom: 2px solid var(--success); }
-.reps-input {
-    width: 100%;
-    padding: 12px;
-    background: #222;
-    border: 1px solid #444;
-    color: white;
-    border-radius: 6px;
-    box-sizing: border-box;
-    text-align: center;
-    font-size: 1rem;
-}
+.reps-input { width: 100%; padding: 12px; background: #222; border: 1px solid #444; color: white; border-radius: 6px; box-sizing: border-box; text-align: center; font-size: 1rem; margin-bottom: 10px; }
 .reps-input:focus { border-color: var(--accent); outline: none; }
+
+/* Aproximaciones (Warm-up) */
+.warmup-btn { width: 100%; background: transparent; color: var(--warning); border: 1px dashed var(--warning); padding: 8px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+.warmup-btn:hover { background: rgba(255, 152, 0, 0.1); }
+.warmup-content { background: #1a1a1a; padding: 10px; border-radius: 6px; margin-top: 8px; display: none; font-size: 0.9rem; border-left: 3px solid var(--warning); }
+.warmup-content ul { list-style: none; padding: 0; margin: 0; }
+.warmup-content li { margin-bottom: 5px; color: #ddd; }
+
+/* Controles de Tiempo en Tarjeta */
+.timer-controls { display: flex; gap: 10px; margin-top: 10px; }
+.btn-timer { flex: 1; background: #222; color: #fff; border: 1px solid #444; border-radius: 6px; padding: 8px; font-size: 0.85rem; cursor: pointer; font-weight: bold; }
+.btn-timer:hover { border-color: var(--accent); }
+
+/* Temporizador Flotante Global */
+.floating-timer { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #000; padding: 10px 25px; border-radius: 30px; font-weight: bold; font-size: 1.2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.6); display: none; align-items: center; gap: 15px; z-index: 1000; }
+.close-timer { background: #000; color: #fff; border: none; border-radius: 50%; width: 26px; height: 26px; cursor: pointer; font-weight: bold; line-height: 1; padding: 0; }
 
 /* Nutrición */
 .nutrition-category { margin-bottom: 25px; }
