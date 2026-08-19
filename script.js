@@ -2,9 +2,8 @@ let appData = {};
 
 document.addEventListener("DOMContentLoaded", async () => {
     await loadData();
-    checkDailyReset(); // Reinicia checkboxes si es un nuevo día
+    checkDailyReset(); 
     
-    // Configurar UI
     setupDaySelector();
     const today = new Date().getDay().toString();
     const initialDay = appData.routines[today] ? today : "1";
@@ -14,7 +13,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     renderNutrition();
     setupLocalBackend();
 
-    // Eventos de Pestañas
     document.getElementById('tabWorkout').addEventListener('click', () => switchTab('workout'));
     document.getElementById('tabDiet').addEventListener('click', () => switchTab('diet'));
 });
@@ -46,7 +44,6 @@ function saveData() {
     localStorage.setItem('miEntrenamiento', JSON.stringify(appData));
 }
 
-// Reinicia los checkboxes si detecta que cambió de día
 function checkDailyReset() {
     const todayStr = new Date().toLocaleDateString();
     if (appData.lastLoginDate !== todayStr) {
@@ -89,7 +86,10 @@ function renderRoutine(dayKey) {
     routine.exercises.forEach((exercise) => {
         if (typeof exercise.completed === 'undefined') exercise.completed = false;
         if (!exercise.originalName) exercise.originalName = exercise.name;
-        if (!exercise.lastRecord) exercise.lastRecord = ''; // Inicializar campo de pesos
+        
+        // Convertir la estructura antigua a la nueva si es necesario
+        if (typeof exercise.weight === 'undefined') exercise.weight = 0;
+        if (typeof exercise.reps === 'undefined') exercise.reps = '';
 
         const card = document.createElement('div');
         card.className = `exercise-card ${exercise.completed ? 'completed' : ''}`;
@@ -120,11 +120,39 @@ function renderRoutine(dayKey) {
             <p><strong>RIR Objetivo:</strong> ${exercise.rir || 'N/A'}</p>
         `;
 
-        // Input minimalista de pesos
-        const recordDiv = document.createElement('div');
-        recordDiv.innerHTML = `<input type="text" class="weight-input" placeholder="Registro: Ej. 80kg x 8,8,6" value="${exercise.lastRecord}">`;
-        recordDiv.querySelector('input').addEventListener('change', (e) => {
-            exercise.lastRecord = e.target.value;
+        // NUEVO: Tracker de Peso por Botones
+        const trackerDiv = document.createElement('div');
+        trackerDiv.className = 'tracker-container';
+        trackerDiv.innerHTML = `
+            <div class="weight-display"><span class="val-weight">${exercise.weight}</span> kg</div>
+            <div class="weight-controls">
+                <button class="weight-btn sub" data-val="-20">-20</button>
+                <button class="weight-btn sub" data-val="-10">-10</button>
+                <button class="weight-btn sub" data-val="-5">-5</button>
+                <button class="weight-btn sub" data-val="-2.5">-2.5</button>
+
+                <button class="weight-btn add" data-val="2.5">+2.5</button>
+                <button class="weight-btn add" data-val="5">+5</button>
+                <button class="weight-btn add" data-val="10">+10</button>
+                <button class="weight-btn add" data-val="20">+20</button>
+            </div>
+            <input type="text" class="reps-input" placeholder="Reps: Ej. 8, 8, 6" value="${exercise.reps}">
+        `;
+
+        // Lógica matemática de los botones
+        const weightSpan = trackerDiv.querySelector('.val-weight');
+        trackerDiv.querySelectorAll('.weight-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const val = parseFloat(e.target.getAttribute('data-val'));
+                // Evitar pesos negativos y redondear errores de flotantes en JS
+                exercise.weight = Math.max(0, parseFloat((exercise.weight + val).toFixed(1)));
+                weightSpan.innerText = exercise.weight;
+                saveData();
+            });
+        });
+
+        trackerDiv.querySelector('.reps-input').addEventListener('change', (e) => {
+            exercise.reps = e.target.value;
             saveData();
         });
 
@@ -164,7 +192,7 @@ function renderRoutine(dayKey) {
 
         card.appendChild(header);
         card.appendChild(details);
-        card.appendChild(recordDiv); // Se añade el input de peso
+        card.appendChild(trackerDiv); // Insertar el nuevo tracker de botones
         card.appendChild(altsDiv);
         exercisesContainer.appendChild(card);
     });
@@ -273,7 +301,6 @@ function renderNutrition() {
 
 // --- BACKEND LOCAL (EXPORTAR / IMPORTAR) ---
 function setupLocalBackend() {
-    // Exportar
     document.getElementById('btnExport').addEventListener('click', () => {
         const dataStr = JSON.stringify(appData, null, 2);
         const blob = new Blob([dataStr], { type: "application/json" });
@@ -286,7 +313,6 @@ function setupLocalBackend() {
         URL.revokeObjectURL(url);
     });
 
-    // Importar
     document.getElementById('fileImport').addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (!file) return;
