@@ -73,6 +73,11 @@ function renderRoutine(dayKey) {
 
     routine.exercises.forEach((exercise) => {
         if (typeof exercise.completed === 'undefined') exercise.completed = false;
+        
+        // Guardar el nombre original para no perderlo al hacer intercambios
+        if (!exercise.originalName) {
+            exercise.originalName = exercise.name;
+        }
 
         const card = document.createElement('div');
         card.className = `exercise-card ${exercise.completed ? 'completed' : ''}`;
@@ -109,16 +114,29 @@ function renderRoutine(dayKey) {
         if (exercise.alternatives && exercise.alternatives.length > 0) {
             const selectAlt = document.createElement('select');
             selectAlt.innerHTML = `<option value="">🔄 Cambiar ejercicio...</option>`;
+            
+            // Si el nombre actual NO es el original, agregar la opción para regresar
+            if (exercise.name !== exercise.originalName) {
+                const optOriginal = document.createElement('option');
+                optOriginal.value = exercise.originalName;
+                optOriginal.textContent = `⬅️ Volver al original: ${exercise.originalName.split(':')[0]}`;
+                selectAlt.appendChild(optOriginal);
+            }
+
+            // Agregar las alternativas que no estén activas actualmente
             exercise.alternatives.forEach(alt => {
-                const opt = document.createElement('option');
-                opt.value = alt;
-                opt.textContent = alt;
-                selectAlt.appendChild(opt);
+                if (alt !== exercise.name) {
+                    const opt = document.createElement('option');
+                    opt.value = alt;
+                    opt.textContent = alt;
+                    selectAlt.appendChild(opt);
+                }
             });
+
             selectAlt.onchange = (e) => {
                 if (e.target.value) {
                     exercise.name = e.target.value;
-                    exercise.completed = false; 
+                    exercise.completed = false; // Reinicia el checkbox al cambiar
                     saveData();
                     renderRoutine(dayKey);
                 }
@@ -134,14 +152,12 @@ function renderRoutine(dayKey) {
 }
 
 // --- LÓGICA DE NUTRICIÓN INTELIGENTE ---
-
-// Determina qué comida toca según la hora local
 function getCurrentMealCategory() {
     const hour = new Date().getHours();
-    if (hour < 11) return 'breakfast';          // 00:00 - 10:59
-    if (hour >= 11 && hour < 14) return 'snacks'; // 11:00 - 13:59 (Regla de 11:30 AM)
-    if (hour >= 14 && hour < 19) return 'lunch';  // 14:00 - 18:59 (Regla Pre-entreno 3:30 PM)
-    return 'dinner';                              // 19:00 - 23:59 (Regla Post-entreno)
+    if (hour < 11) return 'breakfast';          
+    if (hour >= 11 && hour < 14) return 'snacks'; 
+    if (hour >= 14 && hour < 19) return 'lunch';  
+    return 'dinner';                              
 }
 
 function renderNutrition() {
@@ -150,7 +166,6 @@ function renderNutrition() {
     const plan = appData.nutritionPlan;
     if (!plan) return;
 
-    // Inicializar preferencias de usuario si no existen en el caché
     if (!appData.mealPreferences) {
         appData.mealPreferences = { breakfast: 0, lunch: 0, snacks: 0, dinner: 0 };
     }
@@ -172,7 +187,6 @@ function renderNutrition() {
             const card = document.createElement('div');
             card.className = `meal-card ${currentCat === cat.key ? 'active-time' : ''}`;
 
-            // Cabecera de la tarjeta con el aviso de "Hora Actual"
             const headerInfo = document.createElement('div');
             headerInfo.className = 'meal-header-info';
             let headerHTML = `<h2>${cat.title}</h2>`;
@@ -182,7 +196,6 @@ function renderNutrition() {
             headerInfo.innerHTML = headerHTML;
             card.appendChild(headerInfo);
 
-            // Selector de opciones
             const select = document.createElement('select');
             select.className = 'meal-selector';
             plan[cat.key].forEach((meal, index) => {
@@ -192,11 +205,9 @@ function renderNutrition() {
                 select.appendChild(opt);
             });
 
-            // Cargar la preferencia guardada
             const savedIndex = appData.mealPreferences[cat.key] || 0;
             select.value = savedIndex;
 
-            // Contenedor dinámico de los ingredientes
             const ingredientsDiv = document.createElement('div');
             
             const renderIngredients = (index) => {
@@ -216,14 +227,12 @@ function renderNutrition() {
                 ingredientsDiv.innerHTML = ingHtml;
             };
 
-            // Primer renderizado con la opción guardada
             renderIngredients(savedIndex);
 
-            // Escuchador de cambios (guarda y re-renderiza)
             select.addEventListener('change', (e) => {
                 const newIndex = parseInt(e.target.value);
                 appData.mealPreferences[cat.key] = newIndex;
-                saveData(); // Guarda la nueva preferencia en el localStorage
+                saveData(); 
                 renderIngredients(newIndex);
             });
 
@@ -234,7 +243,6 @@ function renderNutrition() {
         }
     });
 
-    // Renderizar sección de Equivalencias
     if (plan.equivalents && plan.equivalents.length > 0) {
         const eqSection = document.createElement('div');
         eqSection.className = 'nutrition-category';
