@@ -1,4 +1,5 @@
 let appData = {};
+let restTimerInterval;
 
 document.addEventListener("DOMContentLoaded", async () => {
     await loadData();
@@ -25,7 +26,7 @@ function switchTab(tabName) {
     document.getElementById('dietSection').classList.toggle('active', tabName === 'diet');
 }
 
-// --- DATOS Y RESET ---
+// --- DATOS Y RESET AUTOMÁTICO ---
 async function loadData() {
     const localData = localStorage.getItem('miEntrenamiento');
     if (localData) {
@@ -49,12 +50,42 @@ function checkDailyReset() {
     if (appData.lastLoginDate !== todayStr) {
         for (let day in appData.routines) {
             appData.routines[day].exercises.forEach(ex => {
+                // Almacenar el peso actual como peso previo para el Delta Visual
+                ex.prevWeight = ex.weight || 0;
                 ex.completed = false;
             });
         }
         appData.lastLoginDate = todayStr;
         saveData();
     }
+}
+
+// --- TEMPORIZADOR DE DESCANSO ---
+function startTimer(seconds) {
+    clearInterval(restTimerInterval);
+    let timeRemaining = seconds;
+    const display = document.getElementById('timerDisplay');
+    const timerDiv = document.getElementById('floatingTimer');
+    
+    timerDiv.style.display = 'flex';
+    
+    restTimerInterval = setInterval(() => {
+        let m = Math.floor(timeRemaining / 60).toString().padStart(2, '0');
+        let s = (timeRemaining % 60).toString().padStart(2, '0');
+        display.innerText = `${m}:${s}`;
+        
+        if (timeRemaining <= 0) {
+            clearInterval(restTimerInterval);
+            display.innerText = "¡TIEMPO!";
+            navigator.vibrate([200, 100, 200, 100, 500]); // API de vibración móvil
+        }
+        timeRemaining--;
+    }, 1000);
+}
+
+function stopTimer() {
+    clearInterval(restTimerInterval);
+    document.getElementById('floatingTimer').style.display = 'none';
 }
 
 // --- ENTRENAMIENTO ---
@@ -68,6 +99,30 @@ function setupDaySelector() {
         selector.appendChild(option);
     }
     selector.addEventListener('change', (e) => renderRoutine(e.target.value));
+}
+
+function updateDeltaVisual(exercise, weightSpan) {
+    if(typeof exercise.prevWeight === 'undefined') exercise.prevWeight = exercise.weight || 0;
+    
+    let delta = parseFloat((exercise.weight - exercise.prevWeight).toFixed(1));
+    let deltaClass = delta > 0 ? 'delta-positive' : (delta < 0 ? 'delta-negative' : 'delta-neutral');
+    let deltaText = delta > 0 ? `(↑ +${delta} kg)` : (delta < 0 ? `(↓ ${delta} kg)` : `(=)`);
+    
+    weightSpan.innerHTML = `${exercise.weight} <span class="delta-val ${deltaClass}">${deltaText}</span>`;
+}
+
+function getWarmupSetsHTML(targetWeight) {
+    if (targetWeight < 20) return "<p>Peso insuficiente para aproximaciones.</p>";
+    // Redondea al múltiplo de 2.5 kg más cercano (discos estándar)
+    let w50 = Math.round((targetWeight * 0.5) / 2.5) * 2.5;
+    let w70 = Math.round((targetWeight * 0.7) / 2.5) * 2.5;
+    let w90 = Math.round((targetWeight * 0.9) / 2.5) * 2.5;
+    
+    return `<ul>
+        <li><strong>50%:</strong> ${w50} kg x 10 reps</li>
+        <li><strong>70%:</strong> ${w70} kg x 5 reps</li>
+        <li><strong>90%:</strong> ${w90} kg x 1-2 reps</li>
+    </ul>`;
 }
 
 function renderRoutine(dayKey) {
@@ -86,9 +141,8 @@ function renderRoutine(dayKey) {
     routine.exercises.forEach((exercise) => {
         if (typeof exercise.completed === 'undefined') exercise.completed = false;
         if (!exercise.originalName) exercise.originalName = exercise.name;
-        
-        // Convertir la estructura antigua a la nueva si es necesario
         if (typeof exercise.weight === 'undefined') exercise.weight = 0;
+        if (typeof exercise.prevWeight === 'undefined') exercise.prevWeight = exercise.weight;
         if (typeof exercise.reps === 'undefined') exercise.reps = '';
 
         const card = document.createElement('div');
@@ -118,13 +172,17 @@ function renderRoutine(dayKey) {
             <p><strong>Detalle:</strong> ${exercise.detail}</p>
             ${exercise.tempo ? `<p><strong>Tempo:</strong> ${exercise.tempo}</p>` : ''}
             <p><strong>RIR Objetivo:</strong> ${exercise.rir || 'N/A'}</p>
+            <div class="timer-controls">
+                <button class="btn-timer" onclick="startTimer(90)">⏱️ 90s</button>
+                <button class="btn-timer" onclick="startTimer(120)">⏱️ 2m</button>
+                <button class="btn-timer" onclick="startTimer(180)">⏱️ 3m</button>
+            </div>
         `;
 
-        // NUEVO: Tracker de Peso por Botones
         const trackerDiv = document.createElement('div');
         trackerDiv.className = 'tracker-container';
         trackerDiv.innerHTML = `
-            <div class="weight-display"><span class="val-weight">${exercise.weight}</span> kg</div>
+            <div class="weight-display"><span class="val-weight"></span></div>
             <div class="weight-controls">
                 <button class="weight-btn sub" data-val="-20">-20</button>
                 <button class="weight-btn sub" data-val="-10">-10</button>
@@ -137,16 +195,28 @@ function renderRoutine(dayKey) {
                 <button class="weight-btn add" data-val="20">+20</button>
             </div>
             <input type="text" class="reps-input" placeholder="Reps: Ej. 8, 8, 6" value="${exercise.reps}">
+            
+            <button class="warmup-btn">🔥 Calculadora de Aproximación</button>
+            <div class="warmup-content"></div>
         `;
 
-        // Lógica matemática de los botones
         const weightSpan = trackerDiv.querySelector('.val-weight');
+        const warmupBtn = trackerDiv.querySelector('.warmup-btn');
+        const warmupContent = trackerDiv.querySelector('.warmup-content');
+
+        // Inicializar el delta
+        updateDeltaVisual(exercise, weightSpan);
+
         trackerDiv.querySelectorAll('.weight-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const val = parseFloat(e.target.getAttribute('data-val'));
-                // Evitar pesos negativos y redondear errores de flotantes en JS
                 exercise.weight = Math.max(0, parseFloat((exercise.weight + val).toFixed(1)));
-                weightSpan.innerText = exercise.weight;
+                updateDeltaVisual(exercise, weightSpan);
+                
+                // Actualizar las aproximaciones automáticamente si están abiertas
+                if(warmupContent.style.display === 'block') {
+                    warmupContent.innerHTML = getWarmupSetsHTML(exercise.weight);
+                }
                 saveData();
             });
         });
@@ -154,6 +224,15 @@ function renderRoutine(dayKey) {
         trackerDiv.querySelector('.reps-input').addEventListener('change', (e) => {
             exercise.reps = e.target.value;
             saveData();
+        });
+
+        warmupBtn.addEventListener('click', () => {
+            if (warmupContent.style.display === 'none' || warmupContent.style.display === '') {
+                warmupContent.innerHTML = getWarmupSetsHTML(exercise.weight);
+                warmupContent.style.display = 'block';
+            } else {
+                warmupContent.style.display = 'none';
+            }
         });
 
         const altsDiv = document.createElement('div');
@@ -192,7 +271,7 @@ function renderRoutine(dayKey) {
 
         card.appendChild(header);
         card.appendChild(details);
-        card.appendChild(trackerDiv); // Insertar el nuevo tracker de botones
+        card.appendChild(trackerDiv);
         card.appendChild(altsDiv);
         exercisesContainer.appendChild(card);
     });
