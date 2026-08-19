@@ -7,7 +7,6 @@
     --success: #4caf50;
     --success-bg: #1a2e1a;
     --warning: #ff9800;
-    --highlight-border: #ffeb3b;
 }
 
 body {
@@ -19,170 +18,80 @@ body {
     padding-bottom: 40px;
 }
 
-.container {
-    max-width: 600px;
-    margin: 0 auto;
-}
+.container { max-width: 600px; margin: 0 auto; }
 
-/* --- Navegación de Pestañas --- */
-.tabs {
-    display: flex;
-    background: var(--card-bg);
-    border-radius: 8px;
-    overflow: hidden;
-    margin-bottom: 20px;
-}
-
-.tab-btn {
-    flex: 1;
-    padding: 15px;
-    background: transparent;
-    border: none;
-    color: var(--text-muted);
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.tab-btn.active {
-    color: var(--accent);
-    background: #2a2a2a;
-    border-bottom: 3px solid var(--accent);
-}
-
+/* Navegación */
+.tabs { display: flex; background: var(--card-bg); border-radius: 8px; overflow: hidden; margin-bottom: 20px; }
+.tab-btn { flex: 1; padding: 15px; background: transparent; border: none; color: var(--text-muted); font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.3s; }
+.tab-btn.active { color: var(--accent); background: #2a2a2a; border-bottom: 3px solid var(--accent); }
 .tab-content { display: none; }
-.tab-content.active {
-    display: block;
-    animation: fadeIn 0.3s;
-}
+.tab-content.active { display: block; animation: fadeIn 0.3s; }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(5px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-/* --- Estructura General --- */
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
+/* Estructura */
+header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+select { padding: 10px; border-radius: 8px; background: #333; color: white; border: 1px solid #555; font-size: 1rem; }
 
-select {
-    padding: 10px;
-    border-radius: 8px;
-    background: #333;
-    color: white;
-    border: 1px solid #555;
-    font-size: 1rem;
-}
-
-/* --- Tarjetas de Entrenamiento --- */
-.cardio-card {
-    background: var(--card-bg);
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    border-left: 4px solid var(--accent);
-    line-height: 1.5;
-}
-
-.exercise-card {
-    background: var(--card-bg);
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    transition: all 0.3s ease;
-}
-
-.exercise-card.completed {
-    opacity: 0.6;
-    border-left: 4px solid var(--success);
-    background: var(--success-bg);
-}
-
-.exercise-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
+/* Ejercicios */
+.cardio-card { background: var(--card-bg); padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid var(--accent); line-height: 1.5; }
+.exercise-card { background: var(--card-bg); padding: 15px; border-radius: 8px; margin-bottom: 15px; transition: all 0.3s ease; }
+.exercise-card.completed { opacity: 0.6; border-left: 4px solid var(--success); background: var(--success-bg); }
+.exercise-header { display: flex; justify-content: space-between; align-items: center; }
 .exercise-header h3 { margin: 0; font-size: 1.1rem; flex: 1; }
-input[type="checkbox"] {
-    transform: scale(1.8);
-    cursor: pointer;
-    margin-left: 15px;
-    accent-color: var(--success);
-}
+input[type="checkbox"] { transform: scale(1.8); cursor: pointer; margin-left: 15px; accent-color: var(--success); }
 .exercise-details p { margin: 8px 0 0 0; font-size: 0.9rem; color: var(--text-muted); }
 .exercise-alternatives { margin-top: 15px; }
 .exercise-alternatives select { width: 100%; background: #2a2a2a; }
 
-/* --- Tarjetas de Nutrición Inteligentes --- */
-.nutrition-category { margin-bottom: 25px; }
-
-.meal-card {
-    background: var(--card-bg);
-    border-radius: 8px;
-    padding: 15px;
-    transition: 0.3s;
-}
-
-/* Resaltado de la comida actual según la hora */
-.meal-card.active-time {
-    border: 2px solid var(--accent);
-    box-shadow: 0 0 10px rgba(0, 188, 212, 0.2);
-}
-
-.meal-header-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-    border-bottom: 1px solid #333;
-    padding-bottom: 10px;
-}
-
-.meal-header-info h2 { margin: 0; font-size: 1.2rem; color: var(--accent); }
-.current-badge {
-    background-color: var(--accent);
-    color: #000;
-    padding: 3px 8px;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: bold;
-}
-
-.meal-selector {
+/* Input Minimalista de Pesos */
+.weight-input {
     width: 100%;
-    margin-bottom: 15px;
-    background: #2a2a2a;
-    font-weight: bold;
-}
-
-.ingredient-list { list-style: none; padding: 0; margin: 0; }
-.ingredient-list > li {
-    margin-bottom: 10px;
-    font-size: 0.95rem;
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    line-height: 1.4;
-    background: #252525;
     padding: 10px;
+    margin-top: 12px;
+    background: #111;
+    border: 1px solid #444;
+    color: white;
     border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 0.95rem;
 }
+.weight-input:focus { border-color: var(--accent); outline: none; }
 
+/* Nutrición */
+.nutrition-category { margin-bottom: 25px; }
+.meal-card { background: var(--card-bg); border-radius: 8px; padding: 15px; transition: 0.3s; }
+.meal-card.active-time { border: 2px solid var(--accent); box-shadow: 0 0 10px rgba(0, 188, 212, 0.2); }
+.meal-header-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+.meal-header-info h2 { margin: 0; font-size: 1.2rem; color: var(--accent); }
+.current-badge { background-color: var(--accent); color: #000; padding: 3px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: bold; }
+.meal-selector { width: 100%; margin-bottom: 15px; background: #2a2a2a; font-weight: bold; }
+.ingredient-list { list-style: none; padding: 0; margin: 0; }
+.ingredient-list > li { margin-bottom: 10px; font-size: 0.95rem; display: flex; align-items: flex-start; gap: 10px; line-height: 1.4; background: #252525; padding: 10px; border-radius: 6px; }
 .subs-list { list-style: none; padding-left: 20px; margin-top: 8px; }
 .subs-list li { font-size: 0.85rem; color: var(--text-muted); position: relative; margin-bottom: 4px; }
 .subs-list li::before { content: "↳"; position: absolute; left: -15px; color: var(--text-muted); }
-
-.equivalents-card {
-    background: #2a2a2a;
-    padding: 15px;
-    border-radius: 8px;
-    border-left: 4px solid var(--warning);
-}
+.equivalents-card { background: #2a2a2a; padding: 15px; border-radius: 8px; border-left: 4px solid var(--warning); }
 .equivalents-card li { margin-bottom: 12px; line-height: 1.4; list-style: none; }
+
+/* Backend Local */
+.backend-controls {
+    display: flex;
+    gap: 10px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #333;
+}
+.btn-secondary {
+    flex: 1;
+    padding: 12px;
+    background: #2a2a2a;
+    color: var(--text-color);
+    border: 1px solid #444;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+.btn-secondary:hover { background: #333; }
