@@ -19,7 +19,6 @@ body { font-family: system-ui, -apple-system, sans-serif; background-color: var(
 .tab-btn.active { color: var(--accent); background: #2a2a2a; border-bottom: 3px solid var(--accent); }
 .tab-content { display: none; }
 .tab-content.active { display: block; animation: fadeIn 0.3s; }
-
 @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
 /* Estructura General */
@@ -84,8 +83,17 @@ input[type="checkbox"] { transform: scale(1.8); cursor: pointer; margin-left: 15
 .subs-list { list-style: none; padding-left: 20px; margin-top: 8px; }
 .subs-list li { font-size: 0.85rem; color: var(--text-muted); position: relative; margin-bottom: 4px; }
 .subs-list li::before { content: "↳"; position: absolute; left: -15px; color: var(--text-muted); }
-.equivalents-card { background: #2a2a2a; padding: 15px; border-radius: 8px; border-left: 4px solid var(--warning); }
-.equivalents-card li { margin-bottom: 12px; line-height: 1.4; list-style: none; }
+
+/* Acordeón de Reglas y Equivalencias */
+.rules-accordion { background: #1a1a1a; border-radius: 8px; overflow: hidden; border-left: 4px solid var(--warning); margin-bottom: 15px; }
+.rules-accordion summary { padding: 15px; font-weight: bold; font-size: 1.05rem; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; color: var(--text-color); }
+.rules-accordion summary::-webkit-details-marker { display: none; }
+.rules-accordion summary::after { content: "▼"; font-size: 0.8rem; color: var(--warning); transition: transform 0.3s ease; }
+.rules-accordion[open] summary::after { transform: rotate(180deg); }
+.rule-content { padding: 0 15px 15px 15px; display: flex; flex-direction: column; gap: 10px; }
+.rule-item { background: #252525; padding: 12px; border-radius: 6px; display: flex; flex-direction: column; gap: 6px; }
+.rule-item-header { font-weight: bold; color: var(--accent); display: flex; align-items: center; gap: 8px; font-size: 0.95rem; }
+.rule-item-desc { color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; }
 
 /* Backend Local */
 .backend-controls { display: flex; gap: 10px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #333; }
