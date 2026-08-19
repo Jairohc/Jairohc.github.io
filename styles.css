@@ -25,12 +25,22 @@ body { font-family: system-ui, -apple-system, sans-serif; background-color: var(
 header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
 select { padding: 10px; border-radius: 8px; background: #333; color: white; border: 1px solid #555; font-size: 1rem; }
 
-/* Tarjetas de Ejercicio */
+/* Tarjetas de Ejercicio y Animación de Colapso */
 .cardio-card { background: var(--card-bg); padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid var(--accent); line-height: 1.5; }
 .exercise-card { background: var(--card-bg); padding: 15px; border-radius: 8px; margin-bottom: 15px; transition: all 0.3s ease; }
-.exercise-card.completed { opacity: 0.6; border-left: 4px solid var(--success); background: var(--success-bg); }
+.exercise-card.completed { border-left: 4px solid var(--success); background: var(--success-bg); }
+
 .exercise-header { display: flex; justify-content: space-between; align-items: center; }
-.exercise-header h3 { margin: 0; font-size: 1.1rem; flex: 1; }
+.title-wrapper { display: flex; align-items: center; flex: 1; cursor: pointer; padding: 5px 0; }
+.title-wrapper h3 { margin: 0; font-size: 1.1rem; }
+.toggle-icon { margin-left: 10px; font-size: 0.8rem; color: var(--text-muted); transition: transform 0.3s ease; }
+
+/* Lógica visual de colapsado */
+.exercise-body { max-height: 1000px; overflow: hidden; transition: max-height 0.3s ease, opacity 0.3s ease, margin-top 0.3s ease; opacity: 1; margin-top: 15px; }
+.exercise-card.collapsed .exercise-body { max-height: 0; opacity: 0; margin-top: 0; pointer-events: none; }
+.exercise-card.collapsed .toggle-icon { transform: rotate(-90deg); }
+.exercise-card.collapsed.completed { opacity: 0.6; }
+
 input[type="checkbox"] { transform: scale(1.8); cursor: pointer; margin-left: 15px; accent-color: var(--success); }
 .exercise-details p { margin: 8px 0 0 0; font-size: 0.9rem; color: var(--text-muted); }
 .exercise-alternatives { margin-top: 15px; }
