@@ -1,117 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Protocol">
-    <title>Protocol | Workout & Nutrition</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gym Tracker</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1>My Protocol</h1>
-        <p id="fecha-hora"></p>
-    </header>
+    <div class="container">
+        <header>
+            <h1>Mi Entrenamiento</h1>
+            <select id="daySelector"></select>
+        </header>
 
-    <main id="main-content">
-        <div id="vista-rutina" class="vista">
-            <div class="card">
-                <h2>🏋️ Today's Workout</h2>
-                
-                <div class="header-rutina-controles">
-                    <div class="selector-dia-override">
-                        <label for="select-dia">Select Day:</label>
-                        <select id="select-dia" onchange="cambiarDiaRutina(this.value)"></select>
-                    </div>
-                    <div class="rutina-actions-row">
-                        <button id="btn-express" class="btn-express" onclick="toggleExpressMode()">
-                            ⚡ Exprés
-                        </button>
-                        <button class="btn-swap-day" onclick="mostrarModalShift()">
-                            🔄 Adaptar Semana
-                        </button>
-                    </div>
-                </div>
-
-                <h3 id="nombre-rutina"></h3>
-                <p id="bloque-cardio" class="info-texto"></p>
-                
-                <div id="supps-checklist"></div>
-                <div id="lista-ejercicios"></div>
-            </div>
-        </div>
-
-        <div id="vista-dieta" class="vista hidden">
-            <div class="card">
-                <h2>🍽️ Daily Nutrition Menu</h2>
-                <div id="alerta-domingo" class="alerta hidden">
-                    ⚠️ Sunday Maintenance: Add 1 whole egg or 30% additional base carbs.
-                </div>
-                
-                <div class="tabs-nutricion">
-                    <button id="btn-breakfast" onclick="cambiarComida('breakfast')">Breakfast</button>
-                    <button id="btn-lunch" onclick="cambiarComida('lunch')">Lunch</button>
-                    <button id="btn-dinner" onclick="cambiarComida('dinner')">Dinner</button>
-                    <button id="btn-snacks" onclick="cambiarComida('snacks')">Snacks</button>
-                    <button id="btn-equivalents" onclick="cambiarComida('equivalents')">Subs</button>
-                </div>
-
-                <div id="meal-selector-container" class="selector-dia-override hidden" style="margin-bottom: 15px;">
-                    <label for="select-meal-opt">Select Option:</label>
-                    <select id="select-meal-opt" onchange="renderizarIngredientes(this.value)"></select>
-                </div>
-
-                <div id="ingredients-grid" class="ing-grid"></div>
-
-                <div class="action-container">
-                    <button class="btn-action" onclick="copiarListaSuper()">🛒 Copy Grocery List</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="vista-semana" class="vista hidden">
-            <div class="card">
-                <h2>📅 Weekly Overview</h2>
-                <div id="contenedor-semana"></div>
-            </div>
-        </div>
-    </main>
-
-    <div id="modal-shift" class="modal-overlay hidden">
-        <div class="modal-content">
-            <h3 style="margin-top:0;">🔄 Adaptar Rutina</h3>
-            <p style="font-size:0.9em; color:#555; margin-bottom: 20px;">Si saliste a rodar hoy, la aplicación desplazará tus días de pesas hacia adelante para que no pierdas ningún entrenamiento.</p>
-            
-            <button class="btn-action" style="background-color: #f59e0b; margin-bottom: 10px;" onclick="aplicarRodadaImprevista('6')">
-                🚵‍♂️ Hoy hice MTB Fuerte
-            </button>
-            <button class="btn-action" style="background-color: #3498db; margin-bottom: 25px;" onclick="aplicarRodadaImprevista('0')">
-                🚴 Hoy hice Rodada Regenerativa
-            </button>
-            
-            <button class="btn-action" style="background-color: #e74c3c; margin-bottom: 10px;" onclick="resetearSemana()">
-                ⚠️ Restaurar Semana Original
-            </button>
-            <button class="btn-action" style="background-color: #94a3b8;" onclick="cerrarModalShift()">
-                Cancelar
-            </button>
-        </div>
+        <main>
+            <div id="cardioSection" class="cardio-card"></div>
+            <div id="exercisesContainer"></div>
+        </main>
     </div>
 
-    <nav class="bottom-nav">
-        <button id="nav-rutina" class="nav-item activo" onclick="cambiarVista('rutina')">
-            <span class="nav-icon">🏋️</span><span>Routine</span>
-        </button>
-        <button id="nav-dieta" class="nav-item" onclick="cambiarVista('dieta')">
-            <span class="nav-icon">🍽️</span><span>Diet</span>
-        </button>
-        <button id="nav-semana" class="nav-item" onclick="cambiarVista('semana')">
-            <span class="nav-icon">📅</span><span>Week</span>
-        </button>
-    </nav>
-
-    <script src="script.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
