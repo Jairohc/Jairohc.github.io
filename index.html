@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gym & Diet Tracker</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- Librería para Gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="container">
@@ -12,6 +14,7 @@
         <nav class="tabs">
             <button id="tabWorkout" class="tab-btn active">💪 Entrenamiento</button>
             <button id="tabDiet" class="tab-btn">🥗 Dieta</button>
+            <button id="tabProgress" class="tab-btn">📈 Progreso</button>
         </nav>
 
         <!-- SECCIÓN: ENTRENAMIENTO -->
@@ -30,6 +33,18 @@
                 <h1>Plan Nutricional</h1>
             </header>
             <div id="nutritionContainer"></div>
+        </main>
+
+        <!-- SECCIÓN: PROGRESO -->
+        <main id="progressSection" class="tab-content">
+            <header>
+                <h1>Tendencia de Fuerza</h1>
+            </header>
+            <div class="chart-container" id="chartContainer">
+                <select id="chartExerciseSelector" class="meal-selector" style="display:none;"></select>
+                <canvas id="progressChart"></canvas>
+                <div id="noDataMessage" class="no-data-msg">Registra pesos en tus ejercicios para ver las gráficas de progreso.</div>
+            </div>
         </main>
 
         <!-- BACKEND LOCAL: Exportar / Importar -->
