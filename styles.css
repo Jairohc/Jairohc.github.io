@@ -7,6 +7,7 @@
     --success: #4caf50;
     --success-bg: #1a2e1a;
     --warning: #ff9800;
+    --danger: #f44336;
 }
 
 body {
@@ -29,11 +30,11 @@ body {
 
 @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-/* Estructura */
+/* Estructura General */
 header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
 select { padding: 10px; border-radius: 8px; background: #333; color: white; border: 1px solid #555; font-size: 1rem; }
 
-/* Ejercicios */
+/* Tarjetas de Ejercicio */
 .cardio-card { background: var(--card-bg); padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid var(--accent); line-height: 1.5; }
 .exercise-card { background: var(--card-bg); padding: 15px; border-radius: 8px; margin-bottom: 15px; transition: all 0.3s ease; }
 .exercise-card.completed { opacity: 0.6; border-left: 4px solid var(--success); background: var(--success-bg); }
@@ -44,19 +45,55 @@ input[type="checkbox"] { transform: scale(1.8); cursor: pointer; margin-left: 15
 .exercise-alternatives { margin-top: 15px; }
 .exercise-alternatives select { width: 100%; background: #2a2a2a; }
 
-/* Input Minimalista de Pesos */
-.weight-input {
-    width: 100%;
-    padding: 10px;
-    margin-top: 12px;
+/* NUEVO: Tracker de Peso con Botones */
+.tracker-container {
     background: #111;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 15px;
+}
+.weight-display {
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: var(--accent);
+    margin-bottom: 12px;
+}
+.weight-controls {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+.weight-btn {
+    background: #2a2a2a;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 0;
+    font-size: 0.95rem;
+    font-weight: bold;
+    cursor: pointer;
+    flex: 1 1 calc(25% - 6px); /* 4 botones por fila */
+    transition: 0.2s;
+}
+.weight-btn:active { transform: scale(0.95); }
+.weight-btn.sub { border-bottom: 2px solid var(--danger); }
+.weight-btn.add { border-bottom: 2px solid var(--success); }
+.reps-input {
+    width: 100%;
+    padding: 12px;
+    background: #222;
     border: 1px solid #444;
     color: white;
     border-radius: 6px;
     box-sizing: border-box;
-    font-size: 0.95rem;
+    text-align: center;
+    font-size: 1rem;
 }
-.weight-input:focus { border-color: var(--accent); outline: none; }
+.reps-input:focus { border-color: var(--accent); outline: none; }
 
 /* Nutrición */
 .nutrition-category { margin-bottom: 25px; }
@@ -75,23 +112,6 @@ input[type="checkbox"] { transform: scale(1.8); cursor: pointer; margin-left: 15
 .equivalents-card li { margin-bottom: 12px; line-height: 1.4; list-style: none; }
 
 /* Backend Local */
-.backend-controls {
-    display: flex;
-    gap: 10px;
-    margin-top: 30px;
-    padding-top: 20px;
-    border-top: 1px solid #333;
-}
-.btn-secondary {
-    flex: 1;
-    padding: 12px;
-    background: #2a2a2a;
-    color: var(--text-color);
-    border: 1px solid #444;
-    border-radius: 8px;
-    text-align: center;
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: bold;
-}
+.backend-controls { display: flex; gap: 10px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #333; }
+.btn-secondary { flex: 1; padding: 12px; background: #2a2a2a; color: var(--text-color); border: 1px solid #444; border-radius: 8px; text-align: center; cursor: pointer; font-size: 0.9rem; font-weight: bold; }
 .btn-secondary:hover { background: #333; }
