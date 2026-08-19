@@ -1,10 +1,46 @@
 let appData = {};
 let restTimerInterval;
-let progressChartInstance = null; 
+let progressChartInstance = null;
 
-document.addEventListener("DOMContentLoaded", async () => {
-    await loadData();
-    checkDailyReset(); 
+document.addEventListener("DOMContentLoaded", () => {
+    bootApp();
+});
+
+// --- INICIO Y BLOQUEO ANTI-PÉRDIDA ---
+async function bootApp() {
+    const localData = localStorage.getItem('miEntrenamiento');
+    
+    // Configurar Eventos del Modal
+    document.getElementById('overlayFileImport').addEventListener('change', handleImport);
+    document.getElementById('fileImport').addEventListener('change', handleImport);
+    document.getElementById('btnStartFresh').addEventListener('click', loadDefaultBase);
+
+    if (localData) {
+        appData = JSON.parse(localData);
+        initializeApp();
+    } else {
+        // Bloquear App si no hay caché
+        document.getElementById('importOverlay').style.display = 'flex';
+        document.getElementById('mainAppContainer').style.display = 'none';
+    }
+}
+
+async function loadDefaultBase() {
+    try {
+        const response = await fetch('data.json');
+        appData = await response.json();
+        saveData();
+        initializeApp();
+    } catch (error) {
+        alert("Error cargando la base de datos (data.json). Asegúrate de que el archivo exista en la raíz.");
+    }
+}
+
+function initializeApp() {
+    document.getElementById('importOverlay').style.display = 'none';
+    document.getElementById('mainAppContainer').style.display = 'block';
+
+    checkDailyReset();
     
     setupDaySelector();
     const today = new Date().getDay().toString();
@@ -13,7 +49,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     
     renderRoutine(initialDay);
     renderNutrition();
-    setupLocalBackend();
 
     if(window.Chart) {
         Chart.defaults.color = '#a0a0a0';
@@ -23,7 +58,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById('tabWorkout').addEventListener('click', () => switchTab('workout'));
     document.getElementById('tabDiet').addEventListener('click', () => switchTab('diet'));
     document.getElementById('tabProgress').addEventListener('click', () => switchTab('progress'));
-});
+    
+    document.getElementById('btnExport').addEventListener('click', () => exportData(false));
+}
 
 // --- PESTAÑAS ---
 function switchTab(tabName) {
@@ -36,21 +73,6 @@ function switchTab(tabName) {
     document.getElementById('progressSection').classList.toggle('active', tabName === 'progress');
 
     if(tabName === 'progress') initProgressTab();
-}
-
-// --- DATOS Y RESET AUTOMÁTICO ---
-async function loadData() {
-    const localData = localStorage.getItem('miEntrenamiento');
-    if (localData) {
-        appData = JSON.parse(localData);
-    } else {
-        try {
-            const response = await fetch('data.json');
-            appData = await response.json();
-        } catch (error) {
-            console.error("Error cargando data.json:", error);
-        }
-    }
 }
 
 function saveData() {
@@ -69,6 +91,79 @@ function checkDailyReset() {
         appData.lastLoginDate = todayStr;
         saveData();
     }
+}
+
+// --- EXPORTACIÓN INTELIGENTE (NAVIGATOR.SHARE) ---
+async function exportData(isAuto = false) {
+    const dataStr = JSON.stringify(appData, null, 2);
+    const date = new Date().toISOString().split('T')[0];
+    const fileName = `gym_backup_${date}.json`;
+    
+    // Crear archivo File compatible con la Share API
+    const file = new File([dataStr], fileName, { type: "application/json" });
+
+    // Verificar si el celular soporta compartir archivos directamente
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+            await navigator.share({
+                title: 'Respaldo Gym Tracker',
+                text: isAuto ? 'Rutina Completada - Respaldo Automático' : 'Respaldo Manual',
+                files: [file]
+            });
+            if (isAuto) console.log("Auto-respaldo exitoso vía Share API");
+        } catch (err) {
+            console.log("El usuario canceló el auto-respaldo o hubo error:", err);
+        }
+    } else {
+        // Fallback para PC o navegadores antiguos (Descarga tradicional)
+        const blob = new Blob([dataStr], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+}
+
+// --- LÓGICA DE AUTO-RESPALDO AL TERMINAR RUTINA ---
+function checkAndTriggerAutoBackup(dayKey) {
+    const todayStr = new Date().toLocaleDateString();
+    
+    // Si ya se generó un respaldo automático hoy, evitar doble descarga
+    if (appData.autoBackupDate === todayStr) return;
+
+    const routine = appData.routines[dayKey];
+    if (!routine || !routine.exercises || routine.exercises.length === 0) return;
+
+    const allCompleted = routine.exercises.every(ex => ex.completed === true);
+
+    if (allCompleted) {
+        appData.autoBackupDate = todayStr;
+        saveData();
+        exportData(true);
+    }
+}
+
+function handleImport(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(event) {
+        try {
+            const importedData = JSON.parse(event.target.result);
+            if (importedData.routines && importedData.nutritionPlan) {
+                appData = importedData;
+                saveData();
+                location.reload(); 
+            } else {
+                alert("Formato incorrecto. Asegúrate de subir el archivo json válido.");
+            }
+        } catch (err) {
+            alert("Error al procesar el archivo JSON.");
+        }
+    };
+    reader.readAsText(file);
 }
 
 // --- TEMPORIZADOR DE DESCANSO ---
@@ -170,13 +265,11 @@ function renderRoutine(dayKey) {
         if (typeof exercise.history === 'undefined') exercise.history = [];
 
         const card = document.createElement('div');
-        // Si ya está completado, cargar la tarjeta como colapsada para ahorrar espacio
         card.className = `exercise-card ${exercise.completed ? 'completed collapsed' : ''}`;
 
         const header = document.createElement('div');
         header.className = 'exercise-header';
 
-        // Nuevo envoltorio para el título, lo hace clickable
         const titleWrapper = document.createElement('div');
         titleWrapper.className = 'title-wrapper';
         titleWrapper.innerHTML = `<h3>${exercise.name}</h3><span class="toggle-icon">▼</span>`;
@@ -191,19 +284,20 @@ function renderRoutine(dayKey) {
             exercise.completed = e.target.checked;
             card.classList.toggle('completed', exercise.completed);
             
-            // Colapsar automáticamente al terminar, expandir si se desmarca
             if (exercise.completed) {
                 card.classList.add('collapsed');
             } else {
                 card.classList.remove('collapsed');
             }
             saveData();
+            
+            // Disparar lógica de auto-respaldo
+            checkAndTriggerAutoBackup(dayKey);
         };
 
         header.appendChild(titleWrapper);
         header.appendChild(checkbox);
 
-        // Contenedor interno que se oculta/muestra
         const bodyWrapper = document.createElement('div');
         bodyWrapper.className = 'exercise-body';
 
@@ -307,7 +401,6 @@ function renderRoutine(dayKey) {
             altsDiv.appendChild(selectAlt);
         }
 
-        // Ensamblar los componentes en el bodyWrapper
         bodyWrapper.appendChild(details);
         bodyWrapper.appendChild(trackerDiv);
         bodyWrapper.appendChild(altsDiv);
@@ -370,7 +463,6 @@ function initProgressTab() {
 function drawChart(exerciseName, allExercises) {
     const exercise = allExercises.find(ex => ex.name === exerciseName);
     if (!exercise || !exercise.history) return;
-
     if (typeof Chart === 'undefined') return;
 
     const ctx = document.getElementById('progressChart').getContext('2d');
@@ -535,41 +627,4 @@ function renderNutrition() {
         eqSection.innerHTML = rulesHTML;
         container.appendChild(eqSection);
     }
-}
-
-// --- BACKEND LOCAL (EXPORTAR / IMPORTAR) ---
-function setupLocalBackend() {
-    document.getElementById('btnExport').addEventListener('click', () => {
-        const dataStr = JSON.stringify(appData, null, 2);
-        const blob = new Blob([dataStr], { type: "application/json" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        const date = new Date().toISOString().split('T')[0];
-        a.download = `gym_backup_${date}.json`;
-        a.click();
-        URL.revokeObjectURL(url);
-    });
-
-    document.getElementById('fileImport').addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = function(event) {
-            try {
-                const importedData = JSON.parse(event.target.result);
-                if (importedData.routines && importedData.nutritionPlan) {
-                    appData = importedData;
-                    saveData();
-                    alert("¡Respaldo importado con éxito!");
-                    location.reload(); 
-                } else {
-                    alert("Formato incorrecto. Asegúrate de subir el archivo correcto.");
-                }
-            } catch (err) {
-                alert("Error al procesar el archivo JSON.");
-            }
-        };
-        reader.readAsText(file);
-    });
 }
