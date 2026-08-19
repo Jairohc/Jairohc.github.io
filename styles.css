@@ -7,6 +7,7 @@
     --success: #4caf50;
     --success-bg: #1a2e1a;
     --warning: #ff9800;
+    --highlight-border: #ffeb3b;
 }
 
 body {
@@ -50,10 +51,7 @@ body {
     border-bottom: 3px solid var(--accent);
 }
 
-.tab-content {
-    display: none;
-}
-
+.tab-content { display: none; }
 .tab-content.active {
     display: block;
     animation: fadeIn 0.3s;
@@ -111,86 +109,75 @@ select {
     align-items: center;
 }
 
-.exercise-header h3 {
-    margin: 0;
-    font-size: 1.1rem;
-    flex: 1;
-}
-
+.exercise-header h3 { margin: 0; font-size: 1.1rem; flex: 1; }
 input[type="checkbox"] {
     transform: scale(1.8);
     cursor: pointer;
     margin-left: 15px;
     accent-color: var(--success);
 }
-
-.exercise-details p {
-    margin: 8px 0 0 0;
-    font-size: 0.9rem;
-    color: var(--text-muted);
-}
-
+.exercise-details p { margin: 8px 0 0 0; font-size: 0.9rem; color: var(--text-muted); }
 .exercise-alternatives { margin-top: 15px; }
 .exercise-alternatives select { width: 100%; background: #2a2a2a; }
 
-/* --- Tarjetas de Nutrición --- */
+/* --- Tarjetas de Nutrición Inteligentes --- */
 .nutrition-category { margin-bottom: 25px; }
-.nutrition-category h2 {
-    font-size: 1.3rem;
-    color: var(--accent);
-    border-bottom: 1px solid #333;
-    padding-bottom: 8px;
-    margin-bottom: 15px;
-}
 
 .meal-card {
     background: var(--card-bg);
-    padding: 15px;
     border-radius: 8px;
-    margin-bottom: 12px;
+    padding: 15px;
+    transition: 0.3s;
 }
 
-.meal-card h4 {
-    margin: 0 0 12px 0;
-    color: white;
-    font-size: 1.05rem;
+/* Resaltado de la comida actual según la hora */
+.meal-card.active-time {
+    border: 2px solid var(--accent);
+    box-shadow: 0 0 10px rgba(0, 188, 212, 0.2);
 }
 
-.ingredient-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+.meal-header-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 10px;
 }
 
+.meal-header-info h2 { margin: 0; font-size: 1.2rem; color: var(--accent); }
+.current-badge {
+    background-color: var(--accent);
+    color: #000;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: bold;
+}
+
+.meal-selector {
+    width: 100%;
+    margin-bottom: 15px;
+    background: #2a2a2a;
+    font-weight: bold;
+}
+
+.ingredient-list { list-style: none; padding: 0; margin: 0; }
 .ingredient-list > li {
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     font-size: 0.95rem;
     display: flex;
     align-items: flex-start;
     gap: 10px;
     line-height: 1.4;
+    background: #252525;
+    padding: 10px;
+    border-radius: 6px;
 }
 
-.subs-list {
-    list-style: none;
-    padding-left: 30px;
-    margin-top: 5px;
-    margin-bottom: 10px;
-}
-
-.subs-list li {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    position: relative;
-    margin-bottom: 4px;
-}
-
-.subs-list li::before {
-    content: "↳";
-    position: absolute;
-    left: -15px;
-    color: var(--text-muted);
-}
+.subs-list { list-style: none; padding-left: 20px; margin-top: 8px; }
+.subs-list li { font-size: 0.85rem; color: var(--text-muted); position: relative; margin-bottom: 4px; }
+.subs-list li::before { content: "↳"; position: absolute; left: -15px; color: var(--text-muted); }
 
 .equivalents-card {
     background: #2a2a2a;
@@ -198,4 +185,4 @@ input[type="checkbox"] {
     border-radius: 8px;
     border-left: 4px solid var(--warning);
 }
-.equivalents-card li { margin-bottom: 12px; line-height: 1.4; }
+.equivalents-card li { margin-bottom: 12px; line-height: 1.4; list-style: none; }
