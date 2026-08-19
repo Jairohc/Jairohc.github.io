@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById('daySelector').value = initialDay;
     renderRoutine(initialDay);
 
-    // Configurar Nutrición
+    // Configurar Nutrición Inteligente
     renderNutrition();
 
     // Eventos de Pestañas
@@ -18,16 +18,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById('tabDiet').addEventListener('click', () => switchTab('diet'));
 });
 
-// Función de Pestañas
+// --- PESTAÑAS ---
 function switchTab(tabName) {
     document.getElementById('tabWorkout').classList.toggle('active', tabName === 'workout');
     document.getElementById('tabDiet').classList.toggle('active', tabName === 'diet');
-    
     document.getElementById('workoutSection').classList.toggle('active', tabName === 'workout');
     document.getElementById('dietSection').classList.toggle('active', tabName === 'diet');
 }
 
-// Carga datos
+// --- DATOS ---
 async function loadData() {
     const localData = localStorage.getItem('miEntrenamiento');
     if (localData) {
@@ -46,18 +45,16 @@ function saveData() {
     localStorage.setItem('miEntrenamiento', JSON.stringify(appData));
 }
 
-// --- LÓGICA DE ENTRENAMIENTO ---
+// --- ENTRENAMIENTO ---
 function setupDaySelector() {
     const selector = document.getElementById('daySelector');
     selector.innerHTML = '';
-    
     for (let dayKey in appData.routines) {
         const option = document.createElement('option');
         option.value = dayKey;
         option.textContent = appData.routines[dayKey].name.split(':')[0]; 
         selector.appendChild(option);
     }
-    
     selector.addEventListener('change', (e) => renderRoutine(e.target.value));
 }
 
@@ -112,14 +109,12 @@ function renderRoutine(dayKey) {
         if (exercise.alternatives && exercise.alternatives.length > 0) {
             const selectAlt = document.createElement('select');
             selectAlt.innerHTML = `<option value="">🔄 Cambiar ejercicio...</option>`;
-            
             exercise.alternatives.forEach(alt => {
                 const opt = document.createElement('option');
                 opt.value = alt;
                 opt.textContent = alt;
                 selectAlt.appendChild(opt);
             });
-
             selectAlt.onchange = (e) => {
                 if (e.target.value) {
                     exercise.name = e.target.value;
@@ -138,66 +133,118 @@ function renderRoutine(dayKey) {
     });
 }
 
-// --- LÓGICA DE NUTRICIÓN ---
+// --- LÓGICA DE NUTRICIÓN INTELIGENTE ---
+
+// Determina qué comida toca según la hora local
+function getCurrentMealCategory() {
+    const hour = new Date().getHours();
+    if (hour < 11) return 'breakfast';          // 00:00 - 10:59
+    if (hour >= 11 && hour < 14) return 'snacks'; // 11:00 - 13:59 (Regla de 11:30 AM)
+    if (hour >= 14 && hour < 19) return 'lunch';  // 14:00 - 18:59 (Regla Pre-entreno 3:30 PM)
+    return 'dinner';                              // 19:00 - 23:59 (Regla Post-entreno)
+}
+
 function renderNutrition() {
     const container = document.getElementById('nutritionContainer');
+    container.innerHTML = '';
     const plan = appData.nutritionPlan;
     if (!plan) return;
 
-    let html = '';
+    // Inicializar preferencias de usuario si no existen en el caché
+    if (!appData.mealPreferences) {
+        appData.mealPreferences = { breakfast: 0, lunch: 0, snacks: 0, dinner: 0 };
+    }
 
-    // Diccionario de categorías para títulos bonitos
+    const currentCat = getCurrentMealCategory();
+
     const categories = [
         { key: 'breakfast', title: '🍳 Desayuno' },
-        { key: 'lunch', title: '🍲 Comida (Pre-Entreno)' },
         { key: 'snacks', title: '🍎 Snacks' },
+        { key: 'lunch', title: '🍲 Comida (Pre-Entreno)' },
         { key: 'dinner', title: '🍽️ Cena (Post-Entreno)' }
     ];
 
     categories.forEach(cat => {
         if (plan[cat.key] && plan[cat.key].length > 0) {
-            html += `<div class="nutrition-category"><h2>${cat.title}</h2>`;
+            const section = document.createElement('div');
+            section.className = 'nutrition-category';
             
-            plan[cat.key].forEach(meal => {
-                html += `<div class="meal-card">
-                            <h4>${meal.name}</h4>
-                            <ul class="ingredient-list">`;
-                
+            const card = document.createElement('div');
+            card.className = `meal-card ${currentCat === cat.key ? 'active-time' : ''}`;
+
+            // Cabecera de la tarjeta con el aviso de "Hora Actual"
+            const headerInfo = document.createElement('div');
+            headerInfo.className = 'meal-header-info';
+            let headerHTML = `<h2>${cat.title}</h2>`;
+            if(currentCat === cat.key) {
+                headerHTML += `<span class="current-badge">¡Hora Actual!</span>`;
+            }
+            headerInfo.innerHTML = headerHTML;
+            card.appendChild(headerInfo);
+
+            // Selector de opciones
+            const select = document.createElement('select');
+            select.className = 'meal-selector';
+            plan[cat.key].forEach((meal, index) => {
+                const opt = document.createElement('option');
+                opt.value = index;
+                opt.textContent = meal.name;
+                select.appendChild(opt);
+            });
+
+            // Cargar la preferencia guardada
+            const savedIndex = appData.mealPreferences[cat.key] || 0;
+            select.value = savedIndex;
+
+            // Contenedor dinámico de los ingredientes
+            const ingredientsDiv = document.createElement('div');
+            
+            const renderIngredients = (index) => {
+                const meal = plan[cat.key][index];
+                let ingHtml = `<ul class="ingredient-list">`;
                 meal.ingredients.forEach(ing => {
-                    html += `<li><span>${ing.icon}</span> <span><strong>${ing.qty} ${ing.unit}</strong> ${ing.name}</span></li>`;
-                    
-                    // Renderizar sustituciones (subs) si existen (ej. el aguacate por aderezo)
+                    ingHtml += `<li><span>${ing.icon}</span> <span><strong>${ing.qty} ${ing.unit}</strong> ${ing.name}</span></li>`;
                     if (ing.subs && ing.subs.length > 0) {
-                        html += `<ul class="subs-list">`;
+                        ingHtml += `<ul class="subs-list">`;
                         ing.subs.forEach(sub => {
-                            html += `<li>Opción: ${sub.icon} <strong>${sub.qty} ${sub.unit}</strong> ${sub.name}</li>`;
+                            ingHtml += `<li>Opción: ${sub.icon} <strong>${sub.qty} ${sub.unit}</strong> ${sub.name}</li>`;
                         });
-                        html += `</ul>`;
+                        ingHtml += `</ul>`;
                     }
                 });
-                
-                html += `</ul></div>`;
+                ingHtml += `</ul>`;
+                ingredientsDiv.innerHTML = ingHtml;
+            };
+
+            // Primer renderizado con la opción guardada
+            renderIngredients(savedIndex);
+
+            // Escuchador de cambios (guarda y re-renderiza)
+            select.addEventListener('change', (e) => {
+                const newIndex = parseInt(e.target.value);
+                appData.mealPreferences[cat.key] = newIndex;
+                saveData(); // Guarda la nueva preferencia en el localStorage
+                renderIngredients(newIndex);
             });
-            html += `</div>`;
+
+            card.appendChild(select);
+            card.appendChild(ingredientsDiv);
+            section.appendChild(card);
+            container.appendChild(section);
         }
     });
 
-    // Renderizar sección de Equivalencias y Reglas
+    // Renderizar sección de Equivalencias
     if (plan.equivalents && plan.equivalents.length > 0) {
-        html += `<div class="nutrition-category">
-                    <h2>⚠️ Reglas y Equivalencias</h2>
-                    <div class="equivalents-card">
-                        <ul class="ingredient-list">`;
+        const eqSection = document.createElement('div');
+        eqSection.className = 'nutrition-category';
+        eqSection.innerHTML = `<h2>⚠️ Reglas y Equivalencias</h2><div class="equivalents-card"><ul class="ingredient-list"></ul></div>`;
+        const ul = eqSection.querySelector('ul');
         plan.equivalents.forEach(rule => {
-            // Separa el ícono del texto para que se vea limpio
             const icon = rule.split(' ')[0];
             const text = rule.substring(icon.length).trim();
-            html += `<li><span>${icon}</span> <span>${text}</span></li>`;
+            ul.innerHTML += `<li><span>${icon}</span> <span>${text}</span></li>`;
         });
-        html += `       </ul>
-                    </div>
-                 </div>`;
+        container.appendChild(eqSection);
     }
-
-    container.innerHTML = html;
 }
