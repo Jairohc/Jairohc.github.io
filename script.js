@@ -93,36 +93,36 @@ function checkDailyReset() {
     }
 }
 
-// --- EXPORTACIÓN INTELIGENTE (NAVIGATOR.SHARE) ---
-async function exportData(isAuto = false) {
-    const dataStr = JSON.stringify(appData, null, 2);
-    const date = new Date().toISOString().split('T')[0];
-    const fileName = `gym_backup_${date}.json`;
-    
-    // Crear archivo File compatible con la Share API
-    const file = new File([dataStr], fileName, { type: "application/json" });
-
-    // Verificar si el celular soporta compartir archivos directamente
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        try {
-            await navigator.share({
-                title: 'Respaldo Gym Tracker',
-                text: isAuto ? 'Rutina Completada - Respaldo Automático' : 'Respaldo Manual',
-                files: [file]
-            });
-            if (isAuto) console.log("Auto-respaldo exitoso vía Share API");
-        } catch (err) {
-            console.log("El usuario canceló el auto-respaldo o hubo error:", err);
-        }
-    } else {
-        // Fallback para PC o navegadores antiguos (Descarga tradicional)
+// --- EXPORTACIÓN ROBUSTA (Candado anti-spam) ---
+function exportData(isAuto = false) {
+    try {
+        const dataStr = JSON.stringify(appData, null, 2);
+        const date = new Date().toISOString().split('T')[0];
+        
+        // Agregar sufijo 'auto' o 'manual' para distinguir archivos si se descargan el mismo día
+        const suffix = isAuto ? "AUTO" : "MANUAL";
+        const fileName = `gym_backup_${date}_${suffix}.json`;
+        
         const blob = new Blob([dataStr], { type: "application/json" });
         const url = URL.createObjectURL(blob);
+        
         const a = document.createElement('a');
         a.href = url;
         a.download = fileName;
+        
+        // Apéndice temporal necesario en móviles para forzar la descarga
+        document.body.appendChild(a);
         a.click();
+        document.body.removeChild(a);
+        
         URL.revokeObjectURL(url);
+        
+        if (!isAuto) {
+            alert("✅ Respaldo forzado generado con éxito en tu carpeta de descargas.");
+        }
+    } catch (err) {
+        console.error("Error al exportar:", err);
+        alert("Hubo un error al intentar generar el respaldo.");
     }
 }
 
@@ -130,7 +130,7 @@ async function exportData(isAuto = false) {
 function checkAndTriggerAutoBackup(dayKey) {
     const todayStr = new Date().toLocaleDateString();
     
-    // Si ya se generó un respaldo automático hoy, evitar doble descarga
+    // CANDADO BARRERA: Si ya se generó un respaldo automático hoy, abortar para no saturar descargas
     if (appData.autoBackupDate === todayStr) return;
 
     const routine = appData.routines[dayKey];
@@ -139,6 +139,7 @@ function checkAndTriggerAutoBackup(dayKey) {
     const allCompleted = routine.exercises.every(ex => ex.completed === true);
 
     if (allCompleted) {
+        // Cerrar candado para hoy antes de exportar
         appData.autoBackupDate = todayStr;
         saveData();
         exportData(true);
@@ -291,7 +292,7 @@ function renderRoutine(dayKey) {
             }
             saveData();
             
-            // Disparar lógica de auto-respaldo
+            // Evaluar y disparar respaldo automático al terminar todo
             checkAndTriggerAutoBackup(dayKey);
         };
 
