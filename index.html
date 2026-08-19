@@ -3,19 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gym Tracker</title>
+    <title>Gym & Diet Tracker</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>Mi Entrenamiento</h1>
-            <select id="daySelector"></select>
-        </header>
+        <!-- Navegación por Pestañas -->
+        <nav class="tabs">
+            <button id="tabWorkout" class="tab-btn active">💪 Entrenamiento</button>
+            <button id="tabDiet" class="tab-btn">🥗 Dieta</button>
+        </nav>
 
-        <main>
+        <!-- SECCIÓN: ENTRENAMIENTO -->
+        <main id="workoutSection" class="tab-content active">
+            <header>
+                <h1>Mi Rutina</h1>
+                <select id="daySelector"></select>
+            </header>
             <div id="cardioSection" class="cardio-card"></div>
             <div id="exercisesContainer"></div>
+        </main>
+
+        <!-- SECCIÓN: DIETA -->
+        <main id="dietSection" class="tab-content">
+            <header>
+                <h1>Plan Nutricional</h1>
+            </header>
+            <div id="nutritionContainer"></div>
         </main>
     </div>
 
