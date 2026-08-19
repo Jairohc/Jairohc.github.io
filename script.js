@@ -1,6 +1,6 @@
 let appData = {};
 let restTimerInterval;
-let progressChartInstance = null; // Variable global para la gráfica
+let progressChartInstance = null; 
 
 document.addEventListener("DOMContentLoaded", async () => {
     await loadData();
@@ -15,9 +15,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     renderNutrition();
     setupLocalBackend();
 
-    // Configurar color base de Chart.js para modo oscuro
-    Chart.defaults.color = '#a0a0a0';
-    Chart.defaults.font.family = 'system-ui, -apple-system, sans-serif';
+    if(window.Chart) {
+        Chart.defaults.color = '#a0a0a0';
+        Chart.defaults.font.family = 'system-ui, -apple-system, sans-serif';
+    }
 
     document.getElementById('tabWorkout').addEventListener('click', () => switchTab('workout'));
     document.getElementById('tabDiet').addEventListener('click', () => switchTab('diet'));
@@ -34,10 +35,7 @@ function switchTab(tabName) {
     document.getElementById('dietSection').classList.toggle('active', tabName === 'diet');
     document.getElementById('progressSection').classList.toggle('active', tabName === 'progress');
 
-    // Renderizar gráfico solo cuando se abre la pestaña
-    if(tabName === 'progress') {
-        initProgressTab();
-    }
+    if(tabName === 'progress') initProgressTab();
 }
 
 // --- DATOS Y RESET AUTOMÁTICO ---
@@ -137,17 +135,13 @@ function getWarmupSetsHTML(targetWeight) {
     </ul>`;
 }
 
-// Guarda la tendencia de peso histórico
 function recordWeightHistory(exercise) {
     if (!exercise.history) exercise.history = [];
-    const todayISO = new Date().toISOString().split('T')[0]; // Ej. 2026-08-19
-    
-    // Busca si ya hay un registro de hoy
+    const todayISO = new Date().toISOString().split('T')[0]; 
     let todayLog = exercise.history.find(h => h.date === todayISO);
     if (todayLog) {
         todayLog.weight = exercise.weight;
     } else {
-        // Solo guardar si el peso es mayor a cero para no ensuciar la gráfica
         if(exercise.weight > 0) {
             exercise.history.push({ date: todayISO, weight: exercise.weight });
         }
@@ -176,13 +170,19 @@ function renderRoutine(dayKey) {
         if (typeof exercise.history === 'undefined') exercise.history = [];
 
         const card = document.createElement('div');
-        card.className = `exercise-card ${exercise.completed ? 'completed' : ''}`;
+        // Si ya está completado, cargar la tarjeta como colapsada para ahorrar espacio
+        card.className = `exercise-card ${exercise.completed ? 'completed collapsed' : ''}`;
 
         const header = document.createElement('div');
         header.className = 'exercise-header';
 
-        const title = document.createElement('h3');
-        title.innerText = exercise.name;
+        // Nuevo envoltorio para el título, lo hace clickable
+        const titleWrapper = document.createElement('div');
+        titleWrapper.className = 'title-wrapper';
+        titleWrapper.innerHTML = `<h3>${exercise.name}</h3><span class="toggle-icon">▼</span>`;
+        titleWrapper.onclick = () => {
+            card.classList.toggle('collapsed');
+        };
 
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
@@ -190,11 +190,22 @@ function renderRoutine(dayKey) {
         checkbox.onchange = (e) => {
             exercise.completed = e.target.checked;
             card.classList.toggle('completed', exercise.completed);
+            
+            // Colapsar automáticamente al terminar, expandir si se desmarca
+            if (exercise.completed) {
+                card.classList.add('collapsed');
+            } else {
+                card.classList.remove('collapsed');
+            }
             saveData();
         };
 
-        header.appendChild(title);
+        header.appendChild(titleWrapper);
         header.appendChild(checkbox);
+
+        // Contenedor interno que se oculta/muestra
+        const bodyWrapper = document.createElement('div');
+        bodyWrapper.className = 'exercise-body';
 
         const details = document.createElement('div');
         details.className = 'exercise-details';
@@ -239,7 +250,7 @@ function renderRoutine(dayKey) {
                 const val = parseFloat(e.target.getAttribute('data-val'));
                 exercise.weight = Math.max(0, parseFloat((exercise.weight + val).toFixed(1)));
                 updateDeltaVisual(exercise, weightSpan);
-                recordWeightHistory(exercise); // Guardar punto en la gráfica
+                recordWeightHistory(exercise); 
                 
                 if(warmupContent.style.display === 'block') {
                     warmupContent.innerHTML = getWarmupSetsHTML(exercise.weight);
@@ -296,10 +307,13 @@ function renderRoutine(dayKey) {
             altsDiv.appendChild(selectAlt);
         }
 
+        // Ensamblar los componentes en el bodyWrapper
+        bodyWrapper.appendChild(details);
+        bodyWrapper.appendChild(trackerDiv);
+        bodyWrapper.appendChild(altsDiv);
+
         card.appendChild(header);
-        card.appendChild(details);
-        card.appendChild(trackerDiv);
-        card.appendChild(altsDiv);
+        card.appendChild(bodyWrapper);
         exercisesContainer.appendChild(card);
     });
 }
@@ -310,7 +324,6 @@ function initProgressTab() {
     const msg = document.getElementById('noDataMessage');
     const canvas = document.getElementById('progressChart');
     
-    // Recolectar todos los ejercicios que tengan historial guardado
     let exercisesWithHistory = [];
     for (let dayKey in appData.routines) {
         appData.routines[dayKey].exercises.forEach(ex => {
@@ -331,28 +344,24 @@ function initProgressTab() {
     selector.style.display = 'block';
     canvas.style.display = 'block';
 
-    // Llenar el selector evitando duplicados
     selector.innerHTML = '';
     let addedNames = new Set();
     
     exercisesWithHistory.forEach(ex => {
         let name = ex.originalName || ex.name;
-        // Solo usar la parte antes de los dos puntos para que se vea limpio
         let cleanName = name.split(':')[0];
         
         if (!addedNames.has(cleanName)) {
             const opt = document.createElement('option');
-            opt.value = ex.name; // Value exacto para buscarlo luego
+            opt.value = ex.name; 
             opt.textContent = cleanName;
             selector.appendChild(opt);
             addedNames.add(cleanName);
         }
     });
 
-    // Dibujar gráfico inicial
     drawChart(selector.value, exercisesWithHistory);
 
-    // Evento al cambiar ejercicio
     selector.onchange = (e) => {
         drawChart(e.target.value, exercisesWithHistory);
     };
@@ -362,15 +371,15 @@ function drawChart(exerciseName, allExercises) {
     const exercise = allExercises.find(ex => ex.name === exerciseName);
     if (!exercise || !exercise.history) return;
 
+    if (typeof Chart === 'undefined') return;
+
     const ctx = document.getElementById('progressChart').getContext('2d');
     
     if (progressChartInstance) {
         progressChartInstance.destroy();
     }
 
-    // Formatear datos para Chart.js
     const labels = exercise.history.map(item => {
-        // Cortar el año para que quede ej. "08-19"
         let parts = item.date.split('-');
         return `${parts[1]}-${parts[2]}`;
     });
@@ -381,7 +390,7 @@ function drawChart(exerciseName, allExercises) {
         data: {
             labels: labels,
             datasets: [{
-                label: 'Peso de Trabajo (kg)',
+                label: 'Peso (kg)',
                 data: dataPoints,
                 borderColor: '#00bcd4',
                 backgroundColor: 'rgba(0, 188, 212, 0.15)',
@@ -391,22 +400,15 @@ function drawChart(exerciseName, allExercises) {
                 pointBorderWidth: 2,
                 pointRadius: 5,
                 fill: true,
-                tension: 0.3 // Curva suave
+                tension: 0.3 
             }]
         },
         options: {
             responsive: true,
-            plugins: {
-                legend: { display: false }
-            },
+            plugins: { legend: { display: false } },
             scales: {
-                y: {
-                    beginAtZero: false,
-                    grid: { color: 'rgba(255,255,255,0.05)' }
-                },
-                x: {
-                    grid: { display: false }
-                }
+                y: { beginAtZero: false, grid: { color: 'rgba(255,255,255,0.05)' } },
+                x: { grid: { display: false } }
             }
         }
     });
