@@ -50,7 +50,6 @@ function checkDailyReset() {
     if (appData.lastLoginDate !== todayStr) {
         for (let day in appData.routines) {
             appData.routines[day].exercises.forEach(ex => {
-                // Almacenar el peso actual como peso previo para el Delta Visual
                 ex.prevWeight = ex.weight || 0;
                 ex.completed = false;
             });
@@ -77,7 +76,7 @@ function startTimer(seconds) {
         if (timeRemaining <= 0) {
             clearInterval(restTimerInterval);
             display.innerText = "¡TIEMPO!";
-            navigator.vibrate([200, 100, 200, 100, 500]); // API de vibración móvil
+            if (navigator.vibrate) navigator.vibrate([200, 100, 200, 100, 500]);
         }
         timeRemaining--;
     }, 1000);
@@ -113,7 +112,6 @@ function updateDeltaVisual(exercise, weightSpan) {
 
 function getWarmupSetsHTML(targetWeight) {
     if (targetWeight < 20) return "<p>Peso insuficiente para aproximaciones.</p>";
-    // Redondea al múltiplo de 2.5 kg más cercano (discos estándar)
     let w50 = Math.round((targetWeight * 0.5) / 2.5) * 2.5;
     let w70 = Math.round((targetWeight * 0.7) / 2.5) * 2.5;
     let w90 = Math.round((targetWeight * 0.9) / 2.5) * 2.5;
@@ -188,14 +186,12 @@ function renderRoutine(dayKey) {
                 <button class="weight-btn sub" data-val="-10">-10</button>
                 <button class="weight-btn sub" data-val="-5">-5</button>
                 <button class="weight-btn sub" data-val="-2.5">-2.5</button>
-
                 <button class="weight-btn add" data-val="2.5">+2.5</button>
                 <button class="weight-btn add" data-val="5">+5</button>
                 <button class="weight-btn add" data-val="10">+10</button>
                 <button class="weight-btn add" data-val="20">+20</button>
             </div>
             <input type="text" class="reps-input" placeholder="Reps: Ej. 8, 8, 6" value="${exercise.reps}">
-            
             <button class="warmup-btn">🔥 Calculadora de Aproximación</button>
             <div class="warmup-content"></div>
         `;
@@ -204,7 +200,6 @@ function renderRoutine(dayKey) {
         const warmupBtn = trackerDiv.querySelector('.warmup-btn');
         const warmupContent = trackerDiv.querySelector('.warmup-content');
 
-        // Inicializar el delta
         updateDeltaVisual(exercise, weightSpan);
 
         trackerDiv.querySelectorAll('.weight-btn').forEach(btn => {
@@ -212,8 +207,6 @@ function renderRoutine(dayKey) {
                 const val = parseFloat(e.target.getAttribute('data-val'));
                 exercise.weight = Math.max(0, parseFloat((exercise.weight + val).toFixed(1)));
                 updateDeltaVisual(exercise, weightSpan);
-                
-                // Actualizar las aproximaciones automáticamente si están abiertas
                 if(warmupContent.style.display === 'block') {
                     warmupContent.innerHTML = getWarmupSetsHTML(exercise.weight);
                 }
@@ -367,13 +360,35 @@ function renderNutrition() {
     if (plan.equivalents && plan.equivalents.length > 0) {
         const eqSection = document.createElement('div');
         eqSection.className = 'nutrition-category';
-        eqSection.innerHTML = `<h2>⚠️ Reglas y Equivalencias</h2><div class="equivalents-card"><ul class="ingredient-list"></ul></div>`;
-        const ul = eqSection.querySelector('ul');
+        
+        let rulesHTML = `
+            <h2>⚠️ Protocolos del Sistema</h2>
+            <details class="rules-accordion">
+                <summary>Ver Reglas y Equivalencias</summary>
+                <div class="rule-content">
+        `;
+
         plan.equivalents.forEach(rule => {
-            const icon = rule.split(' ')[0];
-            const text = rule.substring(icon.length).trim();
-            ul.innerHTML += `<li><span>${icon}</span> <span>${text}</span></li>`;
+            const separatorIndex = rule.indexOf(':');
+            if (separatorIndex !== -1) {
+                const titlePart = rule.substring(0, separatorIndex).trim();
+                const descPart = rule.substring(separatorIndex + 1).trim();
+                const icon = titlePart.split(' ')[0];
+                const title = titlePart.substring(icon.length).trim();
+
+                rulesHTML += `
+                    <div class="rule-item">
+                        <div class="rule-item-header"><span>${icon}</span> ${title}</div>
+                        <div class="rule-item-desc">${descPart}</div>
+                    </div>
+                `;
+            } else {
+                rulesHTML += `<div class="rule-item"><div class="rule-item-desc">${rule}</div></div>`;
+            }
         });
+
+        rulesHTML += `</div></details>`;
+        eqSection.innerHTML = rulesHTML;
         container.appendChild(eqSection);
     }
 }
