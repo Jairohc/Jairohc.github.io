@@ -15,7 +15,7 @@ body { font-family: system-ui, -apple-system, sans-serif; background-color: var(
 
 /* Navegación */
 .tabs { display: flex; background: var(--card-bg); border-radius: 8px; overflow: hidden; margin-bottom: 20px; }
-.tab-btn { flex: 1; padding: 15px; background: transparent; border: none; color: var(--text-muted); font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.3s; }
+.tab-btn { flex: 1; padding: 12px 5px; background: transparent; border: none; color: var(--text-muted); font-size: 0.95rem; font-weight: bold; cursor: pointer; transition: 0.3s; text-align: center; }
 .tab-btn.active { color: var(--accent); background: #2a2a2a; border-bottom: 3px solid var(--accent); }
 .tab-content { display: none; }
 .tab-content.active { display: block; animation: fadeIn 0.3s; }
@@ -69,6 +69,11 @@ input[type="checkbox"] { transform: scale(1.8); cursor: pointer; margin-left: 15
 /* Temporizador Flotante Global */
 .floating-timer { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #000; padding: 10px 25px; border-radius: 30px; font-weight: bold; font-size: 1.2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.6); display: none; align-items: center; gap: 15px; z-index: 1000; }
 .close-timer { background: #000; color: #fff; border: none; border-radius: 50%; width: 26px; height: 26px; cursor: pointer; font-weight: bold; line-height: 1; padding: 0; }
+
+/* Gráficos de Progreso */
+.chart-container { background: var(--card-bg); padding: 15px; border-radius: 8px; }
+#progressChart { width: 100%; margin-top: 15px; }
+.no-data-msg { text-align: center; color: var(--text-muted); padding: 20px 0; font-style: italic; }
 
 /* Nutrición */
 .nutrition-category { margin-bottom: 25px; }
