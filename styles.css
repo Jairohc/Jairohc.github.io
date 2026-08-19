@@ -6,6 +6,7 @@
     --accent: #00bcd4;
     --success: #4caf50;
     --success-bg: #1a2e1a;
+    --warning: #ff9800;
 }
 
 body {
@@ -13,7 +14,8 @@ body {
     background-color: var(--bg-color);
     color: var(--text-color);
     margin: 0;
-    padding: 20px;
+    padding: 15px;
+    padding-bottom: 40px;
 }
 
 .container {
@@ -21,6 +23,48 @@ body {
     margin: 0 auto;
 }
 
+/* --- Navegación de Pestañas --- */
+.tabs {
+    display: flex;
+    background: var(--card-bg);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 15px;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.tab-btn.active {
+    color: var(--accent);
+    background: #2a2a2a;
+    border-bottom: 3px solid var(--accent);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+    animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Estructura General --- */
 header {
     display: flex;
     justify-content: space-between;
@@ -37,12 +81,14 @@ select {
     font-size: 1rem;
 }
 
+/* --- Tarjetas de Entrenamiento --- */
 .cardio-card {
     background: var(--card-bg);
     padding: 15px;
     border-radius: 8px;
     margin-bottom: 20px;
     border-left: 4px solid var(--accent);
+    line-height: 1.5;
 }
 
 .exercise-card {
@@ -53,7 +99,6 @@ select {
     transition: all 0.3s ease;
 }
 
-/* Estado de Ejercicio Completado */
 .exercise-card.completed {
     opacity: 0.6;
     border-left: 4px solid var(--success);
@@ -85,11 +130,72 @@ input[type="checkbox"] {
     color: var(--text-muted);
 }
 
-.exercise-alternatives {
-    margin-top: 15px;
+.exercise-alternatives { margin-top: 15px; }
+.exercise-alternatives select { width: 100%; background: #2a2a2a; }
+
+/* --- Tarjetas de Nutrición --- */
+.nutrition-category { margin-bottom: 25px; }
+.nutrition-category h2 {
+    font-size: 1.3rem;
+    color: var(--accent);
+    border-bottom: 1px solid #333;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
 }
 
-.exercise-alternatives select {
-    width: 100%;
-    background: #2a2a2a;
+.meal-card {
+    background: var(--card-bg);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 12px;
 }
+
+.meal-card h4 {
+    margin: 0 0 12px 0;
+    color: white;
+    font-size: 1.05rem;
+}
+
+.ingredient-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.ingredient-list > li {
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.4;
+}
+
+.subs-list {
+    list-style: none;
+    padding-left: 30px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.subs-list li {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    position: relative;
+    margin-bottom: 4px;
+}
+
+.subs-list li::before {
+    content: "↳";
+    position: absolute;
+    left: -15px;
+    color: var(--text-muted);
+}
+
+.equivalents-card {
+    background: #2a2a2a;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid var(--warning);
+}
+.equivalents-card li { margin-bottom: 12px; line-height: 1.4; }
