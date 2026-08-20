@@ -33,8 +33,28 @@
                 <h1>Mi Rutina</h1>
                 <select id="daySelector"></select>
             </header>
-            <div id="cardioSection" class="cardio-card"></div>
-            <div id="exercisesContainer"></div>
+            
+            <!-- Vista de Días Regulares -->
+            <div id="regularDayView">
+                <div id="cardioSection" class="cardio-card"></div>
+                <div id="exercisesContainer"></div>
+            </div>
+
+            <!-- Vista de Fines de Semana (MTB / Descanso) -->
+            <div id="weekendView" class="weekend-card" style="display: none;">
+                <div class="weekend-header">
+                    <h2 id="weekendTitle">Sábado de MTB</h2>
+                    <span id="weekendIcon">🚵‍♂️</span>
+                </div>
+                <div class="weekend-content">
+                    <p id="weekendDesc">Recuperación activa y ruta de montaña.</p>
+                    <div class="weekend-metrics">
+                        <input type="text" id="weekendDistance" placeholder="Distancia (Ej. 30 km)" class="metric-input">
+                        <input type="text" id="weekendTime" placeholder="Tiempo (Ej. 2h 15m)" class="metric-input">
+                    </div>
+                    <button class="btn-primary" id="btnSaveWeekend" style="margin-top: 15px;">Guardar y Respaldar Día</button>
+                </div>
+            </div>
         </main>
 
         <!-- SECCIÓN: DIETA -->
@@ -63,12 +83,6 @@
             <label for="fileImport" class="btn-secondary">📂 Importar</label>
             <input type="file" id="fileImport" accept=".json" style="display: none;">
         </div>
-    </div>
-
-    <!-- Temporizador Flotante -->
-    <div id="floatingTimer" class="floating-timer">
-        ⏱️ <span id="timerDisplay">00:00</span>
-        <button onclick="stopTimer()" class="close-timer">X</button>
     </div>
 
     <script src="script.js"></script>
