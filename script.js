@@ -1,5 +1,4 @@
 let appData = {};
-let restTimerInterval;
 let progressChartInstance = null;
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -19,7 +18,6 @@ async function bootApp() {
         appData = JSON.parse(localData);
         initializeApp();
     } else {
-        // Bloquear App si no hay caché
         document.getElementById('importOverlay').style.display = 'flex';
         document.getElementById('mainAppContainer').style.display = 'none';
     }
@@ -85,6 +83,11 @@ function checkDailyReset() {
         for (let day in appData.routines) {
             appData.routines[day].exercises.forEach(ex => {
                 ex.prevWeight = ex.weight || 0;
+                
+                // Mover reps actuales a prevReps para la Memoria Fantasma
+                ex.prevReps = ex.reps || '';
+                ex.reps = ''; // Limpiar campo de texto para hoy
+                
                 ex.completed = false;
             });
         }
@@ -93,13 +96,12 @@ function checkDailyReset() {
     }
 }
 
-// --- EXPORTACIÓN ROBUSTA (Candado anti-spam) ---
+// --- EXPORTACIÓN ROBUSTA ---
 function exportData(isAuto = false) {
     try {
         const dataStr = JSON.stringify(appData, null, 2);
         const date = new Date().toISOString().split('T')[0];
         
-        // Agregar sufijo 'auto' o 'manual' para distinguir archivos si se descargan el mismo día
         const suffix = isAuto ? "AUTO" : "MANUAL";
         const fileName = `gym_backup_${date}_${suffix}.json`;
         
@@ -110,7 +112,6 @@ function exportData(isAuto = false) {
         a.href = url;
         a.download = fileName;
         
-        // Apéndice temporal necesario en móviles para forzar la descarga
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -126,20 +127,25 @@ function exportData(isAuto = false) {
     }
 }
 
-// --- LÓGICA DE AUTO-RESPALDO AL TERMINAR RUTINA ---
+// --- AUTO-RESPALDO AL TERMINAR RUTINA ---
 function checkAndTriggerAutoBackup(dayKey) {
     const todayStr = new Date().toLocaleDateString();
     
-    // CANDADO BARRERA: Si ya se generó un respaldo automático hoy, abortar para no saturar descargas
     if (appData.autoBackupDate === todayStr) return;
 
     const routine = appData.routines[dayKey];
-    if (!routine || !routine.exercises || routine.exercises.length === 0) return;
+    
+    // Si es fin de semana/descanso
+    if (!routine || !routine.exercises || routine.exercises.length === 0) {
+        appData.autoBackupDate = todayStr;
+        saveData();
+        exportData(true);
+        return;
+    }
 
     const allCompleted = routine.exercises.every(ex => ex.completed === true);
 
     if (allCompleted) {
-        // Cerrar candado para hoy antes de exportar
         appData.autoBackupDate = todayStr;
         saveData();
         exportData(true);
@@ -167,35 +173,7 @@ function handleImport(e) {
     reader.readAsText(file);
 }
 
-// --- TEMPORIZADOR DE DESCANSO ---
-function startTimer(seconds) {
-    clearInterval(restTimerInterval);
-    let timeRemaining = seconds;
-    const display = document.getElementById('timerDisplay');
-    const timerDiv = document.getElementById('floatingTimer');
-    
-    timerDiv.style.display = 'flex';
-    
-    restTimerInterval = setInterval(() => {
-        let m = Math.floor(timeRemaining / 60).toString().padStart(2, '0');
-        let s = (timeRemaining % 60).toString().padStart(2, '0');
-        display.innerText = `${m}:${s}`;
-        
-        if (timeRemaining <= 0) {
-            clearInterval(restTimerInterval);
-            display.innerText = "¡TIEMPO!";
-            if (navigator.vibrate) navigator.vibrate([200, 100, 200, 100, 500]);
-        }
-        timeRemaining--;
-    }, 1000);
-}
-
-function stopTimer() {
-    clearInterval(restTimerInterval);
-    document.getElementById('floatingTimer').style.display = 'none';
-}
-
-// --- ENTRENAMIENTO ---
+// --- ENTRENAMIENTO Y VISTAS DEDICADAS ---
 function setupDaySelector() {
     const selector = document.getElementById('daySelector');
     selector.innerHTML = '';
@@ -218,19 +196,6 @@ function updateDeltaVisual(exercise, weightSpan) {
     weightSpan.innerHTML = `${exercise.weight} <span class="delta-val ${deltaClass}">${deltaText}</span>`;
 }
 
-function getWarmupSetsHTML(targetWeight) {
-    if (targetWeight < 20) return "<p>Peso insuficiente para aproximaciones.</p>";
-    let w50 = Math.round((targetWeight * 0.5) / 2.5) * 2.5;
-    let w70 = Math.round((targetWeight * 0.7) / 2.5) * 2.5;
-    let w90 = Math.round((targetWeight * 0.9) / 2.5) * 2.5;
-    
-    return `<ul>
-        <li><strong>50%:</strong> ${w50} kg x 10 reps</li>
-        <li><strong>70%:</strong> ${w70} kg x 5 reps</li>
-        <li><strong>90%:</strong> ${w90} kg x 1-2 reps</li>
-    </ul>`;
-}
-
 function recordWeightHistory(exercise) {
     if (!exercise.history) exercise.history = [];
     const todayISO = new Date().toISOString().split('T')[0]; 
@@ -246,16 +211,60 @@ function recordWeightHistory(exercise) {
 
 function renderRoutine(dayKey) {
     const routine = appData.routines[dayKey];
+    
+    const regularView = document.getElementById('regularDayView');
+    const weekendView = document.getElementById('weekendView');
     const exercisesContainer = document.getElementById('exercisesContainer');
     const cardioSection = document.getElementById('cardioSection');
 
-    cardioSection.innerHTML = `<strong>Cardio:</strong> ${routine.cardio}`;
+    // Limpiar contenedores
     exercisesContainer.innerHTML = '';
 
+    // LÓGICA DE PANTALLA DEDICADA (Sábado y Domingo)
     if (!routine.exercises || routine.exercises.length === 0) {
-        exercisesContainer.innerHTML = '<p>Día de descanso o actividad libre.</p>';
+        regularView.style.display = 'none';
+        weekendView.style.display = 'block';
+        
+        const wTitle = document.getElementById('weekendTitle');
+        const wIcon = document.getElementById('weekendIcon');
+        const wDesc = document.getElementById('weekendDesc');
+        const dInput = document.getElementById('weekendDistance');
+        const tInput = document.getElementById('weekendTime');
+        const btnSave = document.getElementById('btnSaveWeekend');
+
+        // Configurar según el día usando el nombre de la rutina
+        const nameUpper = routine.name.toUpperCase();
+        if (nameUpper.includes("SÁBADO") || nameUpper.includes("SABADO") || nameUpper.includes("6")) {
+            wTitle.innerText = "Sábado de MTB";
+            wIcon.innerText = "🚵‍♂️";
+            wDesc.innerText = routine.cardio || "Recuperación activa y ruta de montaña.";
+        } else {
+            wTitle.innerText = "Domingo de Descanso";
+            wIcon.innerText = "🛋️";
+            wDesc.innerText = routine.cardio || "Descanso total para recuperación muscular.";
+        }
+
+        // Cargar datos previos si existen (evitar perderlos si cambias de pestaña y regresas)
+        if (!routine.weekendData) routine.weekendData = { distance: "", time: "" };
+        dInput.value = routine.weekendData.distance;
+        tInput.value = routine.weekendData.time;
+
+        btnSave.onclick = () => {
+            routine.weekendData.distance = dInput.value;
+            routine.weekendData.time = tInput.value;
+            saveData();
+            checkAndTriggerAutoBackup(dayKey);
+            alert("Métricas guardadas y respaldo generado.");
+        };
+
         return;
     }
+
+    // SI HAY EJERCICIOS (Lunes a Viernes)
+    weekendView.style.display = 'none';
+    regularView.style.display = 'block';
+
+    cardioSection.innerHTML = `<strong>Cardio:</strong> ${routine.cardio}`;
 
     routine.exercises.forEach((exercise) => {
         if (typeof exercise.completed === 'undefined') exercise.completed = false;
@@ -263,6 +272,7 @@ function renderRoutine(dayKey) {
         if (typeof exercise.weight === 'undefined') exercise.weight = 0;
         if (typeof exercise.prevWeight === 'undefined') exercise.prevWeight = exercise.weight;
         if (typeof exercise.reps === 'undefined') exercise.reps = '';
+        if (typeof exercise.prevReps === 'undefined') exercise.prevReps = '';
         if (typeof exercise.history === 'undefined') exercise.history = [];
 
         const card = document.createElement('div');
@@ -292,7 +302,6 @@ function renderRoutine(dayKey) {
             }
             saveData();
             
-            // Evaluar y disparar respaldo automático al terminar todo
             checkAndTriggerAutoBackup(dayKey);
         };
 
@@ -308,12 +317,10 @@ function renderRoutine(dayKey) {
             <p><strong>Detalle:</strong> ${exercise.detail}</p>
             ${exercise.tempo ? `<p><strong>Tempo:</strong> ${exercise.tempo}</p>` : ''}
             <p><strong>RIR Objetivo:</strong> ${exercise.rir || 'N/A'}</p>
-            <div class="timer-controls">
-                <button class="btn-timer" onclick="startTimer(90)">⏱️ 90s</button>
-                <button class="btn-timer" onclick="startTimer(120)">⏱️ 2m</button>
-                <button class="btn-timer" onclick="startTimer(180)">⏱️ 3m</button>
-            </div>
         `;
+
+        // Input de reps con memoria fantasma en el placeholder
+        const placeholderText = exercise.prevReps ? `Última vez: ${exercise.prevReps}` : `Reps: Ej. 8, 8, 6`;
 
         const trackerDiv = document.createElement('div');
         trackerDiv.className = 'tracker-container';
@@ -329,14 +336,10 @@ function renderRoutine(dayKey) {
                 <button class="weight-btn add" data-val="10">+10</button>
                 <button class="weight-btn add" data-val="20">+20</button>
             </div>
-            <input type="text" class="reps-input" placeholder="Reps: Ej. 8, 8, 6" value="${exercise.reps}">
-            <button class="warmup-btn">🔥 Calculadora de Aproximación</button>
-            <div class="warmup-content"></div>
+            <input type="text" class="reps-input" placeholder="${placeholderText}" value="${exercise.reps}">
         `;
 
         const weightSpan = trackerDiv.querySelector('.val-weight');
-        const warmupBtn = trackerDiv.querySelector('.warmup-btn');
-        const warmupContent = trackerDiv.querySelector('.warmup-content');
 
         updateDeltaVisual(exercise, weightSpan);
 
@@ -346,10 +349,6 @@ function renderRoutine(dayKey) {
                 exercise.weight = Math.max(0, parseFloat((exercise.weight + val).toFixed(1)));
                 updateDeltaVisual(exercise, weightSpan);
                 recordWeightHistory(exercise); 
-                
-                if(warmupContent.style.display === 'block') {
-                    warmupContent.innerHTML = getWarmupSetsHTML(exercise.weight);
-                }
                 saveData();
             });
         });
@@ -357,15 +356,6 @@ function renderRoutine(dayKey) {
         trackerDiv.querySelector('.reps-input').addEventListener('change', (e) => {
             exercise.reps = e.target.value;
             saveData();
-        });
-
-        warmupBtn.addEventListener('click', () => {
-            if (warmupContent.style.display === 'none' || warmupContent.style.display === '') {
-                warmupContent.innerHTML = getWarmupSetsHTML(exercise.weight);
-                warmupContent.style.display = 'block';
-            } else {
-                warmupContent.style.display = 'none';
-            }
         });
 
         const altsDiv = document.createElement('div');
