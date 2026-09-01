@@ -259,7 +259,7 @@
   "routines": {
     "1": {
       "name": "Monday: Push (Chest/Shoulders/Triceps)",
-      "cardio": "🏃 Treadmill: 20 min | 5% incl. | 4.2 - 4.8 km/h [Alts: Stair Climber Lvl 5-6 | Elliptical Res 6-7]",
+      "cardio": "🏃 Treadmill: 10-15 min | 5% incl. | 4.2 - 4.8 km/h",
       "exercises": [
         { "name": "Flat Bench Press: 3x6-8", "isMain": true, "rir": "1-2", "detail": "Mandatory scapular retraction. Lower bar to lower chest level.", "alternatives": ["Incline dumbbell press", "Convergent machine press", "Weighted push-ups"] },
         { "name": "Incline Dumbbell Press: 3x8-10", "isMain": true, "rir": "1-2", "detail": "Bench set to 30-45 degrees. Deep stretch on upper chest.", "alternatives": ["Incline machine press", "Incline dumbbell flyes"] },
@@ -269,12 +269,12 @@
       ]
     },
     "2": {
-      "name": "Tuesday: Legs 1 (Quad Focus) + Abs",
-      "cardio": "🏃 Treadmill: 20 min | 0% incl. | 4.0 km/h [Alts: Stair Climber Lvl 4 | Elliptical Res 5]",
+      "name": "Tuesday: Full Legs (Quads & Hams) + Abs",
+      "cardio": "🏃 Treadmill: 10-15 min | 0% incl. | 4.0 km/h",
       "exercises": [
         { "name": "Barbell Squat or Hack Squat: 3x6-8", "isMain": true, "rir": "1-2", "detail": "Break parallel depth. Push firmly through full foot plant.", "alternatives": ["Leg press (low feet placement)", "Bulgarian split squat", "Goblet squat"] },
+        { "name": "Romanian Deadlift: 3x8-10", "isMain": true, "rir": "1-2", "detail": "Hinge hips backward. Neutral spine, bar tracking close to shins.", "alternatives": ["Good mornings", "Conventional deadlift"] },
         { "name": "Leg Press: 3x10-12", "isMain": true, "rir": "1-2", "detail": "Feet low on platform. Do not lock knees at full extension.", "alternatives": ["Hack squat machine", "Dumbbell walking lunges"] },
-        { "name": "Leg Extension: 3x12-15", "isMain": false, "rir": "0", "detail": "Controlled concentric, 1-second hold at peak contraction.", "tempo": "1s Peak Squeeze", "alternatives": ["Sissy squat", "Static bodyweight lunges"] },
         { "name": "Lying Leg Curl: 3x10-12", "isMain": false, "rir": "0", "detail": "Hips glued to bench. 3-second controlled eccentric phase.", "tempo": "3s Down (Eccentric)", "alternatives": ["Seated leg curl", "Stiff-legged dumbbell deadlift"] },
         { "name": "Standing Calf Raises: 4x10-15", "isMain": false, "rir": "0", "detail": "Full stretch at bottom step, squeeze calves hard at top.", "tempo": "1s Hold Bottom Stretch", "alternatives": ["Leg press calf raises", "Seated calf raise machine"] },
         { "name": "Decline Bench Crunch (Abs): 3x12-15", "isMain": false, "rir": "0", "detail": "Anchor feet securely. Flex spine, do not just hinge hips. Hold weight plate if easy.", "alternatives": ["Weighted cable crunch", "Hanging leg raises"] }
@@ -282,7 +282,7 @@
     },
     "3": {
       "name": "Wednesday: Pull (Back/Biceps)",
-      "cardio": "🏃 Treadmill: 20 min | 5% incl. | 4.2 - 4.8 km/h [Alts: Stair Climber Lvl 5-6 | Elliptical Res 6-7]",
+      "cardio": "🏃 Treadmill: 10-15 min | 5% incl. | 4.2 - 4.8 km/h",
       "exercises": [
         { "name": "Pull-ups or Lat Pulldown: 3x6-8", "isMain": true, "rir": "1-2", "detail": "Depress scapulae before pulling. Touch upper chest to bar.", "alternatives": ["Close-grip pulldown", "Assisted pull-up machine"] },
         { "name": "Barbell or Machine Row: 3x8-10", "isMain": true, "rir": "1-2", "detail": "Torso steady. Pull elbows close along ribs toward hip.", "alternatives": ["Seated cable row", "Single-arm dumbbell row"] },
@@ -292,26 +292,20 @@
       ]
     },
     "4": {
-      "name": "Thursday: Legs 2 (Hamstrings/Glutes) + Abs",
-      "cardio": "🏃 Treadmill: 20 min | 0% incl. | 4.0 km/h [Alts: Stair Climber Lvl 4 | Elliptical Res 5]",
-      "exercises": [
-        { "name": "Romanian Deadlift: 3x8-10", "isMain": true, "rir": "1-2", "detail": "Hinge hips backward. Neutral spine, bar tracking close to shins.", "alternatives": ["Good mornings", "Conventional deadlift"] },
-        { "name": "Bulgarian Split Squat: 3x10-12", "isMain": true, "rir": "1-2", "detail": "Torso slightly leaned forward. Lower hips deep into movement.", "alternatives": ["Single-leg press", "Reverse lunges"] },
-        { "name": "Seated Leg Curl: 3x12-15", "isMain": false, "rir": "0", "detail": "Adjust thigh pad firmly. Squeeze hamstrings forcefully.", "tempo": "1s Peak Squeeze", "alternatives": ["Lying leg curl", "Nordic hamstring curl"] },
-        { "name": "High-Foot Leg Press: 2x12-15", "isMain": false, "rir": "0", "detail": "Feet high and wide on platform. Drive knees toward chest.", "alternatives": ["Barbell hip thrust", "Sumo squat"] },
-        { "name": "Standing Calf Raises: 4x10-15", "isMain": false, "rir": "0", "detail": "Strict eccentric control, pause 1 second in bottom stretch.", "tempo": "1s Hold Bottom Stretch", "alternatives": ["Press calf raises", "Bodyweight single-leg calf raise"] },
-        { "name": "Flat Bench Lying Leg Raises (Abs): 3x12-15", "isMain": false, "rir": "0", "detail": "Lie on bench, grab behind head. Roll pelvis upward off bench to engage lower rectus.", "alternatives": ["Ab wheel rollout", "Hanging knees to chest"] }
-      ]
+      "name": "Thursday: Running 10k Prep",
+      "cardio": "🏃 Running: 25-30 min | Outdoor/Treadmill | Strict HR Zone 2 (130-145 bpm)",
+      "exercises": []
     },
     "5": {
-      "name": "Friday: Torso (Maintenance)",
-      "cardio": "🏃 Elliptical or Treadmill: 35-40 min | 0% incl. | Strict HR Zone 2 (120-130 bpm) [Rule: Nasal breathing only. No intense effort.]",
+      "name": "Friday: Torso (Maintenance) + Abs",
+      "cardio": "🏃 Treadmill: 10-15 min | 0% incl. | 4.0 km/h",
       "exercises": [
         { "name": "Cable Chest Flyes: 3x10-12", "isMain": true, "rir": "1-2", "detail": "Feel deep pectoral stretch, squeeze hands together at peak.", "alternatives": ["Pec deck flye machine", "Flat dumbbell flyes"] },
         { "name": "Single-Arm Dumbbell Row: 3x8-10", "isMain": true, "rir": "1-2", "detail": "Pull dumbbell directly toward hip pocket, not upper chest.", "alternatives": ["Hammer Strength row", "Single-arm cable row"] },
         { "name": "Machine Overhead Press: 3x10-12", "isMain": true, "rir": "1-2", "detail": "Constant tension. Do not let weight stack touch bottom.", "alternatives": ["Arnold dumbbell press", "Dumbbell military press"] },
         { "name": "Cable Biceps Curl: 2x12-15", "isMain": false, "rir": "0", "detail": "Constant cable tension. Hold peak squeeze for 1 second.", "tempo": "1s Peak Squeeze", "alternatives": ["Concentration curl", "Preacher curl"] },
-        { "name": "Overhead Dumbbell Triceps Extension: 2x12-15", "isMain": false, "rir": "0", "detail": "Elbows pointing up and tucked close. Extend fully overhead.", "alternatives": ["Lying triceps extensions", "Single-arm cable overhead extension"] }
+        { "name": "Overhead Dumbbell Triceps Extension: 2x12-15", "isMain": false, "rir": "0", "detail": "Elbows pointing up and tucked close. Extend fully overhead.", "alternatives": ["Lying triceps extensions", "Single-arm cable overhead extension"] },
+        { "name": "Hanging Leg Raises (Abs): 3x12-15", "isMain": false, "rir": "0", "detail": "Hang from pull-up bar. Roll pelvis upward to lift legs. Do not use momentum.", "alternatives": ["Lying leg raises on flat bench", "Plank holds 3x60s"] }
       ]
     },
     "6": {
