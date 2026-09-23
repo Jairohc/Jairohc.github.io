@@ -1,4 +1,4 @@
-const CACHE_NAME = 'protocol-cache-v8';
+const CACHE_NAME = 'protocol-cache-v9';
 const ASSETS = [
     './',
     './index.html',
