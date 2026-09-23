@@ -1,10 +1,11 @@
-const CACHE_NAME = 'protocol-cache-v9';
+const CACHE_NAME = 'protocol-cache-v10';
 const ASSETS = [
     './',
     './index.html',
     './styles.css',
     './script.js',
-    './data.json'
+    './data.json',
+    './chart.min.js'
 ];
 
 self.addEventListener('install', (event) => {
