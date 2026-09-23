@@ -500,10 +500,10 @@ function drawChart(exerciseName, allExercises) {
 // --- LÓGICA DE NUTRICIÓN INTELIGENTE ---
 function getCurrentMealCategory() {
     const hour = new Date().getHours();
-    if (hour < 11) return 'breakfast';          
-    if (hour >= 11 && hour < 14) return 'snacks'; 
-    if (hour >= 14 && hour < 19) return 'lunch';  
-    return 'dinner';                              
+    if (hour < 9) return 'breakfast';            // Desayuno: 5:00 - 8:59 (y madrugada)
+    if (hour >= 9 && hour < 11) return 'snacks'; // Snack: 9:00 - 10:59
+    if (hour >= 11 && hour < 16) return 'lunch'; // Comida: 11:00 - 15:59
+    return 'dinner';                             // Cena: 16:00 - 22:59
 }
 
 function renderNutrition() {
